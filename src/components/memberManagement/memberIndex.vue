@@ -48,7 +48,10 @@
           width="80"
           align="center"
         ></vxe-column>
-        <vxe-column title="操作"></vxe-column>
+        <vxe-column title="操作">
+          编辑
+          删除
+        </vxe-column>
       </vxe-table>
       <vxe-pager
         :current-page.sync="page1.offset"
