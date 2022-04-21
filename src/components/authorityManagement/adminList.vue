@@ -33,19 +33,17 @@
                       <el-input v-model="addList.nickname"></el-input>
                     </el-form-item>
                     <el-form-item label="组别">
-                      <!-- <el-input v-model="addList.group"></el-input> -->
-                      <!-- <el-select v-model="addList.group_id" placeholder="请选择" multiple clearable>
-                        <el-option
+                      <vxe-select
+                        v-model="addList.group_id"
+                        placeholder="请选择"
+                      >
+                        <vxe-option
                           v-for="item in group"
-                          :key="item.group_id"
-                          :label="item.group"
-                          :value="item.group_id"
-                        >
-                        </el-option>
-                      </el-select> -->
-                      <vxe-select v-model="addList.group_id" placeholder="请选择">
-            <vxe-option v-for="item in group" :key="item.id" :value="item.id" :label="item.title"></vxe-option>
-          </vxe-select>
+                          :key="item.id"
+                          :value="item.id"
+                          :label="item.title"
+                        ></vxe-option>
+                      </vxe-select>
                     </el-form-item>
                     <el-form-item label="密码" prop="password">
                       <el-input v-model="addList.password"></el-input>
@@ -196,7 +194,7 @@ import { postD } from "../../api/index.js";
 export default {
   data() {
     return {
-      group:"",
+      group: "",
       adminListeditAddmodify: false,
       adminListeditFrom: {
         id: "",
@@ -225,7 +223,7 @@ export default {
         adminEditInterface: "Auth/adminEdit",
         adminDelInterface: "Auth/adminDel",
         // 下拉框
-        adminGroupInterface:"Auth/adminGroup",
+        adminGroupInterface: "Auth/adminGroup",
       },
       // 删除按钮
       adminListremoveRowFrom: {
@@ -341,7 +339,6 @@ export default {
     tableDataValue() {
       postD(this.url.adminListInterface).then((res) => {
         this.tableData = res.list;
-        // this.group = res.list
       });
     },
     // 添加用户
@@ -360,14 +357,13 @@ export default {
     },
     // 下拉框
     addListAdd() {
-      postD(this.url.adminGroupInterface).then((res)=> {
-        this.group = res.list
-        console.log(this.group);
-      })
+      postD(this.url.adminGroupInterface).then((res) => {
+        this.group = res.list;
+      });
     },
     addListClosed() {
       this.$refs.addListRef.resetFields();
-      this.addList.group_id=""
+      this.addList.group_id = "";
     },
     checkboxChangeEvent(data) {
       this.arrs = data.records;

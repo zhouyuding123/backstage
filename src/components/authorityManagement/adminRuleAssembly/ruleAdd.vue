@@ -18,7 +18,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="父级" prop="ltitle">
-          <el-select v-model="addForm.ltitle" placeholder="请选择">
+          <el-select v-model="addForm.ltitle" placeholder="请选择" @change="chang()">
             <el-option
               v-for="item in ltitle"
               :key="item.id"
@@ -84,6 +84,7 @@ export default {
         sort: "",
         type: "",
         auth_open: "",
+        pid:""
       },
       addFormRules: {
         delivery: false,
@@ -108,8 +109,8 @@ export default {
           },
           {
             min: 3,
-            max: 10,
-            message: "长度在3-10个",
+            max: 20,
+            message: "长度在3-20个",
             tirgger: "blur",
           },
         ],
@@ -159,6 +160,9 @@ export default {
         });
       });
     },
+    chang() {
+      this.addForm.pid = this.addForm.ltitle
+    }
   },
 };
 </script>

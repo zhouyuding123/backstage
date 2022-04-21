@@ -143,7 +143,7 @@
                     </el-form-item>
 
                     <el-form-item label="规则" prop="name">
-                      <el-input v-model="editFrom.name" disabled></el-input>
+                      <el-input v-model="editFrom.name"></el-input>
                     </el-form-item>
                     <el-form-item label="标题" prop="title">
                       <el-input v-model="editFrom.title"></el-input>
@@ -216,8 +216,9 @@ export default {
   data() {
     return {
       //选中的数组
-      ids: {
-        id: "",
+      ids: [],
+      idsL: {
+        id:""
       },
       //选中时将对象保存到arrs中
       arrs: [],
@@ -316,7 +317,6 @@ export default {
       }
       if (removeValue === "confirm") {
         this.removeRowFrom.id = userinfors.id;
-
         postD(this.url.deleteIInterface, this.removeRowFrom).then((res) => {
           if (res.code !== 200) return this.$message.error("修改失败");
           this.$message.success("状态修改成功");
@@ -353,6 +353,7 @@ export default {
     },
     checkboxChangeEvent(data) {
       this.arrs = data.records;
+      console.log(this.arrs);
     },
     async deleteRow() {
       const deleteRows = await this.$confirm(
@@ -370,13 +371,13 @@ export default {
       }
       if (deleteRows === "confirm") {
         this.arrs.forEach((v) => {
-          this.ids.id = v.id;
-          console.log(this.ids.id);
+          this.ids.push(v.id)
         });
-        postD(this.url.ruleSelectDel, this.ids).then((res) => {
-          if (res.code !== 200) return this.$message.error("修改失败");
-          this.$message.success("状态修改成功");
-          this.reload();
+        this.idsL.id = (this.ids).toString();
+        postD(this.url.ruleSelectDel, this.idsL).then((res) => {
+          if (res.code !== 200) return this.$message.error("删除失败");
+          this.$message.success("删除成功");
+          this.userList();
         });
       }
     },

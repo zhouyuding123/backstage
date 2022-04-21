@@ -319,7 +319,6 @@ export default {
       });
     },
     handleNodeClick(data, checked) {
-      console.log(checked.checkedKeys.toString());
       this.addGroupList.rules = checked.checkedKeys.toString();
     },
     addGroupSubmit() {
@@ -371,7 +370,6 @@ export default {
       this.adminGroupEditFrom.id = id.id;
       this.adminGroupEditFrom.title = id.title;
       this.adminGroupEditFrom.status = id.status;
-      // this.adminGroupEditFrom.rules = id.rules;
       this.rules = id.rules;
       this.rules = id.rules.split(",");
       this.adminGroupEditadd = true;

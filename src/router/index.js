@@ -16,9 +16,9 @@ const routes = [
     component: () => import("../views/Home.vue"),
     children: [
       {
-        path:"/pageHome",
-        name:"homePage",
-        component: ()=> import("../components/homePage/homePage.vue")
+        path: "/pageHome",
+        name: "homePage",
+        component: () => import("../components/homePage/homePage.vue")
       },
       {
         path: "/System/system",
@@ -39,17 +39,17 @@ const routes = [
         path: "/Auth/adminList",
         name: "adminList",
         component: () => import("../components/authorityManagement/adminList.vue")
-      }, 
+      },
       {
         path: "/Auth/adminGroup",
         name: "adminGroup",
         component: () => import("../components/authorityManagement/adminGroup.vue")
-      }, 
+      },
       {
         path: "/Auth/adminRule",
         name: "adminRule",
         component: () => import("../components/authorityManagement/adminRule.vue")
-      }, 
+      },
       {
         path: "/AdminLog/index",
         name: "adminLog",
@@ -119,6 +119,11 @@ const routes = [
         path: "/UsersType/index",
         name: "memberType",
         component: () => import("../components/memberManagement/memberType.vue")
+      },
+      {
+        path: "/Company/index",
+        name: "Company",
+        component: () => import("../components/businessManagement/enterPriseList.vue")
       }
     ]
   },
