@@ -6,7 +6,6 @@
         角色组可以有多个,角色有上下级层级关系,如果子角色有角色组和管理员的权限则可以派生属于自己组别的下级角色组或管理员
       </p>
     </div>
-    <div></div>
     <div class="addPage-Group">
       <el-row>
         <el-col :span="1">
@@ -135,12 +134,9 @@
                       <el-input v-model="adminGroupEditFrom.title"></el-input>
                     </el-form-item>
                     <el-form-item label="状态" prop="status">
-                      <el-radio-group
-                        v-model="adminGroupEditFrom.status"
-                        disabled
-                      >
-                        <el-radio label="1">开启</el-radio>
-                        <el-radio label="0">关闭</el-radio>
+                      <el-radio-group v-model="adminGroupEditFrom.status">
+                        <el-radio :label="1">开启</el-radio>
+                        <el-radio :label="0">关闭</el-radio>
                       </el-radio-group>
                     </el-form-item>
 
@@ -325,7 +321,6 @@ export default {
       this.$refs.addGroupListref.validate((v) => {
         if (!v) return;
         postD(this.url.groupAddInterface, this.addGroupList).then((res) => {
-          console.log(res);
           if (res.code !== 200) {
             this.$message.error("添加失败");
           }
@@ -370,6 +365,7 @@ export default {
       this.adminGroupEditFrom.id = id.id;
       this.adminGroupEditFrom.title = id.title;
       this.adminGroupEditFrom.status = id.status;
+
       this.rules = id.rules;
       this.rules = id.rules.split(",");
       this.adminGroupEditadd = true;

@@ -118,14 +118,8 @@
                   >
                     <el-form-item label="菜单" prop="type">
                       <el-radio-group v-model="editFrom.type">
-                        <el-radio
-                          label="是"
-                          @click="iseditMenuClick(1)"
-                        ></el-radio>
-                        <el-radio
-                          label="否"
-                          @click="noeditMenuClick(2)"
-                        ></el-radio>
+                        <el-radio :label="1">是</el-radio>
+                        <el-radio :label="2">否</el-radio>
                       </el-radio-group>
                     </el-form-item>
 
@@ -153,6 +147,12 @@
                     </el-form-item>
                     <el-form-item label="排序" prop="sort">
                       <el-input v-model="editFrom.sort" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item label="权限验证" prop="auth_open">
+                      <el-radio-group v-model="editFrom.auth_open">
+                        <el-radio :label="1">开启</el-radio>
+                        <el-radio :label="0">关闭</el-radio>
+                      </el-radio-group>
                     </el-form-item>
                   </el-form>
 
@@ -211,14 +211,19 @@ import { ref } from "vue";
 import { postD } from "../../api/index";
 import ruleAdd from "./adminRuleAssembly/ruleAdd.vue";
 export default {
-  inject: ["reload"],
+  inject: ["leftNavigationList"],
+  provide() {
+    return {
+      userList: this.userList,
+    };
+  },
   components: { ruleAdd },
   data() {
     return {
       //选中的数组
       ids: [],
       idsL: {
-        id:""
+        id: "",
       },
       //选中时将对象保存到arrs中
       arrs: [],
@@ -282,6 +287,10 @@ export default {
         this.tableData1 = res.list;
       });
     },
+    // 是否为菜单
+    changelabel(va) {
+      console.log(va);
+    },
     // 菜单开关
     userStateChaged(userinfo) {
       this.loginFrom.id = userinfo.id;
@@ -321,6 +330,7 @@ export default {
           if (res.code !== 200) return this.$message.error("修改失败");
           this.$message.success("状态修改成功");
           this.userList();
+          this.leftNavigationList();
         });
       }
     },
@@ -329,15 +339,11 @@ export default {
         this.ltitle = res.list;
       });
     },
-    iseditMenuClick(e) {
-      this.editFrom.type = e;
-    },
-    noeditMenuClick(i) {
-      this.editFrom.type = i;
-    },
     showEditAddmodify(id) {
       this.editFrom = id;
       this.editFrom.id = id.id;
+      this.editFrom.type = id.type;
+      this.editFrom.auth_open = id.auth_open;
       this.editAddmodify = true;
     },
     editInfo() {
@@ -353,7 +359,6 @@ export default {
     },
     checkboxChangeEvent(data) {
       this.arrs = data.records;
-      console.log(this.arrs);
     },
     async deleteRow() {
       const deleteRows = await this.$confirm(
@@ -371,13 +376,14 @@ export default {
       }
       if (deleteRows === "confirm") {
         this.arrs.forEach((v) => {
-          this.ids.push(v.id)
+          this.ids.push(v.id);
         });
-        this.idsL.id = (this.ids).toString();
+        this.idsL.id = this.ids.toString();
         postD(this.url.ruleSelectDel, this.idsL).then((res) => {
           if (res.code !== 200) return this.$message.error("删除失败");
           this.$message.success("删除成功");
           this.userList();
+          this.leftNavigationList();
         });
       }
     },
@@ -413,5 +419,10 @@ export default {
   .vxe-button {
     margin: 1em 2.5% 1em 2.5%;
   }
+}
+.ssss {
+  width: 100px;
+  height: 100px;
+  background-color: aqua;
 }
 </style>

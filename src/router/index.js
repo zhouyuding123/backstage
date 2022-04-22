@@ -124,6 +124,11 @@ const routes = [
         path: "/Company/index",
         name: "Company",
         component: () => import("../components/businessManagement/enterPriseList.vue")
+      },
+      {
+        path: "/Routine/complaintList",
+        name: "Routine",
+        component: () => import("../components/routineManagement/complaintList.vue")
       }
     ]
   },

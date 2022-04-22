@@ -12,13 +12,17 @@
         label-width="100px"
       >
         <el-form-item label="菜单" prop="type">
-          <el-radio-group v-model="addForm.type">
-            <el-radio label="是" @click="isMenuClick(1)"></el-radio>
-            <el-radio label="否" @click="noMenuClick(2)"></el-radio>
+          <el-radio-group v-model="addForm.type" @change="changelabel">
+            <el-radio label="1">是</el-radio>
+            <el-radio label="2">否</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="父级" prop="ltitle">
-          <el-select v-model="addForm.ltitle" placeholder="请选择" @change="chang()">
+          <el-select
+            v-model="addForm.ltitle"
+            placeholder="请选择"
+            @change="chang()"
+          >
             <el-option
               v-for="item in ltitle"
               :key="item.id"
@@ -47,8 +51,8 @@
 
         <el-form-item label="权限验证" prop="auth_open">
           <el-radio-group v-model="addForm.auth_open">
-            <el-radio label="开启" @click="isOpenClick(1)"></el-radio>
-            <el-radio label="关闭" @click="isCloseClick(0)"></el-radio>
+            <el-radio label="1">开启</el-radio>
+            <el-radio label="0">关闭</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -63,7 +67,7 @@
 <script>
 import { postD } from "../../../api/index.js";
 export default {
-  inject: ["reload"],
+  inject: ["userList", "leftNavigationList"],
   data() {
     return {
       ltitle: "",
@@ -84,7 +88,7 @@ export default {
         sort: "",
         type: "",
         auth_open: "",
-        pid:""
+        pid: "",
       },
       addFormRules: {
         delivery: false,
@@ -109,8 +113,8 @@ export default {
           },
           {
             min: 3,
-            max: 20,
-            message: "长度在3-20个",
+            max: 30,
+            message: "长度在3-30个",
             tirgger: "blur",
           },
         ],
@@ -134,18 +138,6 @@ export default {
         })
         .catch((_) => {});
     },
-    isMenuClick(e) {
-      this.addForm.type = e;
-    },
-    noMenuClick(i) {
-      this.addForm.type = i;
-    },
-    isOpenClick(j) {
-      this.addForm.auth_open = j;
-    },
-    isCloseClick(k) {
-      this.addForm.auth_open = k;
-    },
     addUser() {
       this.$refs.addFormRef.validate((valid) => {
         if (!valid) return;
@@ -156,13 +148,17 @@ export default {
           }
           this.$message.success("添加成功");
           this.addDialogVisible = false;
-          this.reload();
+          this.userList();
+          this.leftNavigationList();
         });
       });
     },
     chang() {
-      this.addForm.pid = this.addForm.ltitle
-    }
+      this.addForm.pid = this.addForm.ltitle;
+    },
+    changelabel(va) {
+      this.addForm.type = va;
+    },
   },
 };
 </script>

@@ -1,91 +1,163 @@
 <template>
   <div>
-        
-        <vxe-toolbar>
-          <template #buttons>
-            <vxe-button @click="insertEvent()">在第1行插入</vxe-button>
-            <vxe-button @click="removeEvent(tableData[1])">删除第2行</vxe-button>
-            <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
-            <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
-            <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
-            <vxe-button icon="fa fa-save" @click="saveEvent">保存</vxe-button>
-          </template>
-        </vxe-toolbar>
+    <vxe-table
+      border
+      resizable
+      height="500"
+      :row-config="{ isCurrent: true, isHover: true }"
+      :data="tableData"
+      @cell-click="cellClickEvent"
+    >
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
+    </vxe-table>
 
+    <vxe-modal
+      v-model="showDetails"
+      title="查看详情"
+      width="600"
+      height="400"
+      :mask="false"
+      :lock-view="false"
+      resize
+    >
+      <template #default>
         <vxe-table
-          ref="xTable"
-          border
+          border="inner"
+          auto-resize
           show-overflow
-          :data="tableData"
-          :edit-config="{trigger: 'click', mode: 'cell'}">
-          <vxe-column type="checkbox" width="60"></vxe-column>
-          <vxe-column type="seq" width="60"></vxe-column>
-          <vxe-column field="name" title="Name" :edit-render="{autofocus: '.vxe-input--inner'}">
-            <template #edit="{ row }">
-              <vxe-input v-model="row.name" type="text"></vxe-input>
-            </template>
-          </vxe-column>
-          <vxe-column field="sex" title="Sex" :edit-render="{}">
-            <template #edit="{ row }">
-              <vxe-input v-model="row.sex" type="text"></vxe-input>
-            </template>
-          </vxe-column>
-          <vxe-column field="age" title="Age" :edit-render="{}">
-            <template #edit="{ row }">
-              <vxe-input v-model="row.age" type="text"></vxe-input>
-            </template>
-          </vxe-column>
+          height="auto"
+          :row-config="{ isHover: true }"
+          :show-header="false"
+          :sync-resize="showDetails"
+          :data="detailData"
+        >
+          <vxe-column field="label" width="40%"></vxe-column>
+          <vxe-column field="value"></vxe-column>
         </vxe-table>
+      </template>
+    </vxe-modal>
   </div>
 </template>
 
 <script>
-import VXETable from 'vxe-table'
-        
-        export default {
-          data () {
-            return {
-              tableData: [
-                { id: 10001, name: 'Test1', role: 'Develop', sex: '0', age: 28, address: 'test abc' },
-                { id: 10002, name: 'Test2', role: 'Test', sex: '1', age: 22, address: 'Guangzhou' },
-                { id: 10003, name: 'Test3', role: 'PM', sex: '0', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: '1', age: 23, address: 'test abc' },
-                { id: 10005, name: 'Test5', role: 'Develop', sex: '1', age: 30, address: 'Shanghai' },
-                { id: 10006, name: 'Test6', role: 'Designer', sex: '1', age: 21, address: 'test abc' }
-              ]
-            }
-          },
-          methods: {
-            async insertEvent (row) {
-              const $table = this.$refs.xTable
-              const record = {
-                sex: '1'
-              }
-              const { row: newRow } = await $table.insertAt(record, row)
-              await $table.setActiveCell(newRow, 'sex')
-            },
-            async removeEvent (row) {
-              const type = await VXETable.modal.confirm('您确定要删除该数据?')
-              const $table = this.$refs.xTable
-              if (type === 'confirm') {
-                $table.remove(row)
-              }
-            },
-            getRemoveEvent () {
-              const $table = this.$refs.xTable
-              const removeRecords = $table.getRemoveRecords()
-              VXETable.modal.alert(removeRecords.length)
-            },
-            getSelectionEvent () {
-              const $table = this.$refs.xTable
-              const selectRecords = $table.getCheckboxRecords()
-              VXETable.modal.alert(selectRecords.length)
-            },
-            saveEvent () {
-              const $table = this.$refs.xTable
-              const { insertRecords, removeRecords, updateRecords } = $table.getRecordset()
-              VXETable.modal.alert(`insertRecords=${insertRecords.length} removeRecords=${removeRecords.length} updateRecords=${updateRecords.length}`)
-            }
-          }
-        }
+export default {
+  data() {
+    return {
+      showDetails: false,
+      detailData: [],
+      tableData: [
+        {
+          id: 10001,
+          name: "Test1",
+          role: "Develop",
+          sex: "0",
+          age: 28,
+          amount: 888,
+          address: "test abc",
+        },
+        {
+          id: 10002,
+          name: "Test2",
+          role: "Test",
+          sex: "1",
+          age: 22,
+          amount: 666,
+          address: "Guangzhou",
+        },
+        {
+          id: 10003,
+          name: "Test3",
+          role: "PM",
+          sex: "1",
+          age: 32,
+          amount: 89,
+          address: "Shanghai",
+        },
+        {
+          id: 10004,
+          name: "Test4",
+          role: "Designer",
+          sex: "0",
+          age: 23,
+          amount: 1000,
+          address: "test abc",
+        },
+        {
+          id: 10005,
+          name: "Test5",
+          role: "Develop",
+          sex: "0",
+          age: 30,
+          amount: 999,
+          address: "Shanghai",
+        },
+        {
+          id: 10006,
+          name: "Test6",
+          role: "Designer",
+          sex: "0",
+          age: 21,
+          amount: 998,
+          address: "test abc",
+        },
+        {
+          id: 10007,
+          name: "Test7",
+          role: "Test",
+          sex: "1",
+          age: 29,
+          amount: 2000,
+          address: "test abc",
+        },
+        {
+          id: 10008,
+          name: "Test8",
+          role: "Develop",
+          sex: "1",
+          age: 35,
+          amount: 999,
+          address: "test abc",
+        },
+        {
+          id: 10009,
+          name: "Test9",
+          role: "Test",
+          sex: "1",
+          age: 26,
+          amount: 2000,
+          address: "test abc",
+        },
+        {
+          id: 100010,
+          name: "Test10",
+          role: "Develop",
+          sex: "1",
+          age: 21,
+          amount: 666,
+          address: "test abc",
+        },
+      ],
+    };
+  },
+  methods: {
+    cellClickEvent({ row }) {
+      this.detailData = [
+        "name",
+        "nickname",
+        "role",
+        "sex",
+        "age",
+        "amount",
+        "address",
+      ].map((field) => {
+        return { label: field, value: row[field] };
+      });
+      this.showDetails = true;
+    },
+  },
+};
 </script>

@@ -11,7 +11,7 @@
       <div class="Query-search">
         <el-row>
           <el-col :span="1"
-            ><div class="grid-content bg-purple">
+            ><div>
               <el-button type="success" @click="addUser = true">添加</el-button>
               <el-dialog
                 title="添加"

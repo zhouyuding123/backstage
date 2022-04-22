@@ -66,6 +66,11 @@
 import { postD } from "../../api/index.js";
 import { Menu, Message, Setting } from "@element-plus/icons-vue";
 export default {
+  provide() {
+    return {
+      leftNavigationList: this.leftNavigationList,
+    };
+  },
   components: {
     Menu,
     Message,
@@ -86,9 +91,19 @@ export default {
     this.leftNavigation();
   },
   methods: {
-    leftNavigation(e) {
+    leftNavigation() {
       postD(this.url.getHomePageHeadMessage)
         .then((res) => {
+          this.leftNavigationValue = res.list;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    leftNavigationList() {
+      postD(this.url.getHomePageHeadMessage)
+        .then((res) => {
+          console.log(res);
           this.leftNavigationValue = res.list;
         })
         .catch((err) => {
