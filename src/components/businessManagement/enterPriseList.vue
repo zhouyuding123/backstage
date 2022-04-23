@@ -57,11 +57,11 @@
             ></vxe-column>
             <vxe-column title="头像" width="100" align="center">
               <template v-slot="scoped">
-                <img
+                <el-image
                   :src="scoped.row.headimage"
                   alt=""
-                  width="50"
-                  height="48"
+                  :preview-src-list="[scoped.row.headimage]"
+                  style="width: 50px; height: 50px"
                   class="textphoto"
                 />
               </template>
@@ -204,11 +204,11 @@
                         >
                         <el-col :span="12"
                           ><div class="bg-purple phtotHeight">
-                            <img
+                            <el-image
                               :src="authCompanyValue.headimage"
                               alt=""
-                              width="50"
-                              height="48"
+                              :preview-src-list="[authCompanyValue.headimage]"
+                              style="width: 50px; height: 50px"
                             /></div
                         ></el-col>
                       </el-row>
@@ -312,7 +312,12 @@
                         >
                         <el-col :span="12"
                           ><div class="bg-purple">
-                            <img :src="authCompanyValue.card_z" alt="" /></div
+                            <el-image
+                              :src="authCompanyValue.card_z"
+                              alt=""
+                              :preview-src-list="[authCompanyValue.card_z]"
+                              style="width: 50px; height: 50px"
+                            /></div
                         ></el-col>
                       </el-row>
                       <el-row class="leftText">
@@ -323,7 +328,12 @@
                         >
                         <el-col :span="12"
                           ><div class="bg-purple-light">
-                            <img :src="authCompanyValue.card_f" alt="" /></div
+                            <el-image
+                              :src="authCompanyValue.card_f"
+                              alt=""
+                              :preview-src-list="[authCompanyValue.card_f]"
+                              style="width: 50px; height: 50px"
+                            /></div
                         ></el-col>
                       </el-row>
                       <el-row class="leftText">
@@ -334,7 +344,12 @@
                         >
                         <el-col :span="12"
                           ><div class="bg-purple">
-                            <img :src="authCompanyValue.shop_img" alt="" /></div
+                            <el-image
+                              :src="authCompanyValue.shop_img"
+                              alt=""
+                              :preview-src-list="[authCompanyValue.shop_img]"
+                              style="width: 50px; height: 50px"
+                            /></div
                         ></el-col>
                       </el-row>
                       <el-row class="leftText">
@@ -345,7 +360,12 @@
                         >
                         <el-col :span="12"
                           ><div class="bg-purple-light">
-                            <img :src="authCompanyValue.license" alt="" /></div
+                            <el-image
+                              :src="authCompanyValue.license"
+                              alt=""
+                              :preview-src-list="[authCompanyValue.license]"
+                              style="width: 50px; height: 50px"
+                            /></div
                         ></el-col>
                       </el-row>
                       <el-row class="leftText">
@@ -507,6 +527,7 @@ export default {
       }
     },
     companySetAuth(data) {
+      console.log(data);
       this.SetAuth = true;
       this.SetAuthRadio.id = data.id;
       this.SetAuthRadio.auth = data.auth;

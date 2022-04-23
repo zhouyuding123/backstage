@@ -34,6 +34,11 @@ const routes = [
         path: "/System/sms",
         name: "sms",
         component: () => import("../components/systemSettings/Sms.vue")
+      }, 
+      {
+        path: "/Auth/adminList",
+        name: "adminList",
+        component: () => import("../components/authorityManagement/adminList.vue")
       },
       {
         path: "/Auth/adminList",
@@ -54,61 +59,6 @@ const routes = [
         path: "/AdminLog/index",
         name: "adminLog",
         component: () => import("../components/authorityManagement/adminLog.vue")
-      },
-      {
-        path: "/Database/database",
-        name: "database",
-        component: () => import("../components/databaseManagement/database.vue")
-      },
-      {
-        path: "/Database/restore",
-        name: "restore",
-        component: () => import("../components/databaseManagement/restore.vue")
-      },
-      {
-        path: "/Module/index",
-        name: "moduleIndex",
-        component: () => import("../components/moduleManagement/moduleIndex.vue")
-      },
-      {
-        path: "/Category/index",
-        name: "categoryIndex",
-        component: () => import("../components/categoryMagnagement/categoryIndex.vue")
-      },
-      {
-        path: "/Link/index",
-        name: "Link",
-        component: () => import("../components/websiteFunction/Link.vue")
-      },
-      {
-        path: "/Ad/index",
-        name: "Ad",
-        component: () => import("../components/websiteFunction/Ad.vue")
-      },
-      {
-        path: "/AdType/index",
-        name: "AdType",
-        component: () => import("../components/websiteFunction/AdType.vue")
-      },
-      {
-        path: "/Debris/index",
-        name: "Debris",
-        component: () => import("../components/websiteFunction/Debris.vue")
-      },
-      {
-        path: "/Addons/index",
-        name: "Addons",
-        component: () => import("../components/addonsManagement/Addons.vue")
-      },
-      {
-        path: "/Hooks/index",
-        name: "Hooks",
-        component: () => import("../components/addonsManagement/Hooks.vue")
-      },
-      {
-        path: "/Template/index",
-        name: "Template",
-        component: () => import("../components/templateMangement/Template.vue")
       },
       {
         path: "/Users/index",
