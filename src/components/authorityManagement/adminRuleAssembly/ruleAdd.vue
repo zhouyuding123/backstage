@@ -43,11 +43,8 @@
           <el-input v-model="addForm.url"></el-input>
         </el-form-item>
         <el-form-item label="icon" prop="图标">
-          <el-input v-model="addForm.icon"></el-input>
+          <icon-list />
         </el-form-item>
-        <!-- <el-form-item label="排序" prop="sort">
-          <el-input v-model="addForm.sort"></el-input>
-        </el-form-item> -->
         <el-form-item label="权限验证" prop="auth_open">
           <el-radio-group v-model="addForm.auth_open">
             <el-radio label="1">开启</el-radio>
@@ -65,7 +62,9 @@
 
 <script>
 import { postD } from "../../../api/index.js";
+import iconList from './iconList.vue';
 export default {
+  components: { iconList },
   inject: ["userList", "leftNavigationList"],
   data() {
     return {
@@ -83,7 +82,7 @@ export default {
         title: "",
         url: "",
         name: "",
-        icon: "",
+        icon: this.icons,
         sort: "",
         type: "",
         auth_open: "",
