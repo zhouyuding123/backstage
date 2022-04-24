@@ -40,6 +40,7 @@
           box-shadow: 1px 1px rgb(0 21 41 / 8%);
         "
       >
+        <Crumbs></Crumbs>
         <div class="toolbar">
           <el-dropdown>
             <el-icon style="margin-right: 8px; margin-top: 1px"
@@ -65,6 +66,7 @@
 <script>
 import { postD } from "../../api/index.js";
 import { Menu, Message, Setting } from "@element-plus/icons-vue";
+import Crumbs from './crumbs.vue';
 export default {
   provide() {
     return {
@@ -75,6 +77,7 @@ export default {
     Menu,
     Message,
     Setting,
+    Crumbs
   },
   data() {
     return {
@@ -203,4 +206,5 @@ export default {
 .indexhomePage {
   text-decoration: none;
 }
+
 </style>

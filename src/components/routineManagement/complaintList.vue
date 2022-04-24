@@ -82,12 +82,12 @@
           width="80"
           align="center"
         ></vxe-column>
-        <vxe-column title="照片" width="80" align="cent er">
+        <vxe-column title="照片" width="80" align="center">
           <template v-slot="scoped">
             <el-image
-              :src="scoped.row.images"
+              :src="scoped.row.images?scoped.row.images:image"
               alt=""
-              :preview-src-list="[scoped.row.images]"
+              :preview-src-list="[scoped.row.images]? [scoped.row.images]:[image]"
               style="width: 50px; height: 50px"
               class="textphoto"
             />
@@ -116,6 +116,7 @@ import { postD } from "../../api/index.js";
 export default {
   data() {
     return {
+      image:"https://weisoutc.oss-cn-shanghai.aliyuncs.com/images/20220424/16507638688738b6a48da424a60d9d99b2c1b20804.png",
       url: {
         getListInterface: "Complaint/getList",
         selectDelInterface: "Complaint/selectDel",

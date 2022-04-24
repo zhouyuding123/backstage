@@ -40,14 +40,14 @@
           title="标题"
           width="350"
         ></vxe-column>
-
         <vxe-column field="name" title="规则" width="350"></vxe-column>
         <vxe-column
           field="icon"
           align="center"
           title="图标"
           width="150"
-        ></vxe-column>
+        >
+        </vxe-column>
         <vxe-column
           field="sort"
           align="center"
@@ -146,7 +146,7 @@
                       <el-input v-model="editFrom.icon"></el-input>
                     </el-form-item>
                     <el-form-item label="排序" prop="sort">
-                      <el-input v-model="editFrom.sort" disabled></el-input>
+                      <el-input v-model="editFrom.sort"></el-input>
                     </el-form-item>
                     <el-form-item label="权限验证" prop="auth_open">
                       <el-radio-group v-model="editFrom.auth_open">

@@ -58,9 +58,9 @@
             <vxe-column title="头像" width="100" align="center">
               <template v-slot="scoped">
                 <el-image
-                  :src="scoped.row.headimage"
+                  :src="scoped.row.headimage?scoped.row.headimage:image"
                   alt=""
-                  :preview-src-list="[scoped.row.headimage]"
+                  :preview-src-list="[scoped.row.headimage]?[scoped.row.headimage] : [image]"
                   style="width: 50px; height: 50px"
                   class="textphoto"
                 />
@@ -205,9 +205,9 @@
                         <el-col :span="12"
                           ><div class="bg-purple phtotHeight">
                             <el-image
-                              :src="authCompanyValue.headimage"
+                              :src="authCompanyValue.headimage?authCompanyValue.headimage:image"
                               alt=""
-                              :preview-src-list="[authCompanyValue.headimage]"
+                              :preview-src-list="[authCompanyValue.headimage]?[authCompanyValue.headimage]:[iamge]"
                               style="width: 50px; height: 50px"
                             /></div
                         ></el-col>
@@ -417,6 +417,7 @@ import { postD } from "../../api/index.js";
 export default {
   data() {
     return {
+      image:"https://weisoutc.oss-cn-shanghai.aliyuncs.com/images/20220424/16507638688738b6a48da424a60d9d99b2c1b20804.png",
       url: {
         CompanyInterface: "Company/index",
         selectDelInterface: "Company/selectDel",
