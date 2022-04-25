@@ -4,6 +4,9 @@
       >添加管理</el-button
     >
     <el-dialog title="添加" v-model="addDialogVisible" width="50%">
+      
+        
+
       <!-- 内容 -->
       <el-form
         :model="addForm"
@@ -43,7 +46,7 @@
           <el-input v-model="addForm.url"></el-input>
         </el-form-item>
         <el-form-item label="icon" prop="图标">
-          <icon-list />
+          <icon-list @func="getMsgFormSon" />
         </el-form-item>
         <el-form-item label="权限验证" prop="auth_open">
           <el-radio-group v-model="addForm.auth_open">
@@ -57,12 +60,13 @@
         <el-button type="primary" @click="addUser">确 定</el-button>
       </span>
     </el-dialog>
+    
   </div>
 </template>
 
 <script>
 import { postD } from "../../../api/index.js";
-import iconList from './iconList.vue';
+import iconList from "./iconList.vue";
 export default {
   components: { iconList },
   inject: ["userList", "leftNavigationList"],
@@ -82,7 +86,7 @@ export default {
         title: "",
         url: "",
         name: "",
-        icon: this.icons,
+        icon: "",
         sort: "",
         type: "",
         auth_open: "",
@@ -157,6 +161,9 @@ export default {
     changelabel(va) {
       this.addForm.type = va;
     },
+    getMsgFormSon(data) {
+      this.addForm.icon = data.icon1
+    }
   },
 };
 </script>

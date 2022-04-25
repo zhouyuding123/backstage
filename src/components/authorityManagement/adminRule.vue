@@ -41,12 +41,7 @@
           width="350"
         ></vxe-column>
         <vxe-column field="name" title="规则" width="350"></vxe-column>
-        <vxe-column
-          field="icon"
-          align="center"
-          title="图标"
-          width="150"
-        >
+        <vxe-column field="icon" align="center" title="图标" width="150">
         </vxe-column>
         <vxe-column
           field="sort"
@@ -392,6 +387,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@import "../../assets/css/style.css";
 .leftser {
   margin-left: 2.5%;
   margin-right: 2.5%;

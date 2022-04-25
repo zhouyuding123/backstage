@@ -134,7 +134,7 @@
                     <el-radio :label="2">审核通过</el-radio>
                     <el-radio :label="3">审核不通过</el-radio>
                   </el-radio-group>
-                  <span slot="footer" class="dialog-footer">
+                  <span class="dialog-footer">
                     <el-button @click="SetAuth = false">取 消</el-button>
                     <el-button type="primary" @click="SetAuthadd"
                       >确 定</el-button
@@ -387,7 +387,7 @@
                         >
                       </el-row>
 
-                      <span slot="footer" class="dialog-footer">
+                      <span class="dialog-footer">
                         <el-button @click="companyDetailser = false"
                           >关闭</el-button
                         >

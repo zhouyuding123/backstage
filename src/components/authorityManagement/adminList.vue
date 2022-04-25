@@ -48,6 +48,24 @@
                     <el-form-item label="密码" prop="password">
                       <el-input v-model="addList.password"></el-input>
                     </el-form-item>
+                    <el-form-item label="头像">
+                      <el-upload
+                        class="avatar-uploader"
+                        action="http://weisou.chengduziyi.com/admin/Uploads/uploadFile"
+                        :show-file-list="false"
+                        :on-success="handleAvatarSuccess"
+                        :before-upload="beforeAvatarUpload"
+                        :data="{ fileType: this.fileType }"
+                      >
+                        <img
+                          v-if="imageUrl"
+                          :src="imageUrl"
+                          class="avatar"
+                          :v-model="imageUrl"
+                        />
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                      </el-upload>
+                    </el-form-item>
                   </el-form>
                   <el-button @click="addUser = false">取 消</el-button>
                   <el-button type="primary" @click="addUserList"
@@ -80,12 +98,48 @@
           width="80"
           class="linker"
         ></vxe-column>
-        <vxe-column type="seq" title="id" width="60"></vxe-column>
-        <vxe-column field="username" title="用户名"></vxe-column>
-        <vxe-column field="nickname" title="昵称"></vxe-column>
-        <vxe-column field="group" title="所属组别"></vxe-column>
-        <vxe-column field="update_time" title="最后登录"></vxe-column>
-        <vxe-column title="操作">
+        <vxe-column
+          type="seq"
+          title="id"
+          width="60"
+          align="center"
+        ></vxe-column>
+        <vxe-column field="username" title="用户名" align="center"></vxe-column>
+        <vxe-column
+          field="nickname"
+          title="真实姓名"
+          align="center"
+        ></vxe-column>
+        <vxe-column field="group" title="所属组别" align="center"></vxe-column>
+        <vxe-column field="loginip" title="登录ip" align="center"></vxe-column>
+        <vxe-column title="头像" width="100" align="center">
+          <template v-slot="scoped">
+            <el-image
+              :src="
+                'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                scoped.row.image
+              "
+              alt=""
+              :preview-src-list="[
+                'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                  scoped.row.image,
+              ]"
+              style="width: 50px; height: 50px"
+              class="textphoto"
+            />
+          </template>
+        </vxe-column>
+        <vxe-column
+          field="create_time"
+          title="登陆时间"
+          align="center"
+        ></vxe-column>
+        <vxe-column
+          field="update_time"
+          title="最后登录"
+          align="center"
+        ></vxe-column>
+        <vxe-column title="操作" align="center">
           <template v-slot="scoped">
             <div class="postDyex">
               <div class="Edit">
@@ -126,21 +180,53 @@
                     label-width="70px"
                   >
                     <el-form-item label="用户名" prop="username">
-                      <el-input
-                        v-model="adminListeditFrom.username"
-                        disabled
-                      ></el-input>
+                      <el-input v-model="adminListeditFrom.username"></el-input>
                     </el-form-item>
-                    <el-form-item label="昵称" prop="nickname">
-                      <el-input
-                        v-model="adminListeditFrom.nickname"
-                        disabled
-                      ></el-input>
+                    <el-form-item label="真实姓名" prop="nickname">
+                      <el-input v-model="adminListeditFrom.nickname"></el-input>
                     </el-form-item>
                     <el-form-item label="密码" prop="password">
                       <el-input v-model="adminListeditFrom.password"></el-input>
                     </el-form-item>
+                    <el-form-item label="组别">
+                      <vxe-select
+                        v-model="adminListeditFrom.group_id"
+                        placeholder="请选择"
+                      >
+                        <vxe-option
+                          v-for="item in group"
+                          :key="item.id"
+                          :value="item.id"
+                          :label="item.title"
+                        ></vxe-option>
+                      </vxe-select>
+                    </el-form-item>
+                    <el-form-item label="状态">
+                      <el-radio-group v-model="adminListeditFrom.status">
+                        <el-radio :label="1">开启</el-radio>
+                        <el-radio :label="0">关闭</el-radio>
+                      </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="头像">
+                    <el-upload
+                      class="avatar-uploader"
+                      action="http://weisou.chengduziyi.com/admin/Uploads/uploadFile"
+                      :show-file-list="false"
+                      :on-success="handleAvatarSuccesser"
+                      :before-upload="beforeAvatarUploader"
+                      :data="{ fileType: this.fileType }"
+                    >
+                      <img
+                        v-if="imageUrlValue"
+                        :src="imageUrlValue"
+                        class="avatar"
+                        :v-model="imageUrlValue"
+                      />
+                      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+                  </el-form-item>
                   </el-form>
+                  
 
                   <span>
                     <el-button @click="adminListeditAddmodify = false"
@@ -194,11 +280,17 @@ import { postD } from "../../api/index.js";
 export default {
   data() {
     return {
+      imageUrlValue: "",
+      imageUrl: "",
+      fileType: "images",
       group: "",
       adminListeditAddmodify: false,
       adminListeditFrom: {
         id: "",
         group_id: "",
+        password: "",
+        status: "",
+        image: "",
       },
       adminListeditFromRules: {
         group_id: [
@@ -229,28 +321,6 @@ export default {
       adminListremoveRowFrom: {
         id: "",
       },
-      options: [
-        {
-          value: "选项1",
-          label: "黄金糕",
-        },
-        {
-          value: "选项2",
-          label: "双皮奶",
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选项4",
-          label: "龙须面",
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭",
-        },
-      ],
       value: "",
       input: "",
       allAlign: null,
@@ -293,6 +363,7 @@ export default {
         password: "",
         nickname: "",
         group_id: "",
+        image: "",
       },
       addListRules: {
         username: [
@@ -343,6 +414,7 @@ export default {
     },
     // 添加用户
     addUserList() {
+      console.log(this.addList.image);
       this.$refs.addListRef.validate((valid) => {
         if (!valid) return;
         postD(this.url.adminAddInterface, this.addList).then((res) => {
@@ -406,6 +478,7 @@ export default {
             if (res.code !== 200) return this.$message.error("更新信息失败");
             this.adminListeditAddmodify = false;
             this.$message.success("更新信息成功");
+            this.tableDataValue();
           }
         );
       });
@@ -433,6 +506,38 @@ export default {
           }
         );
       }
+    },
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+      this.addList.image = res.url;
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
+    },
+    handleAvatarSuccesser(res, file) {
+      this.imageUrlValue = URL.createObjectURL(file.raw);
+      this.adminListeditFrom.image = res.url;
+    },
+    beforeAvatarUploader(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
     },
   },
 };
@@ -472,5 +577,33 @@ export default {
 .Edit {
   width: 100%;
   display: table-cell;
+}
+.textphoto {
+  position: absolute;
+  top: 0;
+  left: 25%;
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
 }
 </style>

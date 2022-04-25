@@ -1,32 +1,68 @@
 <template>
-  <vue3-icon-picker v-model="icon1" />
+  <div>
+    <el-upload
+      class="avatar-uploader"
+      action="http://weisou.chengduziyi.com/admin/Uploads/uploadFile"
+      :show-file-list="false"
+      :on-success="handleAvatarSuccess"
+      :before-upload="beforeAvatarUpload"
+      :data={fileType:this.fileType}
+    >
+      <img v-if="imageUrl" :src="imageUrl" class="avatar" :v-model="imageUrl" />
+      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+    </el-upload>
+  </div>
 </template>
-
 <script>
-import { ref } from 'vue'
-import Vue3IconPicker from '../Vue3IconPicker.vue'
+
 export default {
-  components: {
-    Vue3IconPicker
+  data() {
+    return {
+      imageUrl: "",
+      fileType: "images",
+    };
   },
-  setup () {
-    const icon1 = ref('far fa-grin-hearts')
-    return { icon1}
-  }
-}
+  methods: {
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
+    },
+  },
+};
 </script>
-
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.avatar-uploader .el-upload {
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
 }
-
-.icon {
-  font-size: 40px;
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
 }
 </style>
