@@ -42,6 +42,9 @@
         ></vxe-column>
         <vxe-column field="name" title="规则" width="350"></vxe-column>
         <vxe-column field="icon" align="center" title="图标" width="150">
+          <template v-slot="scoped">
+            <i :class="scoped.row.icon"></i>
+          </template>
         </vxe-column>
         <vxe-column
           field="sort"
@@ -72,7 +75,7 @@
           </template>
         </vxe-column>
 
-        <vxe-column title="操作" width="383" align="center">
+        <vxe-column title="操作" align="center">
           <template v-slot="scoped">
             <div class="postDyex">
               <!-- 修改 -->
@@ -138,7 +141,7 @@
                       <el-input v-model="editFrom.title"></el-input>
                     </el-form-item>
                     <el-form-item label="icon" prop="图标">
-                      <el-input v-model="editFrom.icon"></el-input>
+                      <icon-list @update:modelValue="insert" />
                     </el-form-item>
                     <el-form-item label="排序" prop="sort">
                       <el-input v-model="editFrom.sort"></el-input>
@@ -202,9 +205,9 @@
   </div>
 </template>
 <script>
-import { ref } from "vue";
 import { postD } from "../../api/index";
 import ruleAdd from "./adminRuleAssembly/ruleAdd.vue";
+import iconList from "./adminRuleAssembly/iconList.vue";
 export default {
   inject: ["leftNavigationList"],
   provide() {
@@ -212,7 +215,7 @@ export default {
       userList: this.userList,
     };
   },
-  components: { ruleAdd },
+  components: { ruleAdd, iconList },
   data() {
     return {
       //选中的数组
@@ -222,7 +225,7 @@ export default {
       },
       //选中时将对象保存到arrs中
       arrs: [],
-      tableData1: ref([]),
+      tableData1: [],
       url: {
         getHomePageHeadMessage: "Auth/ruleEdit",
         deleteIInterface: "Auth/ruleDel",
@@ -281,10 +284,6 @@ export default {
       postD("Auth/adminRule").then((res) => {
         this.tableData1 = res.list;
       });
-    },
-    // 是否为菜单
-    changelabel(va) {
-      console.log(va);
     },
     // 菜单开关
     userStateChaged(userinfo) {
@@ -349,6 +348,8 @@ export default {
 
           this.editAddmodify = false;
           this.$message.success("更新信息成功");
+          this.leftNavigationList();
+          this.userList();
         });
       });
     },
@@ -382,11 +383,15 @@ export default {
         });
       }
     },
+    insert(value) {
+      this.editFrom.icon = value
+    },
   },
 };
 </script>
 
 <style lang="less" scoped>
+@import "../../assets/css/style.css";
 @import "../../assets/css/style.css";
 .leftser {
   margin-left: 2.5%;

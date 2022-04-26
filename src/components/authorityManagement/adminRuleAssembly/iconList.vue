@@ -1,5 +1,5 @@
 <template>
-  <vue3-icon-picker v-model="values.icon1" />
+      <vue3-icon-picker v-model="icon1" />
 </template>
 
 <script>
@@ -9,20 +9,9 @@ export default {
   components: {
     Vue3IconPicker,
   },
-  data() {
-    return {
-      values: {
-        icon1: ref("far fa-grin-hearts")
-      }
-    }
-  },
-  created() {
-    this.asd();
-  },
-  methods: {
-    asd() {
-      this.$emit('func',this.values) 
-    },
-  },
-};
+   setup () {
+    const icon1 = ref('far fa-grin-hearts')
+    return { icon1}
+  }
+}
 </script>

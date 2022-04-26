@@ -3,7 +3,6 @@
     <span v-bind="$attrs" @click="togglePicker">
       <i class="vue3-icon-picker" :class="modelValue"></i>
     </span>
-
     <div class="aim-modal aim-open" v-if="isVisible">
       <div class="aim-modal--content">
         <div class="aim-modal--header">
@@ -88,7 +87,7 @@ export default {
     },
     modelValue: {
       type: String,
-      default: "fas fa-circle",
+      default: "far fa-grin-hearts",
     },
   },
   setup(props, context) {
@@ -154,6 +153,7 @@ export default {
 
     const isActiveGlyph = (glyph) => {
       return activeGlyph.value == glyph;
+      
     };
 
     const isActiveTab = (tab) => {

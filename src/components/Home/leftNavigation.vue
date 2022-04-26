@@ -16,7 +16,7 @@
             :index="item.id + ''"
           >
             <template #title>
-              <el-icon><message style="color: white" /></el-icon>
+              <el-icon><i :class="item.icon"></i></el-icon>
               <div style="color: white">{{ item.title }}</div>
             </template>
             <el-menu-item-group>
@@ -25,6 +25,7 @@
                 :key="value.id"
                 :index="'/' + value.name"
               >
+              <el-icon><i :class="value.icon"></i></el-icon>
                 <div>{{ value.title }}</div>
               </el-menu-item>
             </el-menu-item-group>
@@ -52,7 +53,9 @@
               </el-dropdown-menu>
             </template>
           </el-dropdown>
-          <span>Tom</span>
+          <span>
+            {{ useNames }}
+          </span>
         </div>
       </el-header>
 
@@ -81,6 +84,7 @@ export default {
   },
   data() {
     return {
+      useNames:"",
       url: {
         getHomePageHeadMessage: "Index/index",
       },
@@ -92,6 +96,7 @@ export default {
   },
   created() {
     this.leftNavigation();
+    this.useName()
   },
   methods: {
     leftNavigation() {
@@ -106,7 +111,6 @@ export default {
     leftNavigationList() {
       postD(this.url.getHomePageHeadMessage)
         .then((res) => {
-          console.log(res);
           this.leftNavigationValue = res.list;
         })
         .catch((err) => {
@@ -123,6 +127,9 @@ export default {
       //跳转到登录页
       this.$router.push("/login");
     },
+    useName() {
+      this.useNames = localStorage.use
+    }
   },
 };
 </script>

@@ -3,10 +3,7 @@
     <el-button type="primary" @click="addDialogVisible = true"
       >添加管理</el-button
     >
-    <el-dialog title="添加" v-model="addDialogVisible" width="50%">
-      
-        
-
+    <el-dialog title="添加" v-model="addDialogVisible" width="50%" @close="addDialogVisibleClose">
       <!-- 内容 -->
       <el-form
         :model="addForm"
@@ -46,7 +43,7 @@
           <el-input v-model="addForm.url"></el-input>
         </el-form-item>
         <el-form-item label="icon" prop="图标">
-          <icon-list @func="getMsgFormSon" />
+          <icon-list @update:modelValue="insert" />
         </el-form-item>
         <el-form-item label="权限验证" prop="auth_open">
           <el-radio-group v-model="addForm.auth_open">
@@ -133,13 +130,6 @@ export default {
         this.ltitle = res.list;
       });
     },
-    handleClose(done) {
-      this.$confirm("确认关闭？")
-        .then((_) => {
-          done();
-        })
-        .catch((_) => {});
-    },
     addUser() {
       this.$refs.addFormRef.validate((valid) => {
         if (!valid) return;
@@ -161,8 +151,18 @@ export default {
     changelabel(va) {
       this.addForm.type = va;
     },
-    getMsgFormSon(data) {
-      this.addForm.icon = data.icon1
+    insert(value) {
+      this.addForm.icon = value
+    },
+    addDialogVisibleClose() {
+      this.addForm.title = ""
+      this.addForm.url = ""
+      this.addForm.name = ""
+      this.addForm.icon = ""
+      this.addForm.sort = ""
+      this.addForm.type = ""
+      this.addForm.auth_open = ""
+      this.addForm.pid = ""
     }
   },
 };

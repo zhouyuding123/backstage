@@ -93,6 +93,14 @@ const routes = [
         }
       },
       {
+        path: "/AdminLog/zxc",
+        name: "zxc",
+        component: () => import("../components/authorityManagement/adminls.vue")
+        ,meta:{
+          title:"管理员lx"
+        }
+      },
+      {
         path: "/Users/index",
         name: "memberIndex",
         component: () => import("../components/memberManagement/memberIndex.vue")
