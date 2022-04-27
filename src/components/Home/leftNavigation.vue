@@ -25,7 +25,7 @@
                 :key="value.id"
                 :index="'/' + value.name"
               >
-              <el-icon><i :class="value.icon"></i></el-icon>
+                <el-icon><i :class="value.icon"></i></el-icon>
                 <div>{{ value.title }}</div>
               </el-menu-item>
             </el-menu-item-group>
@@ -42,9 +42,32 @@
         "
       >
         <Crumbs></Crumbs>
+        <div class="fullScreen" @click="fullScreen">
+          <svg
+            t="1650962932909"
+            class="icon"
+            viewBox="0 0 1228 1024"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            p-id="2295"
+            width="16"
+            height="16"
+          >
+            <path
+              d="M843.1616 68.266667H989.866667a170.666667 170.666667 0 0 1 170.666666 170.666666v152.8832a34.133333 34.133333 0 1 0 68.266667 0V238.933333a238.933333 238.933333 0 0 0-238.933333-238.933333h-146.705067a34.133333 34.133333 0 0 0 0 68.266667zM1160.533333 629.3504V785.066667a170.666667 170.666667 0 0 1-170.666666 170.666666h-123.5968a34.133333 34.133333 0 0 0 0 68.266667H989.866667a238.933333 238.933333 0 0 0 238.933333-238.933333v-155.716267a34.133333 34.133333 0 1 0-68.266667 0zM393.4208 955.733333H238.933333a170.666667 170.666667 0 0 1-170.666666-170.666666v-155.136a34.133333 34.133333 0 0 0-68.266667 0V785.066667a238.933333 238.933333 0 0 0 238.933333 238.933333h154.487467a34.133333 34.133333 0 0 0 0-68.266667zM68.266667 393.045333V238.933333a170.666667 170.666667 0 0 1 170.666666-170.666666h147.933867a34.133333 34.133333 0 0 0 0-68.266667H238.933333a238.933333 238.933333 0 0 0-238.933333 238.933333v154.112a34.133333 34.133333 0 1 0 68.266667 0z"
+              p-id="2296"
+            ></path>
+          </svg>
+        </div>
         <div class="toolbar">
           <el-dropdown>
-            <el-icon style="margin-right: 8px; margin-top: 1px"
+            <el-icon
+              style="
+                margin-right: 8px;
+                margin-top: 0px;
+                width: 16px;
+                height: 16px;
+              "
               ><setting
             /></el-icon>
             <template #dropdown>
@@ -69,7 +92,7 @@
 <script>
 import { postD } from "../../api/index.js";
 import { Menu, Message, Setting } from "@element-plus/icons-vue";
-import Crumbs from './crumbs.vue';
+import Crumbs from "./crumbs.vue";
 export default {
   provide() {
     return {
@@ -80,11 +103,11 @@ export default {
     Menu,
     Message,
     Setting,
-    Crumbs
+    Crumbs,
   },
   data() {
     return {
-      useNames:"",
+      useNames: "",
       url: {
         getHomePageHeadMessage: "Index/index",
       },
@@ -92,11 +115,12 @@ export default {
       leftvalue: "",
       // 是否折叠
       isCollapse: false,
+      fullscreen: false,
     };
   },
   created() {
     this.leftNavigation();
-    this.useName()
+    this.useName();
   },
   methods: {
     leftNavigation() {
@@ -128,8 +152,33 @@ export default {
       this.$router.push("/login");
     },
     useName() {
-      this.useNames = localStorage.use
-    }
+      this.useNames = localStorage.use;
+    },
+    fullScreen() {
+      let element = document.documentElement;
+      if (this.fullscreen) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitCancelFullScreen) {
+          document.webkitCancelFullScreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      } else {
+        if (element.requestFullscreen) {
+          element.requestFullscreen();
+        } else if (element.webkitRequestFullScreen) {
+          element.webkitRequestFullScreen();
+        } else if (element.mozRequestFullScreen) {
+          element.mozRequestFullScreen();
+        } else if (element.msRequestFullscreen) {
+          element.msRequestFullscreen();
+        }
+      }
+      this.fullscreen = !this.fullscreen;
+    },
   },
 };
 </script>
@@ -213,5 +262,11 @@ export default {
 .indexhomePage {
   text-decoration: none;
 }
-
+.fullScreen {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px;
+  cursor: pointer;
+}
 </style>

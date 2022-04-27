@@ -37,19 +37,32 @@
               </el-form-item>
 
               <el-form-item label="权限" prop="rules">
-                <el-tree
-                  show-checkbox
-                  node-key="id"
-                  ref="tree"
-                  highlight-current
+                <vxe-table
+                  class="leftser"
+                  border
+                  round
+                  resizable
+                  ref="xTree"
+                  row-id="id"
+                  :tree-config="{
+                    transform: true,
+                    rowField: 'id',
+                    parentField: 'pid',
+                    lazy: true,
+                    hasChild: 'hasChild',
+                  }"
                   :data="data"
-                  :props="defaultProps"
-                  @check="
-                    (click, checked) => {
-                      handleNodeClick(click, checked);
-                    }
-                  "
-                ></el-tree>
+                  @checkbox-change="checkboxChangeEventer"
+                  @checkbox-all="checkboxChangeEventer"
+                >
+                  <vxe-column
+                    align="center"
+                    type="checkbox"
+                    width="50"
+                    class="linker"
+                  ></vxe-column>
+                  <vxe-column tree-node field="ltitle" width="350"></vxe-column>
+                </vxe-table>
               </el-form-item>
             </el-form>
             <span>
@@ -146,7 +159,7 @@
                         node-key="id"
                         ref="tree"
                         highlight-current
-                        :data="data"
+                        :data="datas"
                         :props="defaultProps"
                         @check="
                           (click, checked) => {
@@ -155,6 +168,36 @@
                         "
                         :default-checked-keys="rules"
                       ></el-tree>
+                      <!-- <vxe-table
+                        class="leftser"
+                        border
+                        round
+                        resizable
+                        ref="tree"
+                        row-id="id"
+                        :tree-config="{
+                          transform: true,
+                          rowField: 'id',
+                          parentField: 'pid',
+                          lazy: true,
+                          hasChild: 'hasChild',
+                        }"
+                        :data="datas"
+                        @checkbox-change="checkboxChangeEvent"
+                        @checkbox-all="checkboxChangeEvent"
+                      >
+                        <vxe-column
+                          align="center"
+                          type="checkbox"
+                          width="50"
+                          class="linker"
+                        ></vxe-column>
+                        <vxe-column
+                          tree-node
+                          field="ltitle"
+                          width="350"
+                        ></vxe-column>
+                      </vxe-table> -->
                     </el-form-item>
                   </el-form>
                   <span slot="footer" class="dialog-footer">
@@ -254,6 +297,8 @@ export default {
         groupSelectDelInterface: "Auth/groupSelectDel",
         groupEditInterface: "Auth/groupEdit",
         groupDelInterface: "Auth/groupDel",
+        // 读取权限
+        adminRuleInterface: "Auth/adminRule",
       },
       allAlign: null,
       tableData: [],
@@ -284,7 +329,7 @@ export default {
       // 权限
       data: [],
       defaultProps: {
-        children: "children",
+        children: "pid",
         label: "title",
       },
       //选中的数组 批量删除
@@ -294,13 +339,21 @@ export default {
       //选中时将对象保存到arrs中
       arrs: [],
       // 搜索
+      abb: "",
+      pushId: [],
+      datas: [],
+      datap: [],
     };
   },
   created() {
     this.groupVaule();
     this.addPermission();
+    this.addPermissioner();
   },
   methods: {
+    checkboxChangeEventer(data) {
+      this.abb = data.records;
+    },
     groupVaule() {
       postD(this.url.adminGroupInterface, this.page1).then((res) => {
         this.tableData = res.list;
@@ -310,16 +363,34 @@ export default {
     },
     //添加权限
     addPermission() {
-      postD(this.url.getHomePageHeadMessage).then((res) => {
+      postD(this.url.adminRuleInterface).then((res) => {
         this.data = res.list;
       });
     },
-    handleNodeClick(data, checked) {
-      this.addGroupList.rules = checked.checkedKeys.toString();
+    addPermissioner() {
+      postD(this.url.adminRuleInterface).then((res) => {
+        this.datas = res.list;
+        var arr = res.list;
+        console.log(arr);
+        const done = arr
+          .filter((person) => !person.pid)
+          .map((person) => {
+            return {
+              id: person.id,
+              name: person.name,
+              children: arr.filter((child) => child.pid == person.id),
+            };
+        })
+        console.log(done);
+      });
     },
     addGroupSubmit() {
       this.$refs.addGroupListref.validate((v) => {
         if (!v) return;
+        this.abb.forEach((s) => {
+          this.pushId.push(s.id);
+        });
+        this.addGroupList.rules = this.pushId.toString();
         postD(this.url.groupAddInterface, this.addGroupList).then((res) => {
           if (res.code !== 200) {
             this.$message.error("添加失败");
@@ -399,6 +470,7 @@ export default {
       }
     },
     handleNodeClickEdit(data, checked) {
+      console.log(checked);
       this.adminGroupEditFrom.rules = checked.checkedKeys.toString();
     },
     adminGroupEditaddinfo() {

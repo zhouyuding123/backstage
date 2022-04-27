@@ -131,6 +131,14 @@ const routes = [
         ,meta:{
           title:"需求列表"
         }
+      },
+      {
+        path: "/Circle/list",
+        name: "Circle",
+        component: () => import("../components/Circle/circleList.vue")
+        ,meta:{
+          title:"圈子列表"
+        }
       }
     ]
   },

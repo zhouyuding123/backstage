@@ -38,9 +38,12 @@
         <el-form-item label="标题" prop="title">
           <el-input v-model="addForm.title"></el-input>
         </el-form-item>
-
         <el-form-item label="url" prop="url">
           <el-input v-model="addForm.url"></el-input>
+        </el-form-item>
+        
+        <el-form-item label="sort" prop="sort">
+          <el-input v-model="addForm.sort"></el-input>
         </el-form-item>
         <el-form-item label="icon" prop="图标">
           <icon-list @update:modelValue="insert" />
