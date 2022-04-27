@@ -168,36 +168,6 @@
                         "
                         :default-checked-keys="rules"
                       ></el-tree>
-                      <!-- <vxe-table
-                        class="leftser"
-                        border
-                        round
-                        resizable
-                        ref="tree"
-                        row-id="id"
-                        :tree-config="{
-                          transform: true,
-                          rowField: 'id',
-                          parentField: 'pid',
-                          lazy: true,
-                          hasChild: 'hasChild',
-                        }"
-                        :data="datas"
-                        @checkbox-change="checkboxChangeEvent"
-                        @checkbox-all="checkboxChangeEvent"
-                      >
-                        <vxe-column
-                          align="center"
-                          type="checkbox"
-                          width="50"
-                          class="linker"
-                        ></vxe-column>
-                        <vxe-column
-                          tree-node
-                          field="ltitle"
-                          width="350"
-                        ></vxe-column>
-                      </vxe-table> -->
                     </el-form-item>
                   </el-form>
                   <span slot="footer" class="dialog-footer">
@@ -329,8 +299,8 @@ export default {
       // 权限
       data: [],
       defaultProps: {
-        children: "pid",
-        label: "title",
+        children: "children",
+        label: "ltitle",
       },
       //选中的数组 批量删除
       ids: {
@@ -369,19 +339,32 @@ export default {
     },
     addPermissioner() {
       postD(this.url.adminRuleInterface).then((res) => {
-        this.datas = res.list;
-        var arr = res.list;
-        console.log(arr);
-        const done = arr
-          .filter((person) => !person.pid)
-          .map((person) => {
-            return {
-              id: person.id,
-              name: person.name,
-              children: arr.filter((child) => child.pid == person.id),
-            };
-        })
-        console.log(done);
+        var arr = res.list
+        arr.map((item, i) => {
+          if (item.pid == 0) {
+            item.children = [];
+            this.datas.push(item);
+          }
+        });
+        this.datas.forEach((item, i) => {
+          arr.forEach((list, j) => {
+            if (item.id == list.pid) {
+              list.children = [];
+              item.children.push(list);
+            }
+          });
+        });
+        arr.forEach((jk, k) => {
+          this.datas.forEach((item, i) => {
+            if (item.children.length > 0) {
+              item.children.forEach((list, j) => {
+                if (list.id == jk.pid) {
+                  list.children.push(jk);
+                }
+              });
+            }
+          });
+        });
       });
     },
     addGroupSubmit() {
