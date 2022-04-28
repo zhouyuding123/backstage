@@ -123,7 +123,7 @@ export default {
             this.$message.success("登入成功");
             localStorage.setItem("token", res.token);
             localStorage.setItem("use",res.data.username)
-            this.$router.push("/about");
+            this.$router.push("/home");
           })
           .catch((err) => {
             console.log(err);

@@ -6,7 +6,6 @@
 </template>
 
 <script>
-import { ref } from "vue";
 import Vue3IconPicker from "./adminLog.vue";
 export default {
   components: {

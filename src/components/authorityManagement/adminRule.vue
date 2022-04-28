@@ -290,8 +290,17 @@ export default {
       this.loginFrom.id = userinfo.id;
       this.loginFrom.status = userinfo.status;
       postD(this.url.getHomePageHeadMessage, this.loginFrom).then((res) => {
-        if (res.code !== 200) return this.$message.error("修改失败");
-        this.$message.success("菜单修改成功");
+        if (res.code == "200") {
+          this.$message.success("状态修改成功");
+        } else if (res.code == "-200") {
+          this.$message.error("参数错误，或暂无数据");
+        } else if (res.code == "-201") {
+          this.$message.error("未登陆");
+        } else if (res.code == "-203") {
+          this.$message.error("对不起，你没有此操作权限");
+        } else {
+          this.$message.error("注册失败，账号已存在");
+        }
       });
     },
     // 状态开关
@@ -299,8 +308,17 @@ export default {
       this.loginFroms.id = userinfor.id;
       this.loginFroms.auth_open = userinfor.auth_open;
       postD(this.url.getHomePageHeadMessage, this.loginFroms).then((res) => {
-        if (res.code !== 200) return this.$message.error("修改失败");
-        this.$message.success("状态修改成功");
+        if (res.code == "200") {
+          this.$message.success("状态修改成功");
+        } else if (res.code == "-200") {
+          this.$message.error("参数错误，或暂无数据");
+        } else if (res.code == "-201") {
+          this.$message.error("未登陆");
+        } else if (res.code == "-203") {
+          this.$message.error("对不起，你没有此操作权限");
+        } else {
+          this.$message.error("注册失败，账号已存在");
+        }
       });
     },
     // 删除按钮
@@ -321,8 +339,17 @@ export default {
       if (removeValue === "confirm") {
         this.removeRowFrom.id = userinfors.id;
         postD(this.url.deleteIInterface, this.removeRowFrom).then((res) => {
-          if (res.code !== 200) return this.$message.error("修改失败");
+          if (res.code == "200") {
           this.$message.success("状态修改成功");
+        } else if (res.code == "-200") {
+          this.$message.error("参数错误，或暂无数据");
+        } else if (res.code == "-201") {
+          this.$message.error("未登陆");
+        } else if (res.code == "-203") {
+          this.$message.error("对不起，你没有此操作权限");
+        } else {
+          this.$message.error("注册失败，账号已存在");
+        }
           this.userList();
           this.leftNavigationList();
         });
@@ -344,10 +371,20 @@ export default {
       this.$refs.editFromref.validate((valid) => {
         if (!valid) return;
         postD(this.url.ruleEditInterface, this.editFrom).then((res) => {
-          if (res.code !== 200) return this.$message.error("更新信息失败");
+          if (res.code == "200") {
+          this.$message.success("状态修改成功");
+        } else if (res.code == "-200") {
+          this.$message.error("参数错误，或暂无数据");
+        } else if (res.code == "-201") {
+          this.$message.error("未登陆");
+        } else if (res.code == "-203") {
+          this.$message.error("对不起，你没有此操作权限");
+        } else {
+          this.$message.error("注册失败，账号已存在");
+        }
 
           this.editAddmodify = false;
-          this.$message.success("更新信息成功");
+          
           this.leftNavigationList();
           this.userList();
         });
@@ -376,8 +413,17 @@ export default {
         });
         this.idsL.id = this.ids.toString();
         postD(this.url.ruleSelectDel, this.idsL).then((res) => {
-          if (res.code !== 200) return this.$message.error("删除失败");
-          this.$message.success("删除成功");
+          if (res.code == "200") {
+          this.$message.success("状态修改成功");
+        } else if (res.code == "-200") {
+          this.$message.error("参数错误，或暂无数据");
+        } else if (res.code == "-201") {
+          this.$message.error("未登陆");
+        } else if (res.code == "-203") {
+          this.$message.error("对不起，你没有此操作权限");
+        } else {
+          this.$message.error("注册失败，账号已存在");
+        }
           this.userList();
           this.leftNavigationList();
         });

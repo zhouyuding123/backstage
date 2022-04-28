@@ -170,7 +170,7 @@
                       ></el-tree>
                     </el-form-item>
                   </el-form>
-                  <span slot="footer" class="dialog-footer">
+                  <span>
                     <el-button @click="adminGroupEditadd = false"
                       >取 消</el-button
                     >
@@ -216,8 +216,8 @@
         </vxe-column>
       </vxe-table>
       <vxe-pager
-        :current-page.sync="page1.offset"
-        :page-size.sync="page1.limit"
+        :current-page="page1.offset"
+        :page-size="page1.limit"
         :total="page1.totalResult"
         :layouts="[
           'PrevPage',
@@ -375,10 +375,17 @@ export default {
         });
         this.addGroupList.rules = this.pushId.toString();
         postD(this.url.groupAddInterface, this.addGroupList).then((res) => {
-          if (res.code !== 200) {
-            this.$message.error("添加失败");
-          }
-          this.$message.success("添加成功");
+          if (res.code == "200") {
+          this.$message.success("状态修改成功");
+        } else if (res.code == "-200") {
+          this.$message.error("参数错误，或暂无数据");
+        } else if (res.code == "-201") {
+          this.$message.error("未登陆");
+        } else if (res.code == "-203") {
+          this.$message.error("对不起，你没有此操作权限");
+        } else {
+          this.$message.error("注册失败，账号已存在");
+        }
           this.addGroup = false;
           this.groupVaule();
         });
@@ -408,8 +415,17 @@ export default {
         this.arrs.forEach((v) => {
           this.ids.id = v.id;
           postD(this.url.groupSelectDelInterface, this.ids).then((res) => {
-            if (res.code !== 200) return this.$message.error("删除失败");
-            this.$message.success("删除成功");
+            if (res.code == "200") {
+          this.$message.success("状态修改成功");
+        } else if (res.code == "-200") {
+          this.$message.error("参数错误，或暂无数据");
+        } else if (res.code == "-201") {
+          this.$message.error("未登陆");
+        } else if (res.code == "-203") {
+          this.$message.error("对不起，你没有此操作权限");
+        } else {
+          this.$message.error("注册失败，账号已存在");
+        }
             this.groupVaule();
           });
         });
@@ -446,8 +462,17 @@ export default {
       if (removeValue === "confirm") {
         this.removeRowFrom.id = userinfors.id;
         postD(this.url.groupDelInterface, this.removeRowFrom).then((res) => {
-          if (res.code !== 200) return this.$message.error("修改失败");
+          if (res.code == "200") {
           this.$message.success("状态修改成功");
+        } else if (res.code == "-200") {
+          this.$message.error("参数错误，或暂无数据");
+        } else if (res.code == "-201") {
+          this.$message.error("未登陆");
+        } else if (res.code == "-203") {
+          this.$message.error("对不起，你没有此操作权限");
+        } else {
+          this.$message.error("注册失败，账号已存在");
+        }
           this.groupVaule();
         });
       }
@@ -460,9 +485,19 @@ export default {
       this.$refs.adminGroupEditFromref.validate((v) => {
         postD(this.url.groupEditInterface, this.adminGroupEditFrom).then(
           (res) => {
-            if (res.code !== 200) return this.$message.error("更新信息失败");
+            if (res.code == "200") {
+          this.$message.success("状态修改成功");
+        } else if (res.code == "-200") {
+          this.$message.error("参数错误，或暂无数据");
+        } else if (res.code == "-201") {
+          this.$message.error("未登陆");
+        } else if (res.code == "-203") {
+          this.$message.error("对不起，你没有此操作权限");
+        } else {
+          this.$message.error("注册失败，账号已存在");
+        }
             this.adminGroupEditadd = false;
-            this.$message.success("更新信息成功");
+            
           }
         );
       });

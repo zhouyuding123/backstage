@@ -489,8 +489,17 @@ export default {
         });
         this.idsL.id = this.ids.toString();
         postD(this.url.selectDelInterface, this.idsL).then((res) => {
-          if (res.code !== 200) return this.$message.error("删除失败");
-          this.$message.success("删除成功");
+          if (res.code == "200") {
+          this.$message.success("状态修改成功");
+        } else if (res.code == "-200") {
+          this.$message.error("参数错误，或暂无数据");
+        } else if (res.code == "-201") {
+          this.$message.error("未登陆");
+        } else if (res.code == "-203") {
+          this.$message.error("对不起，你没有此操作权限");
+        } else {
+          this.$message.error("注册失败，账号已存在");
+        }
           this.enterprise();
         });
       }
@@ -500,8 +509,17 @@ export default {
       this.companyStatus.id = data.id;
       this.companyStatus.status = data.status;
       postD(this.url.editStatInterface, this.companyStatus).then((res) => {
-        if (res.code !== 200) return this.$message.error("修改失败");
-        this.$message.success("状态修改成功");
+        if (res.code == "200") {
+          this.$message.success("状态修改成功");
+        } else if (res.code == "-200") {
+          this.$message.error("参数错误，或暂无数据");
+        } else if (res.code == "-201") {
+          this.$message.error("未登陆");
+        } else if (res.code == "-203") {
+          this.$message.error("对不起，你没有此操作权限");
+        } else {
+          this.$message.error("注册失败，账号已存在");
+        }
       });
     },
     // 单个删除
@@ -521,8 +539,17 @@ export default {
       if (companyRemoveRows === "confirm") {
         this.companyRemove.id = data.id;
         postD(this.url.delInterface, this.companyRemove).then((res) => {
-          if (res.code !== 200) return this.$message.error("删除失败");
-          this.$message.success("删除成功");
+          if (res.code == "200") {
+          this.$message.success("状态修改成功");
+        } else if (res.code == "-200") {
+          this.$message.error("参数错误，或暂无数据");
+        } else if (res.code == "-201") {
+          this.$message.error("未登陆");
+        } else if (res.code == "-203") {
+          this.$message.error("对不起，你没有此操作权限");
+        } else {
+          this.$message.error("注册失败，账号已存在");
+        }
           this.enterprise();
         });
       }
@@ -536,8 +563,17 @@ export default {
     // 提交审核
     SetAuthadd() {
       postD(this.url.setAuthInterface, this.SetAuthRadio).then((res) => {
-        if (res.code !== 200) return this.$message.error("查看审核失败");
-        this.$message.success("审核修改成功");
+        if (res.code == "200") {
+          this.$message.success("状态修改成功");
+        } else if (res.code == "-200") {
+          this.$message.error("参数错误，或暂无数据");
+        } else if (res.code == "-201") {
+          this.$message.error("未登陆");
+        } else if (res.code == "-203") {
+          this.$message.error("对不起，你没有此操作权限");
+        } else {
+          this.$message.error("注册失败，账号已存在");
+        }
         this.SetAuth = false;
         this.enterprise();
       });

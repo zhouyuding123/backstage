@@ -69,7 +69,7 @@ import { postD } from "../../../api/index.js";
 import iconList from "./iconList.vue";
 export default {
   components: { iconList },
-  inject: ["userList", "leftNavigationList"],
+  inject: ["userList", "leftNavigationList","reload"],
   data() {
     return {
       ltitle: "",
@@ -138,13 +138,21 @@ export default {
         if (!valid) return;
         // 发请求
         postD(this.url.addInterface, this.addForm).then((res) => {
-          if (res.code !== 200) {
-            this.$message.error("添加失败");
-          }
-          this.$message.success("添加成功");
+          if (res.code == "200") {
+          this.$message.success("状态修改成功");
+        } else if (res.code == "-200") {
+          this.$message.error("参数错误，或暂无数据");
+        } else if (res.code == "-201") {
+          this.$message.error("未登陆");
+        } else if (res.code == "-203") {
+          this.$message.error("对不起，你没有此操作权限");
+        } else {
+          this.$message.error("注册失败，账号已存在");
+        }
           this.addDialogVisible = false;
           this.userList();
           this.leftNavigationList();
+          this.reload();
         });
       });
     },

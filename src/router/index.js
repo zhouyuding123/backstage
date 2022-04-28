@@ -53,7 +53,7 @@ const routes = [
         }
       },
       {
-        path: "/System/sensitive",
+        path: "/Sensitive/getData",
         name: "sensitive",
         component: () => import("../components/systemSettings/Sensitive.vue"),
         meta:{
@@ -117,8 +117,8 @@ const routes = [
         }
       },
       {
-        path: "/Routine/complaintList",
-        name: "Routine",
+        path: "/Complaint/getList",
+        name: "Complaint",
         component: () => import("../components/routineManagement/complaintList.vue")
         ,meta:{
           title:"投诉列表"
