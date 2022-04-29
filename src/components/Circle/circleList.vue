@@ -78,12 +78,17 @@
           width="100"
           align="center"
         ></vxe-column>
-        <vxe-column
-          field="status"
-          title="status"
-          width="60"
-          align="center"
-        ></vxe-column>
+        <vxe-column title="status" width="60" align="center">
+          <template v-slot="scoped">
+            <el-switch
+              v-model="scoped.row.status"
+              active-color="#13ce66"
+              @change="circleStatys(scoped.row)"
+              :active-value="1"
+              :inactive-value="0"
+            ></el-switch>
+          </template>
+        </vxe-column>
         <vxe-column
           field="tel"
           title="电话"
@@ -134,11 +139,6 @@
                   align="center"
                 ></vxe-column
                 ><vxe-column
-                  field="status"
-                  title="status"
-                  align="center"
-                ></vxe-column
-                ><vxe-column
                   field="nickname"
                   title="昵称"
                   align="center"
@@ -164,7 +164,6 @@
                       v-model="personneDetils"
                       width="30%"
                     >
-                      <span>这是一段信息</span>
                       <span>
                         <el-button @click="personneDetils = false"
                           >取 消</el-button
@@ -182,9 +181,116 @@
         </vxe-column>
         <vxe-column title="论坛数" width="80" align="center">
           <template v-slot="scoped">
-            <div class="textVuel" @click="forum_countClick">
+            <div class="textVuel" @click="forum_countClick(scoped.row)">
               {{ scoped.row.forum_count }}
             </div>
+            <el-dialog title="提示" v-model="forum_countInput" width="70%">
+              <vxe-table
+                round
+                border="true"
+                ref="xTable3"
+                :row-config="{ isHover: true }"
+                :data="forum_countTab"
+                row-id="id"
+                show-overflow="tooltip"
+              >
+                <vxe-column
+                  align="center"
+                  type="checkbox"
+                  width="50"
+                ></vxe-column>
+                <vxe-column
+                  type="seq"
+                  title="序号"
+                  width="60"
+                  align="center"
+                ></vxe-column>
+                <vxe-column
+                  field="id"
+                  title="id"
+                  width="60"
+                  align="center"
+                ></vxe-column>
+                <vxe-column
+                  field="circle_id"
+                  title="圈子id"
+                  width="70"
+                  align="center"
+                ></vxe-column>
+                <vxe-column
+                  field="title"
+                  title="话题"
+                  width="150"
+                  align="center"
+                ></vxe-column>
+                <vxe-column
+                  field="content"
+                  title="内容"
+                  align="center"
+                ></vxe-column>
+                <vxe-column field="status" title="状态" align="center">
+                  <template v-slot="scr">
+                    <el-switch
+                      v-model="scr.row.status"
+                      active-color="#13ce66"
+                      @change="forumStatus(scr.row)"
+                      :active-value="1"
+                      :inactive-value="0"
+                    ></el-switch>
+                  </template>
+                </vxe-column>
+                <vxe-column
+                  field="browse"
+                  title="浏览量"
+                  align="center"
+                ></vxe-column>
+                <vxe-column
+                  field="comment_count"
+                  title="评论量"
+                  align="center"
+                ></vxe-column>
+                <vxe-column
+                  field="type"
+                  title="类型"
+                  align="center"
+                ></vxe-column>
+                <vxe-column title="操作" align="center" width="200">
+                  <template v-slot="forumed">
+                    <el-row>
+                      <el-button
+                        type="primary"
+                        @click="forumDetails(forumed.row)"
+                        >详情</el-button
+                      >
+                      <el-button type="danger" @click="forumDle(forumed.row)"
+                        >删除</el-button
+                      >
+                    </el-row>
+                  </template>
+                </vxe-column>
+              </vxe-table>
+              <vxe-pager
+                :current-page="forum_countId.offset"
+                :page-size="forum_countId.limit"
+                :total="forum_countId.totalResult"
+                :layouts="[
+                  'PrevPage',
+                  'JumpNumber',
+                  'NextPage',
+                  'FullJump',
+                  'Sizes',
+                  'Total',
+                ]"
+                @page-change="handlePageChangeFroum_count"
+              >
+              </vxe-pager>
+              <span>
+                <el-button @click="forum_countInput = false">取 消</el-button>
+                <el-button type="primary" @click="forum_countInput = false"
+                  >确 定</el-button
+                >
+              </span>
+            </el-dialog>
           </template>
         </vxe-column>
         <vxe-column title="操作" align="center">
@@ -211,6 +317,49 @@
       >
       </vxe-pager>
     </div>
+    <el-dialog title="论坛详情" v-model="forumDetailsDialog" width="30%">
+      <el-descriptions direction="vertical" :column="3" border>
+        <el-descriptions-item label="id">{{
+          forumDetailsValue.id
+        }}</el-descriptions-item>
+        <el-descriptions-item label="圈子id">{{
+          forumDetailsValue.circle_id
+        }}</el-descriptions-item>
+        <el-descriptions-item label="标题">{{
+          forumDetailsValue.title
+        }}</el-descriptions-item>
+        <el-descriptions-item label="缩略图">{{
+          forumDetailsValue.thumb
+        }}</el-descriptions-item>
+        <el-descriptions-item label="描述">{{
+          forumDetailsValue.description
+        }}</el-descriptions-item>
+        <el-descriptions-item label="内容">{{
+          forumDetailsValue.content
+        }}</el-descriptions-item>
+        <el-descriptions-item label="地址">{{
+          forumDetailsValue.details
+        }}</el-descriptions-item>
+        <el-descriptions-item label="区域">{{
+          forumDetailsValue.city
+        }}</el-descriptions-item>
+        <el-descriptions-item label="浏览量">{{
+          forumDetailsValue.browse
+        }}</el-descriptions-item>
+        <el-descriptions-item label="评论量">{{
+          forumDetailsValue.comment_count
+        }}</el-descriptions-item>
+        <el-descriptions-item label="创造时间">{{
+          forumDetailsValue.create_time
+        }}</el-descriptions-item>
+        <el-descriptions-item label="更新时间">{{
+          forumDetailsValue.update_time
+        }}</el-descriptions-item>
+      </el-descriptions>
+      <span>
+        <el-button @click="forumDetailsDialog = false">返 回</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -231,6 +380,8 @@ export default {
         delCircleForumInterface: "Circle/delCircleForum",
         showForumInterface: "Circle/showForum",
         listForumInterface: "Circle/listForum",
+        setCircleStatInterface: "Circle/setCircleStat",
+        setForumStatInterface: "Circle/setForumStat",
       },
       // 打开人员
       member_countClicks: false,
@@ -252,13 +403,12 @@ export default {
       },
       // 圈子人员删除确认
       personneDetils: false,
-      // 分页
+      // 圈子分页
       page1: {
         offset: 1,
         limit: 10,
         totalResult: 0,
       },
-
       //选中的数组  批量删除 选中时将对象保存到arrs中
       ids: [],
       arrs: [],
@@ -269,6 +419,35 @@ export default {
       delRowValue: {
         id: "",
       },
+      // status
+      statusModelRadio: {
+        id: "",
+        status: "",
+      },
+      forumStatusRadio: {
+        id: "",
+        status: "",
+      },
+
+      // 论坛
+      forum_countInput: false,
+      forum_countId: {
+        id: "",
+        offset: 1,
+        limit: 10,
+        totalResult: 0,
+      },
+      forum_countTab: [],
+      // 论坛详情
+      forum_countdetails: {
+        id: "",
+      },
+      forumDetailsDialog: false,
+      forumDetailsValue: [],
+      // 论坛删除
+      forum_countdel: {
+        id: "",
+      },
     };
   },
   created() {
@@ -277,7 +456,7 @@ export default {
   methods: {
     // 读取圈子列表
     circleValue() {
-      postD(this.url.getListInterface).then((res) => {
+      postD(this.url.getListInterface, this.page1).then((res) => {
         this.tableData = res.list;
         this.page1.totalResult = res.count;
       });
@@ -411,8 +590,116 @@ export default {
         });
       }
     },
-    forum_countClick() {
-      alert("124");
+    // 圈子审核
+    circleStatys(data) {
+      this.statusModelRadio.id = data.id.toString();
+      this.statusModelRadio.status = data.status.toString();
+      postD(this.url.setCircleStatInterface, this.statusModelRadio).then(
+        (res) => {
+          if (res.code == "200") {
+            this.$message.success("状态修改成功");
+          } else if (res.code == "-200") {
+            this.$message.error("参数错误，或暂无数据");
+          } else if (res.code == "-201") {
+            this.$message.error("未登陆");
+          } else if (res.code == "-203") {
+            this.$message.error("对不起，你没有此操作权限");
+          } else {
+            this.$message.error("注册失败，账号已存在");
+          }
+        }
+      );
+    },
+    // 论坛
+    forum_countClick(data) {
+      this.forum_countId.id = data.id;
+      this.forum_countInput = true;
+      postD(this.url.getCircleForumInterface, this.forum_countId).then(
+        (res) => {
+          this.forum_countTab = res.list;
+          this.forum_countId.totalResult = res.count;
+        }
+      );
+    },
+    // 论坛分页
+    handlePageChangeFroum_count({ currentPage, pageSize }) {
+      this.forum_countId.offset = currentPage;
+      this.forum_countId.limit = pageSize;
+      postD(this.url.getCircleForumInterface, this.forum_countId).then(
+        (res) => {
+          this.forum_countTab = res.list;
+          this.forum_countId.totalResult = res.count;
+        }
+      );
+    },
+    // 论坛详情
+    forumDetails(data) {
+      this.forumDetailsDialog = true;
+      this.forum_countdetails.id = data.id;
+      postD(this.url.showForumInterface, this.forum_countdetails).then(
+        (res) => {
+          this.forumDetailsValue = res.data;
+        }
+      );
+    },
+    // 论坛删除
+    async forumDle(data) {
+      const forumDles = await this.$confirm(
+        "此操作将永久删除, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => err);
+      if (forumDles !== "confirm") {
+        return this.$message.info("取消删除");
+      }
+      if (forumDles === "confirm") {
+        this.forum_countdel.id = data.id;
+        postD(this.url.delCircleForumInterface, this.forum_countdel).then(
+          (res) => {
+            if (res.code == "200") {
+              this.$message.success("状态修改成功");
+              postD(this.url.getCircleForumInterface, this.forum_countId).then(
+                (res) => {
+                  this.forum_countTab = res.list;
+                  this.forum_countId.totalResult = res.count;
+                }
+              );
+            } else if (res.code == "-200") {
+              this.$message.error("参数错误，或暂无数据");
+            } else if (res.code == "-201") {
+              this.$message.error("未登陆");
+            } else if (res.code == "-203") {
+              this.$message.error("对不起，你没有此操作权限");
+            } else {
+              this.$message.error("注册失败，账号已存在");
+            }
+          }
+        );
+      }
+    },
+    // 论坛审核
+    forumStatus(data) {
+      this.forumStatusRadio.id = data.id;
+      this.forumStatusRadio.status = data.status;
+      postD(this.url.setForumStatInterface, this.forumStatusRadio).then(
+        (res) => {
+          if (res.code == "200") {
+            this.$message.success("状态修改成功");
+          } else if (res.code == "-200") {
+            this.$message.error("参数错误，或暂无数据");
+          } else if (res.code == "-201") {
+            this.$message.error("未登陆");
+          } else if (res.code == "-203") {
+            this.$message.error("对不起，你没有此操作权限");
+          } else {
+            this.$message.error("注册失败，账号已存在");
+          }
+        }
+      );
     },
   },
 };
@@ -477,5 +764,20 @@ export default {
 }
 .inputlong {
   width: 200px;
+}
+.clickHeader {
+  cursor: pointer;
+}
+.green {
+  color: #39b54a;
+}
+.yellow {
+  color: #f29124;
+}
+.red {
+  color: #e6432d;
+}
+.white {
+  color: white;
 }
 </style>

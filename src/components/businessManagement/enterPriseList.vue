@@ -555,7 +555,6 @@ export default {
       }
     },
     companySetAuth(data) {
-      console.log(data);
       this.SetAuth = true;
       this.SetAuthRadio.id = data.id;
       this.SetAuthRadio.auth = data.auth;

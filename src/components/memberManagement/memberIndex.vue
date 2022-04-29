@@ -146,8 +146,8 @@
         </vxe-column>
       </vxe-table>
       <vxe-pager
-        :current-page.sync="page1.offset"
-        :page-size.sync="page1.limit"
+        :current-page="page1.offset"
+        :page-size="page1.limit"
         :total="page1.totalResult"
         :layouts="[
           'PrevPage',

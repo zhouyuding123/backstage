@@ -139,6 +139,14 @@ const routes = [
         ,meta:{
           title:"圈子列表"
         }
+      },
+      {
+        path: "/Designer/index",
+        name: "Designer",
+        component: () => import("../components/Designer/designerList.vue")
+        ,meta:{
+          title:"设计师列表"
+        }
       }
     ]
   },
