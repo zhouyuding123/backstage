@@ -137,9 +137,10 @@
         <vxe-column title="操作" align="center" width="250">
           <template v-slot="scoped">
             <el-button type="primary" @click="designerDetails(scoped.row)"
+            @close ="designerDetailser"
               >详情</el-button
             >
-            <el-button type="primary" @click="designerDelOnly(scoped.row)"
+            <el-button type="danger" @click="designerDelOnly(scoped.row)"
               >删除</el-button
             >
           </template>
@@ -167,34 +168,45 @@
         }}</el-descriptions-item>
         <el-descriptions-item label="id">{{
           designerDetailsValue.id
-        }}</el-descriptions-item><el-descriptions-item label="昵称">{{
+        }}</el-descriptions-item
+        ><el-descriptions-item label="昵称">{{
           designerDetailsValue.nickname
-        }}</el-descriptions-item><el-descriptions-item label="电话">{{
+        }}</el-descriptions-item
+        ><el-descriptions-item label="电话">{{
           designerDetailsValue.tel
-        }}</el-descriptions-item><el-descriptions-item label="头像">{{
-          designerDetailsValue.headimg
-        }}</el-descriptions-item><el-descriptions-item label="id">{{
-          designerDetailsValue.id
-        }}</el-descriptions-item><el-descriptions-item label="id">{{
-          designerDetailsValue.id
-        }}</el-descriptions-item><el-descriptions-item label="id">{{
-          designerDetailsValue.id
-        }}</el-descriptions-item><el-descriptions-item label="id">{{
-          designerDetailsValue.id
-        }}</el-descriptions-item><el-descriptions-item label="id">{{
-          designerDetailsValue.id
-        }}</el-descriptions-item><el-descriptions-item label="id">{{
-          designerDetailsValue.id
-        }}</el-descriptions-item><el-descriptions-item label="id">{{
-          designerDetailsValue.id
-        }}</el-descriptions-item><el-descriptions-item label="id">{{
-          designerDetailsValue.id
-        }}</el-descriptions-item><el-descriptions-item label="id">{{
-          designerDetailsValue.id
-        }}</el-descriptions-item><el-descriptions-item label="id">{{
-          designerDetailsValue.id
-        }}</el-descriptions-item><el-descriptions-item label="id">{{
-          designerDetailsValue.id
+        }}</el-descriptions-item
+        ><el-descriptions-item label="头像">
+          <div>123</div>
+          <el-image
+            :src="
+              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/images/20220413/16498389884a47a0db6e60853dedfcfdf08a5ca249.png'
+            "
+          ></el-image>
+           </el-descriptions-item
+        ><el-descriptions-item label="名字">{{
+          designerDetailsValue.name
+        }}</el-descriptions-item
+        ><el-descriptions-item label="简介">{{
+          designerDetailsValue.description
+        }}</el-descriptions-item
+        ><el-descriptions-item label="账号认证状态">
+
+          {{filterStyles(designerDetailsValue.auth)}}
+
+          </el-descriptions-item
+        ><el-descriptions-item label="性别">
+          {{
+          filterSex(designerDetailsValue.sex)
+        }}
+        </el-descriptions-item
+        ><el-descriptions-item label="身份证号码">{{
+          designerDetailsValue.card_no
+        }}</el-descriptions-item
+        ><el-descriptions-item label="身份证正面">{{
+          designerDetailsValue.card_z
+        }}</el-descriptions-item
+        ><el-descriptions-item label="身份证反面">{{
+          designerDetailsValue.card_f
         }}</el-descriptions-item>
       </el-descriptions>
 
@@ -288,6 +300,16 @@ export default {
         return "已认证审核状态";
       } else {
         return "已审核通过";
+      }
+    },
+    // 性别
+    filterSex(val) {
+       if (val === 1) {
+        return "男 ";
+      } else if (val === 2) {
+        return "女";
+      } else {
+        return "性别不对";
       }
     },
     companySetAuth(data) {
@@ -418,6 +440,9 @@ export default {
         }
       );
     },
+    designerDetailser(){
+      this.designerDetailsId = []
+    }
   },
 };
 </script>

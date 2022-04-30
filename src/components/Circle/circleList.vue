@@ -719,7 +719,7 @@ export default {
       line-height: 48px;
       width: 170px;
       height: 48px;
-      background: #3acbe9;
+      background: red;
       box-shadow: 2px 5px 20px 1px rgba(58, 203, 233, 0.15);
       border-radius: 10px 10px 10px 10px;
       opacity: 1;
