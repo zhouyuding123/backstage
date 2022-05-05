@@ -2,12 +2,18 @@
   <el-container class="layout-container-demo" style="height: 100%">
     <el-aside :width="isCollapse ? '50px' : '170px'">
       <el-scrollbar>
-        <div class="toggle-button" @click="toggleButton">+-</div>
+        <div>
+          <div class="logStyle">
+            <img src="../../assets/logo.png" alt="" />
+            <p>MOPHY</p>
+          </div>
+          <div class="toggle-button" @click="toggleButton">+-</div>
+        </div>
         <el-menu
-          background-color="#304156"
           :collapse="isCollapse"
           :collapse-transition="false"
           router
+          background-color="#7a40f2"
         >
           <router-link class="indexhomePage" to="/pageHome">首页</router-link>
           <el-sub-menu
@@ -17,7 +23,7 @@
           >
             <template #title>
               <el-icon><i :class="item.icon"></i></el-icon>
-              <div style="color: white">{{ item.title }}</div>
+              <div class="textLitle">{{ item.title }}</div>
             </template>
             <el-menu-item-group>
               <el-menu-item
@@ -25,7 +31,6 @@
                 :key="value.id"
                 :index="'/' + value.name"
               >
-                <el-icon><i :class="value.icon"></i></el-icon>
                 <div>{{ value.title }}</div>
               </el-menu-item>
             </el-menu-item-group>
@@ -38,7 +43,9 @@
         style="
           text-align: right;
           font-size: 12px;
-          box-shadow: 1px 1px rgb(0 21 41 / 8%);
+          box-shadow: 1px 1px 30px rgb(0 21 41 / 8%);
+          border-radius: 60px 60px 60px 60px;
+          opacity: 1;
         "
       >
         <Crumbs></Crumbs>
@@ -184,16 +191,34 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.logStyle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  padding-top: 15px;
+  color: white;
+  font-family: Manrope3-Bold, Manrope3;
+  img {
+    width: 58px;
+    height: 50px;
+  }
+}
 .layout-container-demo .el-aside {
-  color: var(--el-text-color-primary);
-  background: #304156;
+  background: #7a40f2;
+  border-radius: 0px 60px 60px 0px;
+  opacity: 1;
 }
 .layout-container-demo .el-menu {
   border-right: none;
-  background-color: #304156;
+  background: #7a40f2;
+  .textLitle {
+    color: #cfb8ff;
+    line-height: 0px;
+  }
   .el-icon {
     width: 30px;
-    color: aliceblue;
+    color: white;
   }
 }
 .layout-container-demo .el-main {
@@ -205,6 +230,42 @@ export default {
   justify-content: center;
   height: 100%;
   right: 20px;
+}
+.el-menu-item-group {
+  background-color: #672fdb;
+}
+
+.el-menu-item {
+  color: #cfb8ff;
+}
+.el-menu-item.is-active {
+  color: #ffffff;
+}
+.toggle-button {
+  background-color: #672fdb;
+  font-size: 10px;
+  line-height: 24px;
+  color: #fff;
+  text-align: center;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+}
+.indexhomePage {
+  cursor: pointer;
+  height: 30px;
+  color: #cfb8ff;
+  font-size: 14px;
+  line-height: 30px;
+}
+.indexhomePage {
+  text-decoration: none;
+}
+.fullScreen {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px;
+  cursor: pointer;
 }
 .topfirster {
   position: relative;
@@ -221,52 +282,5 @@ export default {
     transform: translate(-50%, -10%);
     font-size: 14px;
   }
-}
-.topfirst {
-  width: 200px;
-  height: 60px;
-  .topcenter {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 10%;
-    left: 35%;
-    transform: translate(-50%, -10%);
-  }
-}
-.el-menu-item-group {
-  background-color: #1f2d3d !important;
-}
-.el-menu-item {
-  color: white;
-}
-.el-menu-item.is-active {
-  color: var(--el-menu-active-color);
-}
-.toggle-button {
-  background-color: #4a5064;
-  font-size: 10px;
-  line-height: 24px;
-  color: #fff;
-  text-align: center;
-  letter-spacing: 0.2em;
-  cursor: pointer;
-}
-.indexhomePage {
-  cursor: pointer;
-  height: 30px;
-  color: #fff;
-  font-size: 14px;
-  line-height: 30px;
-}
-.indexhomePage {
-  text-decoration: none;
-}
-.fullScreen {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 20px;
-  cursor: pointer;
 }
 </style>

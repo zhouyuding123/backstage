@@ -1,13 +1,11 @@
 <template>
-  <div>
+  <div class="backColor">
     <!-- 添加 -->
     <rule-add />
     <div>
       <vxe-table
         class="leftser"
-        border
         round
-        resizable
         ref="xTree"
         row-id="id"
         :tree-config="{
@@ -20,6 +18,8 @@
         :data="tableData1"
         @checkbox-change="checkboxChangeEvent"
         @checkbox-all="checkboxChangeEvent"
+        :row-style="tableRowStyle"
+        :header-row-style="tableStyle"
       >
         <vxe-column
           align="center"
@@ -432,13 +432,23 @@ export default {
     insert(value) {
       this.editFrom.icon = value
     },
+    tableRowStyle() {
+      return "background: #FFFFFF;box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);border-radius: 10px 10px 10px 10px;opacity: 1;";
+    },
+    tableStyle() {
+      return "box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);border-radius: 10px 10px 10px 10px;opacity: 1;";
+    },
   },
 };
 </script>
 
 <style lang="less" scoped>
 @import "../../assets/css/style.css";
-@import "../../assets/css/style.css";
+.backColor {
+  background: #f9f9f9;
+  width: 100%;
+  height: 100%;
+}
 .leftser {
   margin-left: 2.5%;
   margin-right: 2.5%;

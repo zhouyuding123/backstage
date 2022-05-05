@@ -1,11 +1,6 @@
 <template>
-  <div class="group-left">
-    <div class="Page-description">
-      <p>角色组</p>
-      <p>
-        角色组可以有多个,角色有上下级层级关系,如果子角色有角色组和管理员的权限则可以派生属于自己组别的下级角色组或管理员
-      </p>
-    </div>
+  <div class="backColor">
+    <div class="group-left">
     <div class="addPage-Group">
       <el-row>
         <el-col :span="1">
@@ -82,13 +77,17 @@
     </div>
     <div class="table-padding">
       <vxe-table
-        border
+        round
+        border="true"
+        ref="xTable1"
         :align="allAlign"
         :row-config="{ isHover: true }"
         :data="tableData"
+        row-id="id"
         @checkbox-change="checkboxChangeEvent"
         @checkbox-all="checkboxChangeEvent"
-        row-id="id"
+        :row-style="tableRowStyle"
+        :header-row-style="tableStyle"
       >
         <vxe-column
           align="center"
@@ -231,6 +230,7 @@
       >
       </vxe-pager>
     </div>
+  </div>
   </div>
 </template>
 
@@ -507,22 +507,49 @@ export default {
       this.page1.limit = pageSize;
       this.groupVaule();
     },
+    tableRowStyle() {
+      return "background: #FFFFFF;box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);border-radius: 10px 10px 10px 10px;opacity: 1;";
+    },
+    tableStyle() {
+      return "box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);border-radius: 10px 10px 10px 10px;opacity: 1;";
+    },
   },
 };
 </script>
 
 <style lang="less" scoped>
+.backColor {
+  background: #f9f9f9;
+  width: 100%;
+  height: 100%;
+  .firstColor {
+    padding: 20px 20px 0 20px;
+    width: 100%;
+    display: flex;
+    flex-flow: row;
+    .buttonStyle {
+      line-height: 48px;
+      width: 170px;
+      height: 48px;
+      background: red;
+      box-shadow: 2px 5px 20px 1px rgba(58, 203, 233, 0.15);
+      border-radius: 10px 10px 10px 10px;
+      opacity: 1;
+      cursor: pointer;
+      p {
+        font-size: 14px;
+        font-weight: 500;
+        color: #ffffff;
+      }
+    }
+  }
+  .twons {
+    padding: 20px;
+  }
+}
 .group-left {
-  margin-top: 2.5%;
   margin-left: 2.5%;
   margin-right: 2.5%;
-}
-.Page-description {
-  font-size: 14px;
-  text-align: left;
-  background-color: #e8edf0;
-  height: 67px;
-  padding: 15px;
 }
 .table-padding {
   padding: 15px 0 0 0;

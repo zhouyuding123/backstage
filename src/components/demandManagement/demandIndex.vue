@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="backColor">
     <div class="memberDeleber">
       <el-row>
         <el-col :span="2"
@@ -19,14 +19,17 @@
     </div>
     <div class="memberTable">
       <vxe-table
+        round
+        border="true"
         ref="xTable1"
-        border
         :align="allAlign"
         :row-config="{ isHover: true }"
         :data="tableData"
         row-id="id"
         @checkbox-change="checkboxChangeEvent"
         @checkbox-all="checkboxChangeEvent"
+        :row-style="tableRowStyle"
+        :header-row-style="tableStyle"
       >
         <vxe-column
           align="center"
@@ -249,11 +252,22 @@ export default {
         return "待匹配";
       }
     },
+    tableRowStyle() {
+      return "background: #FFFFFF;box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);border-radius: 10px 10px 10px 10px;opacity: 1;";
+    },
+    tableStyle() {
+      return "box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);border-radius: 10px 10px 10px 10px;opacity: 1;";
+    },
   },
 };
 </script>
 
 <style lang="less" scoped>
+.backColor {
+  background: #f9f9f9;
+  width: 100%;
+  height: 100%;
+}
 .memberDeleber {
   text-align: left;
   padding: 1% 2.5% 1% 2.5%;

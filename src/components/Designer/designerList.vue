@@ -31,12 +31,23 @@
           width="60"
           align="center"
         ></vxe-column>
-        <vxe-column
-          field="headimage"
-          title="头像"
-          width="80"
-          align="center"
-        ></vxe-column>
+        <vxe-column width="80" align="center">
+          <template v-slot="scoped">
+            <el-image
+              :src="
+                'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                scoped.row.headimage
+              "
+              alt=""
+              :preview-src-list="[
+                'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                  scoped.row.headimage,
+              ]"
+              style="width: 40px; height: 40px"
+              class="imgStyle"
+            />
+          </template>
+        </vxe-column>
         <vxe-column
           field="name"
           title="名字"
@@ -136,8 +147,10 @@
         ></vxe-column>
         <vxe-column title="操作" align="center" width="250">
           <template v-slot="scoped">
-            <el-button type="primary" @click="designerDetails(scoped.row)"
-            @close ="designerDetailser"
+            <el-button
+              type="primary"
+              @click="designerDetails(scoped.row)"
+              @close="designerDetailser"
               >详情</el-button
             >
             <el-button type="danger" @click="designerDelOnly(scoped.row)"
@@ -161,8 +174,8 @@
         @page-change="handlePageChange"
       ></vxe-pager>
     </div>
-    <el-dialog title="设计师详情" v-model="designerDialog" width="30%">
-      <el-descriptions direction="vertical" :column="3" border>
+    <el-dialog title="设计师详情" v-model="designerDialog" width="50%">
+      <el-descriptions direction="vertical" :column="4" border>
         <el-descriptions-item label="账号">{{
           designerDetailsValue.username
         }}</el-descriptions-item>
@@ -174,45 +187,72 @@
         }}</el-descriptions-item
         ><el-descriptions-item label="电话">{{
           designerDetailsValue.tel
-        }}</el-descriptions-item
-        ><el-descriptions-item label="头像">
-          <div>123</div>
+        }}</el-descriptions-item>
+        <el-descriptions-item label="头像">
           <el-image
+            class="heaimageStyle"
             :src="
-              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/images/20220413/16498389884a47a0db6e60853dedfcfdf08a5ca249.png'
+              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+              designerDetailsValue.headimage
             "
-          ></el-image>
-           </el-descriptions-item
-        ><el-descriptions-item label="名字">{{
+            alt=""
+            :preview-src-list="[
+              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                designerDetailsValue.headimage,
+            ]"
+            style="width: 30px; height: 30px"
+          />
+        </el-descriptions-item>
+
+        <el-descriptions-item label="名字">{{
           designerDetailsValue.name
         }}</el-descriptions-item
         ><el-descriptions-item label="简介">{{
           designerDetailsValue.description
         }}</el-descriptions-item
         ><el-descriptions-item label="账号认证状态">
-
-          {{filterStyles(designerDetailsValue.auth)}}
-
-          </el-descriptions-item
+          {{ filterStyles(designerDetailsValue.auth) }} </el-descriptions-item
         ><el-descriptions-item label="性别">
-          {{
-          filterSex(designerDetailsValue.sex)
-        }}
-        </el-descriptions-item
+          {{ filterSex(designerDetailsValue.sex) }} </el-descriptions-item
         ><el-descriptions-item label="身份证号码">{{
           designerDetailsValue.card_no
         }}</el-descriptions-item
-        ><el-descriptions-item label="身份证正面">{{
-          designerDetailsValue.card_z
-        }}</el-descriptions-item
-        ><el-descriptions-item label="身份证反面">{{
-          designerDetailsValue.card_f
-        }}</el-descriptions-item>
+        ><el-descriptions-item label="身份证正面">
+          <el-image
+            class="heaimageStyle"
+            :src="
+              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+              designerDetailsValue.card_z
+            "
+            alt=""
+            :preview-src-list="[
+              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                designerDetailsValue.card_z,
+            ]"
+            style="width: 30px; height: 30px"
+          /> </el-descriptions-item
+        ><el-descriptions-item label="身份证反面">
+          <el-image
+            class="heaimageStyle"
+            :src="
+              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+              designerDetailsValue.card_f
+            "
+            alt=""
+            :preview-src-list="[
+              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                designerDetailsValue.card_f,
+            ]"
+            style="width: 30px; height: 30px"
+          />
+        </el-descriptions-item>
       </el-descriptions>
 
-      <span>
-        <el-button @click="designerDialog = false">返 回</el-button>
-      </span>
+      <div class="desingnerStyle">
+        <span>
+          <el-button @click="designerDialog = false">返 回</el-button>
+        </span>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -262,7 +302,20 @@ export default {
       designerDetailsId: {
         id: "",
       },
-      designerDetailsValue: [],
+      designerDetailsValue: {
+        username: "",
+        id: "",
+        nickname: "",
+        tel: "",
+        headimage: "",
+        name: "",
+        description: "",
+        auth: "",
+        sex: "",
+        card_no: "",
+        card_z: "",
+        card_f: "",
+      },
       designerDialog: false,
     };
   },
@@ -304,7 +357,7 @@ export default {
     },
     // 性别
     filterSex(val) {
-       if (val === 1) {
+      if (val === 1) {
         return "男 ";
       } else if (val === 2) {
         return "女";
@@ -436,13 +489,14 @@ export default {
       this.designerDetailsId.id = data.id;
       postD(this.url.authDesignerInterface, this.designerDetailsId).then(
         (res) => {
+          console.log(res);
           this.designerDetailsValue = res.data;
         }
       );
     },
-    designerDetailser(){
-      this.designerDetailsId = []
-    }
+    designerDetailser() {
+      this.designerDetailsId = [];
+    },
   },
 };
 </script>
@@ -487,5 +541,24 @@ export default {
 }
 .red {
   color: #e6432d;
+}
+.imgStyle {
+  position: absolute;
+  border-radius: 50%;
+  top: 10%;
+  left: 60%;
+  background: #ffffff;
+  box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);
+  opacity: 1;
+}
+.heaimageStyle {
+  width: 500px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);
+  opacity: 1;
+}
+.desingnerStyle {
+  margin-top: 10px;
 }
 </style>

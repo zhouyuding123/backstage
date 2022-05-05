@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="backColor">
     <div class="memberDeleber" v-if="show">
       <el-row>
         <el-col :span="2"><p>关键词搜索:</p></el-col>
@@ -22,7 +22,8 @@
             <el-button type="danger" plain @click="compalanitDeletes"
               >批量删除</el-button
             >
-          </div></el-col
+          </div>
+          </el-col
         >
         <el-col :span="1"
           ><div>
@@ -42,14 +43,17 @@
     </div>
     <div class="memberTable">
       <vxe-table
+        round
+        border="true"
         ref="xTable1"
-        border
         :align="allAlign"
         :row-config="{ isHover: true }"
         :data="tableData"
         row-id="id"
         @checkbox-change="checkboxChangeEvent"
         @checkbox-all="checkboxChangeEvent"
+        :row-style="tableRowStyle"
+        :header-row-style="tableStyle"
       >
         <vxe-column
           align="center"
@@ -85,9 +89,15 @@
         <vxe-column title="照片" width="80" align="center">
           <template v-slot="scoped">
             <el-image
-              :src="scoped.row.images?scoped.row.images:image"
+              :src="
+                'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                scoped.row.images
+              "
               alt=""
-              :preview-src-list="[scoped.row.images]? [scoped.row.images]:[image]"
+              :preview-src-list="[
+                'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                  scoped.row.images,
+              ]"
               style="width: 50px; height: 50px"
               class="textphoto"
             />
@@ -116,7 +126,6 @@ import { postD } from "../../api/index.js";
 export default {
   data() {
     return {
-      image:"https://weisoutc.oss-cn-shanghai.aliyuncs.com/images/20220424/16507638688738b6a48da424a60d9d99b2c1b20804.png",
       url: {
         getListInterface: "Complaint/getList",
         selectDelInterface: "Complaint/selectDel",
@@ -182,16 +191,16 @@ export default {
         this.idL.id = this.ids.toString();
         postD(this.url.selectDelInterface, this.idL).then((res) => {
           if (res.code == "200") {
-          this.$message.success("状态修改成功");
-        } else if (res.code == "-200") {
-          this.$message.error("参数错误，或暂无数据");
-        } else if (res.code == "-201") {
-          this.$message.error("未登陆");
-        } else if (res.code == "-203") {
-          this.$message.error("对不起，你没有此操作权限");
-        } else {
-          this.$message.error("注册失败，账号已存在");
-        }
+            this.$message.success("状态修改成功");
+          } else if (res.code == "-200") {
+            this.$message.error("参数错误，或暂无数据");
+          } else if (res.code == "-201") {
+            this.$message.error("未登陆");
+          } else if (res.code == "-203") {
+            this.$message.error("对不起，你没有此操作权限");
+          } else {
+            this.$message.error("注册失败，账号已存在");
+          }
           this.getListValue();
         });
       }
@@ -214,26 +223,37 @@ export default {
         postD(this.url.delInterface, this.complaintRemoveRowList).then(
           (res) => {
             if (res.code == "200") {
-          this.$message.success("状态修改成功");
-        } else if (res.code == "-200") {
-          this.$message.error("参数错误，或暂无数据");
-        } else if (res.code == "-201") {
-          this.$message.error("未登陆");
-        } else if (res.code == "-203") {
-          this.$message.error("对不起，你没有此操作权限");
-        } else {
-          this.$message.error("注册失败，账号已存在");
-        }
+              this.$message.success("状态修改成功");
+            } else if (res.code == "-200") {
+              this.$message.error("参数错误，或暂无数据");
+            } else if (res.code == "-201") {
+              this.$message.error("未登陆");
+            } else if (res.code == "-203") {
+              this.$message.error("对不起，你没有此操作权限");
+            } else {
+              this.$message.error("注册失败，账号已存在");
+            }
             this.getListValue();
           }
         );
       }
+    },
+    tableRowStyle() {
+      return "background: #FFFFFF;box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);border-radius: 10px 10px 10px 10px;opacity: 1;";
+    },
+    tableStyle() {
+      return "box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);border-radius: 10px 10px 10px 10px;opacity: 1;";
     },
   },
 };
 </script>
 
 <style lang="less" scoped>
+.backColor {
+  background: #f9f9f9;
+  width: 100%;
+  height: 100%;
+}
 .memberDeleber {
   text-align: left;
   padding: 1% 2.5% 1% 2.5%;

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="backColor">
     <div class="memberDeleber">
       <div class="memberDelebers" v-if="show">
         <el-row :gutter="20">
@@ -96,14 +96,17 @@
     </div>
     <div class="memberTable">
       <vxe-table
+        round
+        border="true"
         ref="xTable1"
-        border
         :align="allAlign"
         :row-config="{ isHover: true }"
         :data="tableData"
         row-id="id"
         @checkbox-change="checkboxChangeEvent"
         @checkbox-all="checkboxChangeEvent"
+        :row-style="tableRowStyle"
+        :header-row-style="tableStyle"
       >
         <vxe-column
           align="center"
@@ -328,16 +331,16 @@ export default {
         });
         postD(this.url.selectDelInterface, this.ids).then((res) => {
           if (res.code == "200") {
-          this.$message.success("状态修改成功");
-        } else if (res.code == "-200") {
-          this.$message.error("参数错误，或暂无数据");
-        } else if (res.code == "-201") {
-          this.$message.error("未登陆");
-        } else if (res.code == "-203") {
-          this.$message.error("对不起，你没有此操作权限");
-        } else {
-          this.$message.error("注册失败，账号已存在");
-        }
+            this.$message.success("状态修改成功");
+          } else if (res.code == "-200") {
+            this.$message.error("参数错误，或暂无数据");
+          } else if (res.code == "-201") {
+            this.$message.error("未登陆");
+          } else if (res.code == "-203") {
+            this.$message.error("对不起，你没有此操作权限");
+          } else {
+            this.$message.error("注册失败，账号已存在");
+          }
           this.indexValue();
         });
       }
@@ -359,16 +362,16 @@ export default {
         this.vipRemoveRowList.id = ider.id;
         postD(this.url.delInterface, this.vipRemoveRowList).then((res) => {
           if (res.code == "200") {
-          this.$message.success("状态修改成功");
-        } else if (res.code == "-200") {
-          this.$message.error("参数错误，或暂无数据");
-        } else if (res.code == "-201") {
-          this.$message.error("未登陆");
-        } else if (res.code == "-203") {
-          this.$message.error("对不起，你没有此操作权限");
-        } else {
-          this.$message.error("注册失败，账号已存在");
-        }
+            this.$message.success("状态修改成功");
+          } else if (res.code == "-200") {
+            this.$message.error("参数错误，或暂无数据");
+          } else if (res.code == "-201") {
+            this.$message.error("未登陆");
+          } else if (res.code == "-203") {
+            this.$message.error("对不起，你没有此操作权限");
+          } else {
+            this.$message.error("注册失败，账号已存在");
+          }
           this.indexValue();
         });
       }
@@ -381,11 +384,22 @@ export default {
         data: this.$refs.xTable1.getCheckboxRecords(),
       });
     },
+    tableRowStyle() {
+      return "background: #FFFFFF;box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);border-radius: 10px 10px 10px 10px;opacity: 1;";
+    },
+    tableStyle() {
+      return "box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);border-radius: 10px 10px 10px 10px;opacity: 1;";
+    },
   },
 };
 </script>
 
 <style lang="less" scoped>
+.backColor {
+  background: #f9f9f9;
+  width: 100%;
+  height: 100%;
+}
 .memberDeleber {
   text-align: left;
   padding: 1% 2.5% 1% 2.5%;

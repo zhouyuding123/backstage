@@ -1,29 +1,23 @@
 <template>
-  <div class="backgruond">
-    <div class="Enterprise-configuration">
-      <div class="bodyser">
-        <el-row :gutter="20">
-          <el-col :span="2"
-            ><div>
-              <el-button type="danger" plain @click="enterpriseDeletes"
-                >批量删除</el-button
-              >
-            </div></el-col
-          >
-          <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-          <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-          <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-        </el-row>
-        <div class="tableList">
+  <div class="backColor">
+    <div class="firstColor">
+      <div class="buttonStyle">
+        <p  @click="enterpriseDeletes">批量删除</p>
+      </div>
+    </div>
+    <div class="twons">
           <vxe-table
+            round
+            border="true"
             ref="xTable1"
-            border
             :align="allAlign"
             :row-config="{ isHover: true }"
             :data="tableData"
             row-id="id"
             @checkbox-change="checkboxChangeEvent"
             @checkbox-all="checkboxChangeEvent"
+            :row-style="tableRowStyle"
+            :header-row-style="tableStyle"
           >
             <vxe-column
               align="center"
@@ -55,14 +49,20 @@
               width="120"
               align="center"
             ></vxe-column>
-            <vxe-column title="头像" width="100" align="center">
+            <vxe-column width="100" align="center">
               <template v-slot="scoped">
                 <el-image
-                  :src="scoped.row.headimage?scoped.row.headimage:image"
+                  :src="
+                    'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                    scoped.row.headimage
+                  "
                   alt=""
-                  :preview-src-list="[scoped.row.headimage]?[scoped.row.headimage] : [image]"
-                  style="width: 50px; height: 50px"
-                  class="textphoto"
+                  :preview-src-list="[
+                    'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                      scoped.row.headimage,
+                  ]"
+                  style="width: 40px; height: 40px"
+                  class="imgStyle"
                 />
               </template>
             </vxe-column>
@@ -158,240 +158,129 @@
                       v-model="companyDetailser"
                       width="50%"
                     >
-                      <el-row class="leftText">
-                        <el-col :span="12"
-                          ><div class="bg-purple">账号</div></el-col
-                        >
-                        <el-col :span="12"
-                          ><div class="bg-purple">
-                            {{ authCompanyValue.username }}
-                          </div></el-col
-                        >
-                      </el-row>
-                      <el-row class="leftText">
-                        <el-col :span="12"
-                          ><div class="bg-purple-light">id</div></el-col
-                        >
-                        <el-col :span="12"
-                          ><div class="bg-purple-light">
-                            {{ authCompanyValue.id }}
-                          </div></el-col
-                        >
-                      </el-row>
-                      <el-row class="leftText">
-                        <el-col :span="12"
-                          ><div class="bg-purple">企业名称</div></el-col
-                        >
-                        <el-col :span="12"
-                          ><div class="bg-purple">
-                            {{ authCompanyValue.nickname }}
-                          </div></el-col
-                        >
-                      </el-row>
-                      <el-row class="leftText">
-                        <el-col :span="12"
-                          ><div class="bg-purple-light">企业电话</div></el-col
-                        >
-                        <el-col :span="12"
-                          ><div class="bg-purple-light">
-                            {{ authCompanyValue.tel }}
-                          </div></el-col
-                        >
-                      </el-row>
-                      <el-row class="leftText">
-                        <el-col :span="12"
-                          ><div class="phtotHeight bg-purple">头像</div></el-col
-                        >
-                        <el-col :span="12"
-                          ><div class="bg-purple phtotHeight">
-                            <el-image
-                              :src="authCompanyValue.headimage?authCompanyValue.headimage:image"
-                              alt=""
-                              :preview-src-list="[authCompanyValue.headimage]?[authCompanyValue.headimage]:[iamge]"
-                              style="width: 50px; height: 50px"
-                            /></div
-                        ></el-col>
-                      </el-row>
-                      <el-row class="leftText">
-                        <el-col :span="12"
-                          ><div class="bg-purple-light">企业描述</div></el-col
-                        >
-                        <el-col :span="12"
-                          ><div class="bg-purple-light">
-                            {{ authCompanyValue.description }}
-                          </div></el-col
-                        >
-                      </el-row>
-                      <el-row class="leftText">
-                        <el-col :span="12"
-                          ><div class="bg-purple">省</div></el-col
-                        >
-                        <el-col :span="12"
-                          ><div class="bg-purple">
-                            {{ authCompanyValue.province }}
-                          </div></el-col
-                        >
-                      </el-row>
-                      <el-row class="leftText">
-                        <el-col :span="12"
-                          ><div class="bg-purple-light">市</div></el-col
-                        >
-                        <el-col :span="12"
-                          ><div class="bg-purple-light">
-                            {{ authCompanyValue.city }}
-                          </div></el-col
-                        >
-                      </el-row>
-                      <el-row class="leftText">
-                        <el-col :span="12"
-                          ><div class="bg-purple">区</div></el-col
-                        >
-                        <el-col :span="12"
-                          ><div class="bg-purple">
-                            {{ authCompanyValue.area }}
-                          </div></el-col
-                        >
-                      </el-row>
-                      <el-row class="leftText">
-                        <el-col :span="12"
-                          ><div class="bg-purple-light">详细地址</div></el-col
-                        >
-                        <el-col :span="12"
-                          ><div class="bg-purple-light">
-                            {{ authCompanyValue.detail }}
-                          </div></el-col
-                        >
-                      </el-row>
-                      <el-row class="leftText">
-                        <el-col :span="12"
-                          ><div class="bg-purple">经纬度</div></el-col
-                        >
-                        <el-col :span="12"
-                          ><div class="bg-purple">
-                            经度:{{ authCompanyValue.lon }}纬度:{{
-                              authCompanyValue.lat
-                            }}
-                          </div></el-col
-                        >
-                      </el-row>
-                      <el-row class="leftText">
-                        <el-col :span="12"
-                          ><div class="bg-purple-light">负责人</div></el-col
-                        >
-                        <el-col :span="12"
-                          ><div class="bg-purple-light">
-                            {{ authCompanyValue.name }}
-                          </div></el-col
-                        >
-                      </el-row>
-                      <el-row class="leftText">
-                        <el-col :span="12"
-                          ><div class="bg-purple">负责人电话</div></el-col
-                        >
-                        <el-col :span="12"
-                          ><div class="bg-purple">
-                            {{ authCompanyValue.tel_f }}
-                          </div></el-col
-                        >
-                      </el-row>
-                      <el-row class="leftText">
-                        <el-col :span="12"
-                          ><div class="bg-purple-light">身份证号码</div></el-col
-                        >
-                        <el-col :span="12"
-                          ><div class="bg-purple-light">
-                            {{ authCompanyValue.card_no }}
-                          </div></el-col
-                        >
-                      </el-row>
-                      <el-row class="leftText">
-                        <el-col :span="12"
-                          ><div class="bg-purple phtotHeight">
-                            身份证正面照片
-                          </div></el-col
-                        >
-                        <el-col :span="12"
-                          ><div class="bg-purple">
-                            <el-image
-                              :src="authCompanyValue.card_z"
-                              alt=""
-                              :preview-src-list="[authCompanyValue.card_z]"
-                              style="width: 50px; height: 50px"
-                            /></div
-                        ></el-col>
-                      </el-row>
-                      <el-row class="leftText">
-                        <el-col :span="12"
-                          ><div class="phtotHeight bg-purple-light">
-                            身份证反面照片
-                          </div></el-col
-                        >
-                        <el-col :span="12"
-                          ><div class="bg-purple-light">
-                            <el-image
-                              :src="authCompanyValue.card_f"
-                              alt=""
-                              :preview-src-list="[authCompanyValue.card_f]"
-                              style="width: 50px; height: 50px"
-                            /></div
-                        ></el-col>
-                      </el-row>
-                      <el-row class="leftText">
-                        <el-col :span="12"
-                          ><div class="phtotHeight bg-purple">
-                            店铺照片
-                          </div></el-col
-                        >
-                        <el-col :span="12"
-                          ><div class="bg-purple">
-                            <el-image
-                              :src="authCompanyValue.shop_img"
-                              alt=""
-                              :preview-src-list="[authCompanyValue.shop_img]"
-                              style="width: 50px; height: 50px"
-                            /></div
-                        ></el-col>
-                      </el-row>
-                      <el-row class="leftText">
-                        <el-col :span="12"
-                          ><div class="bg-purple-light phtotHeight">
-                            营业执照
-                          </div></el-col
-                        >
-                        <el-col :span="12"
-                          ><div class="bg-purple-light">
-                            <el-image
-                              :src="authCompanyValue.license"
-                              alt=""
-                              :preview-src-list="[authCompanyValue.license]"
-                              style="width: 50px; height: 50px"
-                            /></div
-                        ></el-col>
-                      </el-row>
-                      <el-row class="leftText">
-                        <el-col :span="12"
-                          ><div class="bg-purple">账号认证状态</div></el-col
-                        >
-                        <el-col :span="12"
-                          ><div
-                            class="bg-purple"
-                            :class="{
-                              green: scoped.row.auth === 2,
-                              yellow: scoped.row.auth == 1,
-                              red: scoped.row.auth === 3,
-                              white: scoped.row.auth === null,
-                            }"
+                      <el-descriptions direction="vertical" :column="3" border>
+                        <el-descriptions-item label="账号">{{
+                          authCompanyValue.username
+                        }}</el-descriptions-item>
+                        <el-descriptions-item label="id">{{
+                          authCompanyValue.id
+                        }}</el-descriptions-item>
+                        <el-descriptions-item label="企业名称">{{
+                          authCompanyValue.nickname
+                        }}</el-descriptions-item>
+                        <el-descriptions-item label="企业电话">{{
+                          authCompanyValue.tel
+                        }}</el-descriptions-item>
+                        <el-descriptions-item>
+                          <el-image
+                            class="heaimageStyle"
+                            :src="
+                              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                              authCompanyValue.headimage
+                            "
+                            alt=""
+                            :preview-src-list="[
+                              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                                authCompanyValue.headimage,
+                            ]"
+                            style="width: 30px; height: 30px"
+                          />
+                        </el-descriptions-item>
+                        <el-descriptions-item label="企业描述">{{
+                          authCompanyValue.description
+                        }}</el-descriptions-item>
+                        <el-descriptions-item label="省">{{
+                          authCompanyValue.province
+                        }}</el-descriptions-item>
+                        <el-descriptions-item label="市">{{
+                          authCompanyValue.city
+                        }}</el-descriptions-item>
+                        <el-descriptions-item label="区">{{
+                          authCompanyValue.area
+                        }}</el-descriptions-item>
+                        <el-descriptions-item label="详细地址">{{
+                          authCompanyValue.detail
+                        }}</el-descriptions-item>
+                        <el-descriptions-item label="负责人">{{
+                          authCompanyValue.name
+                        }}</el-descriptions-item>
+                        <el-descriptions-item label="负责人电话">{{
+                          authCompanyValue.tel_f
+                        }}</el-descriptions-item>
+                        <el-descriptions-item label="身份证号码">{{
+                          authCompanyValue.card_no
+                        }}</el-descriptions-item>
+                        <el-descriptions-item label="身份证正面照片">
+                          <el-image
+                            class="heaimageStyle"
+                            :src="
+                              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                              authCompanyValue.card_z
+                            "
+                            alt=""
+                            :preview-src-list="[
+                              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                                authCompanyValue.card_z,
+                            ]"
+                            style="width: 30px; height: 30px"
+                          />
+                        </el-descriptions-item>
+                        <el-descriptions-item label="身份证反面照片">
+                          <el-image
+                            class="heaimageStyle"
+                            :src="
+                              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                              authCompanyValue.card_f
+                            "
+                            alt=""
+                            :preview-src-list="[
+                              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                                authCompanyValue.card_f,
+                            ]"
+                            style="width: 30px; height: 30px"
+                          />
+                        </el-descriptions-item>
+                        <el-descriptions-item label="店铺照片">
+                          <el-image
+                            class="heaimageStyle"
+                            :src="
+                              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                              authCompanyValue.shop_img
+                            "
+                            alt=""
+                            :preview-src-list="[
+                              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                                authCompanyValue.shop_img,
+                            ]"
+                            style="width: 30px; height: 30px"
+                          />
+                        </el-descriptions-item>
+                        <el-descriptions-item label="营业执照">
+                          <el-image
+                            class="heaimageStyle"
+                            :src="
+                              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                              authCompanyValue.license
+                            "
+                            alt=""
+                            :preview-src-list="[
+                              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                                authCompanyValue.license,
+                            ]"
+                            style="width: 30px; height: 30px"
+                          />
+                        </el-descriptions-item>
+                        <el-descriptions-item label="账号认证状态">
+                          {{ filterStatus(authCompanyValue.auth) }}
+                        </el-descriptions-item>
+                      </el-descriptions>
+                      <div class="dialog-footer">
+                        <span>
+                          <el-button @click="companyDetailser = false"
+                            >关闭</el-button
                           >
-                            {{ filterStatus(authCompanyValue.auth) }}
-                          </div></el-col
-                        >
-                      </el-row>
-
-                      <span class="dialog-footer">
-                        <el-button @click="companyDetailser = false"
-                          >关闭</el-button
-                        >
-                      </span>
+                        </span>
+                      </div>
                     </el-dialog>
                   </div>
                   <div class="postDyexer">
@@ -408,8 +297,6 @@
           </vxe-table>
         </div>
       </div>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -417,7 +304,6 @@ import { postD } from "../../api/index.js";
 export default {
   data() {
     return {
-      image:"https://weisoutc.oss-cn-shanghai.aliyuncs.com/images/20220424/16507638688738b6a48da424a60d9d99b2c1b20804.png",
       url: {
         CompanyInterface: "Company/index",
         selectDelInterface: "Company/selectDel",
@@ -454,7 +340,26 @@ export default {
       companyDetailsId: {
         id: "",
       },
-      authCompanyValue: "",
+      authCompanyValue: {
+        username: "",
+        id: "",
+        nickname: "",
+        tel: "",
+        headimage: "",
+        description: "",
+        province: "",
+        city: "",
+        area: "",
+        detail: "",
+        name: "",
+        tel_f: "",
+        card_no: "",
+        card_z: "",
+        card_f: "",
+        shop_img: "",
+        license: "",
+        auth: "",
+      },
     };
   },
   created() {
@@ -490,16 +395,16 @@ export default {
         this.idsL.id = this.ids.toString();
         postD(this.url.selectDelInterface, this.idsL).then((res) => {
           if (res.code == "200") {
-          this.$message.success("状态修改成功");
-        } else if (res.code == "-200") {
-          this.$message.error("参数错误，或暂无数据");
-        } else if (res.code == "-201") {
-          this.$message.error("未登陆");
-        } else if (res.code == "-203") {
-          this.$message.error("对不起，你没有此操作权限");
-        } else {
-          this.$message.error("注册失败，账号已存在");
-        }
+            this.$message.success("状态修改成功");
+          } else if (res.code == "-200") {
+            this.$message.error("参数错误，或暂无数据");
+          } else if (res.code == "-201") {
+            this.$message.error("未登陆");
+          } else if (res.code == "-203") {
+            this.$message.error("对不起，你没有此操作权限");
+          } else {
+            this.$message.error("注册失败，账号已存在");
+          }
           this.enterprise();
         });
       }
@@ -540,16 +445,16 @@ export default {
         this.companyRemove.id = data.id;
         postD(this.url.delInterface, this.companyRemove).then((res) => {
           if (res.code == "200") {
-          this.$message.success("状态修改成功");
-        } else if (res.code == "-200") {
-          this.$message.error("参数错误，或暂无数据");
-        } else if (res.code == "-201") {
-          this.$message.error("未登陆");
-        } else if (res.code == "-203") {
-          this.$message.error("对不起，你没有此操作权限");
-        } else {
-          this.$message.error("注册失败，账号已存在");
-        }
+            this.$message.success("状态修改成功");
+          } else if (res.code == "-200") {
+            this.$message.error("参数错误，或暂无数据");
+          } else if (res.code == "-201") {
+            this.$message.error("未登陆");
+          } else if (res.code == "-203") {
+            this.$message.error("对不起，你没有此操作权限");
+          } else {
+            this.$message.error("注册失败，账号已存在");
+          }
           this.enterprise();
         });
       }
@@ -597,18 +502,46 @@ export default {
         }
       );
     },
+    tableRowStyle() {
+      return "background: #FFFFFF;box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);border-radius: 10px 10px 10px 10px;opacity: 1;";
+    },
+    tableStyle() {
+      return "box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);border-radius: 10px 10px 10px 10px;opacity: 1;";
+    },
   },
 };
 </script>
 <style lang="less" scoped>
-.backgruond {
+.backColor {
+  background: #f9f9f9;
   width: 100%;
   height: 100%;
-  background: rgb(241, 244, 246);
-  position: relative;
+  .firstColor {
+    padding: 20px 20px 0 20px;
+    width: 100%;
+    display: flex;
+    flex-flow: row;
+    .buttonStyle {
+      line-height: 48px;
+      width: 170px;
+      height: 48px;
+      background: red;
+      box-shadow: 2px 5px 20px 1px rgba(58, 203, 233, 0.15);
+      border-radius: 10px 10px 10px 10px;
+      opacity: 1;
+      cursor: pointer;
+      p {
+        font-size: 14px;
+        font-weight: 500;
+        color: #ffffff;
+      }
+    }
+  }
+  .twons {
+    padding: 20px;
+  }
 }
 .Enterprise-configuration {
-  padding: 1% 2.5% 1% 2.5%;
   .bodyser {
     padding-top: 1.5%;
     background-color: white;
@@ -636,7 +569,7 @@ export default {
   display: table-cell;
 }
 .dialog-footer {
-  padding-left: 1%;
+  margin-top: 10px;
 }
 .clickHeader {
   cursor: pointer;
@@ -664,5 +597,14 @@ export default {
 }
 .phtotHeight {
   height: 100%;
+}
+.imgStyle {
+  position: absolute;
+  border-radius: 50%;
+  top: 10%;
+  left: 60%;
+  background: #ffffff;
+  box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);
+  opacity: 1;
 }
 </style>
