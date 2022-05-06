@@ -128,7 +128,6 @@
                           :key="item.id"
                           :label="item.ltitle"
                           :value="item.id"
-                          disabled
                         >
                         </el-option>
                       </el-select>

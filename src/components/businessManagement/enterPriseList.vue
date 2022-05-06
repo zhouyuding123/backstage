@@ -32,9 +32,9 @@
               align="center"
             ></vxe-column>
             <vxe-column
-              field="id"
-              title="id"
-              width="60"
+              field="in_code"
+              title="邀请码"
+              width="70"
               align="center"
             ></vxe-column>
             <vxe-column

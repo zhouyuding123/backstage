@@ -117,6 +117,14 @@ const routes = [
         }
       },
       {
+        path: "/company_rule/listRule",
+        name: "company_rule",
+        component: () => import("../components/businessManagement/companyRule.vue")
+        ,meta:{
+          title:"权限列表"
+        }
+      },
+      {
         path: "/Complaint/getList",
         name: "Complaint",
         component: () => import("../components/routineManagement/complaintList.vue")
