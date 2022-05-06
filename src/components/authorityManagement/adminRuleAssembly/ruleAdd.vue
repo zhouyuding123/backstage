@@ -3,7 +3,7 @@
     <el-button type="primary" @click="addDialogVisible = true"
       >添加管理</el-button
     >
-    <el-dialog title="添加" v-model="addDialogVisible" width="50%" @close="addDialogVisibleClose">
+    <el-dialog title="添加" v-model="addDialogVisible" width="50%" :destroy-on-close="true">
       <!-- 内容 -->
       <el-form
         :model="addForm"
@@ -165,16 +165,6 @@ export default {
     insert(value) {
       this.addForm.icon = value
     },
-    addDialogVisibleClose() {
-      this.addForm.title = ""
-      this.addForm.url = ""
-      this.addForm.name = ""
-      this.addForm.icon = ""
-      this.addForm.sort = ""
-      this.addForm.type = ""
-      this.addForm.auth_open = ""
-      this.addForm.pid = ""
-    }
   },
 };
 </script>

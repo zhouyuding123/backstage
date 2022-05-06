@@ -244,21 +244,74 @@
       </span>
     </el-dialog>
     <el-dialog
-      title="提示"
+      title="详情"
       v-model="detailsVisible"
       width="70%"
       :destroy-on-close="true"
     >
       <el-descriptions direction="vertical" :column="4" border>
-        <el-descriptions-item label="账号">
-            {{designerDetailsValue.username}}
+        <el-descriptions-item label="id">
+          {{ designerDetailsValue.id }}
+        </el-descriptions-item>
+        <el-descriptions-item label="规则">
+          {{ designerDetailsValue.name }}
+        </el-descriptions-item>
+        <el-descriptions-item label="标题">
+          {{ designerDetailsValue.title }}
+        </el-descriptions-item>
+        <el-descriptions-item label="菜单列表">
+          <div
+            :class="{
+              green: designerDetailsValue.type === 1,
+              red: designerDetailsValue.type === 2,
+            }"
+          >
+            {{ filterType(designerDetailsValue.type) }}
+          </div>
+        </el-descriptions-item>
+        <el-descriptions-item label="菜单状态">
+          <div
+            :class="{
+              green: designerDetailsValue.status === 1,
+              red: designerDetailsValue.status === 0,
+            }"
+          >
+            {{ filterStatus(designerDetailsValue.status) }}
+          </div>
+        </el-descriptions-item>
+        <el-descriptions-item label="状态">
+          <div
+            :class="{
+              green: designerDetailsValue.auth_open === 1,
+              red: designerDetailsValue.auth_open === 0,
+            }"
+          >
+            {{ filterAuth_open(designerDetailsValue.auth_open) }}
+          </div>
+        </el-descriptions-item>
+        <el-descriptions-item label="端口">
+          <div
+            :class="{
+              green: designerDetailsValue.is_mobile === 1,
+              yellow: designerDetailsValue.is_mobile === 2,
+              red: designerDetailsValue.is_mobile === 3,
+            }"
+          >
+            {{ filterIs_mobile(designerDetailsValue.is_mobile) }}
+          </div>
+        </el-descriptions-item>
+        <el-descriptions-item label="图标">
+          <i :class="designerDetailsValue.icon"></i>
+        </el-descriptions-item>
+        <el-descriptions-item label="创建时间">
+          {{ designerDetailsValue.create_time }}
+        </el-descriptions-item>
+        <el-descriptions-item label="更新时间">
+          {{ designerDetailsValue.update_time }}
         </el-descriptions-item>
       </el-descriptions>
       <span>
-        <el-button @click="detailsVisible = false">取 消</el-button>
-        <el-button type="primary" @click="detailsVisible = false"
-          >确 定</el-button
-        >
+        <el-button @click="detailsVisible = false">返 回</el-button>
       </span>
     </el-dialog>
   </div>
@@ -280,7 +333,7 @@ export default {
         ruleSelectDelInterface: "company_rule/ruleSelectDel",
         ruleDelInterface: "company_rule/ruleDel",
         ruleEditInterface: "company_rule/ruleEdit",
-        authCompanyInterface: "company/authCompany",
+        authCompanyInterface: "company_rule/ruleShow",
       },
       addaddEnterpriseShow: false,
       //表单数据
@@ -624,10 +677,40 @@ export default {
       this.detailsVisiblesId.id = data.id.toString();
       postD(this.url.authCompanyInterface, this.detailsVisiblesId).then(
         (res) => {
-            console.log(res);
+          console.log(res);
           this.designerDetailsValue = res.data;
         }
       );
+    },
+    filterType(val) {
+      if (val === 1) {
+        return "是菜单列表 ";
+      } else {
+        return "不是菜单列表";
+      }
+    },
+    filterStatus(val) {
+      if (val === 1) {
+        return "开启 ";
+      } else {
+        return "关闭";
+      }
+    },
+    filterAuth_open(val) {
+      if (val === 1) {
+        return "开启 ";
+      } else {
+        return "关闭";
+      }
+    },
+    filterIs_mobile(val) {
+      if (val === 1) {
+        return "pc ";
+      } else if (val === 2) {
+        return "app";
+      } else {
+        return "两端";
+      }
     },
   },
 };
@@ -689,5 +772,17 @@ export default {
 }
 .el-selects {
   z-index: 8000 !important;
+}
+.green {
+  color: #39b54a;
+}
+.yellow {
+  color: #f29124;
+}
+.red {
+  color: #e6432d;
+}
+.clickHeader {
+  cursor: pointer;
 }
 </style>

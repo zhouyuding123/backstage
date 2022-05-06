@@ -107,57 +107,6 @@
                   </svg>
                   编辑
                 </el-button>
-                <el-dialog title="修改信息" v-model="editAddmodify" width="50%">
-                  <el-form
-                    :model="editFrom"
-                    :rules="editFromRules"
-                    ref="editFromref"
-                    label-width="70px"
-                  >
-                    <el-form-item label="菜单" prop="type">
-                      <el-radio-group v-model="editFrom.type">
-                        <el-radio :label="1">是</el-radio>
-                        <el-radio :label="2">否</el-radio>
-                      </el-radio-group>
-                    </el-form-item>
-
-                    <el-form-item label="父级" prop="title">
-                      <el-select v-model="editFrom.ltitle" placeholder="请选择">
-                        <el-option
-                          v-for="item in ltitle"
-                          :key="item.id"
-                          :label="item.ltitle"
-                          :value="item.id"
-                        >
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-
-                    <el-form-item label="规则" prop="name">
-                      <el-input v-model="editFrom.name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="标题" prop="title">
-                      <el-input v-model="editFrom.title"></el-input>
-                    </el-form-item>
-                    <el-form-item label="icon" prop="图标">
-                      <icon-list @update:modelValue="insert" />
-                    </el-form-item>
-                    <el-form-item label="排序" prop="sort">
-                      <el-input v-model="editFrom.sort"></el-input>
-                    </el-form-item>
-                    <el-form-item label="权限验证" prop="auth_open">
-                      <el-radio-group v-model="editFrom.auth_open">
-                        <el-radio :label="1">开启</el-radio>
-                        <el-radio :label="0">关闭</el-radio>
-                      </el-radio-group>
-                    </el-form-item>
-                  </el-form>
-
-                  <span>
-                    <el-button @click="editAddmodify = false">取消</el-button>
-                    <el-button type="primary" @click="editInfo">确定</el-button>
-                  </span>
-                </el-dialog>
               </div>
               <!-- 删除 -->
               <div class="postDyexer">
@@ -201,6 +150,58 @@
         >批量删除</vxe-button
       >
     </div>
+    <el-dialog title="修改信息" v-model="editAddmodify" width="50%" :destroy-on-close="true">
+                  <el-form
+                    :model="editFrom"
+                    :rules="editFromRules"
+                    ref="editFromref"
+                    label-width="70px"
+                  >
+                    <el-form-item label="菜单" prop="type">
+                      <el-radio-group v-model="editFrom.type">
+                        <el-radio :label="1">是</el-radio>
+                        <el-radio :label="2">否</el-radio>
+                      </el-radio-group>
+                    </el-form-item>
+
+                    <el-form-item label="父级" prop="title">
+                      <el-select v-model="editFrom.ltitle" placeholder="请选择" @change="editChang()">
+                        <el-option
+                          v-for="item in ltitle"
+                          :key="item.id"
+                          :label="item.ltitle"
+                          :value="item.id"
+                          
+                        >
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+
+                    <el-form-item label="规则" prop="name">
+                      <el-input v-model="editFrom.name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="标题" prop="title">
+                      <el-input v-model="editFrom.title"></el-input>
+                    </el-form-item>
+                    <el-form-item label="icon" prop="图标">
+                      <icon-list @update:modelValue="insert" />
+                    </el-form-item>
+                    <el-form-item label="排序" prop="sort">
+                      <el-input v-model="editFrom.sort"></el-input>
+                    </el-form-item>
+                    <el-form-item label="权限验证" prop="auth_open">
+                      <el-radio-group v-model="editFrom.auth_open">
+                        <el-radio :label="1">开启</el-radio>
+                        <el-radio :label="0">关闭</el-radio>
+                      </el-radio-group>
+                    </el-form-item>
+                  </el-form>
+
+                  <span>
+                    <el-button @click="editAddmodify = false">取消</el-button>
+                    <el-button type="primary" @click="editInfo">确定</el-button>
+                  </span>
+                </el-dialog>
   </div>
 </template>
 <script>
@@ -366,9 +367,13 @@ export default {
       this.editFrom.auth_open = id.auth_open;
       this.editAddmodify = true;
     },
+    editChang() {
+      this.editFrom.pid = this.editFrom.ltitle;
+    },
     editInfo() {
       this.$refs.editFromref.validate((valid) => {
         if (!valid) return;
+        console.log(this.editFrom);
         postD(this.url.ruleEditInterface, this.editFrom).then((res) => {
           if (res.code == "200") {
           this.$message.success("状态修改成功");
