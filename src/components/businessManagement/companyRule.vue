@@ -310,9 +310,11 @@
           {{ designerDetailsValue.update_time }}
         </el-descriptions-item>
       </el-descriptions>
-      <span>
-        <el-button @click="detailsVisible = false">返 回</el-button>
-      </span>
+      <div class="detailsVisibleStyle">
+        <span>
+          <el-button @click="detailsVisible = false">返 回</el-button>
+        </span>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -784,5 +786,8 @@ export default {
 }
 .clickHeader {
   cursor: pointer;
+}
+.detailsVisibleStyle {
+  margin-top: 15px;
 }
 </style>

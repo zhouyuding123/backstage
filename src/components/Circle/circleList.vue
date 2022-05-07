@@ -100,83 +100,6 @@
             <div class="textVuel" @click="member_countClick(scoped.row)">
               {{ scoped.row.member_count }}
             </div>
-
-            <el-dialog title="提示" v-model="member_countClicks" width="70%">
-              <div class="seachStyle">
-                <el-input
-                  v-model="personneInput"
-                  placeholder="请输入内容"
-                  class="inputlong"
-                ></el-input
-                ><el-button type="success" @click="keywordSeach(scoped.row)"
-                  >成功按钮</el-button
-                >
-              </div>
-              <vxe-table
-                round
-                border="true"
-                ref="xTable2"
-                :row-config="{ isHover: true }"
-                :data="circlePersonnelTab"
-                row-id="id"
-              >
-                <vxe-column
-                  align="center"
-                  type="checkbox"
-                  width="50"
-                  class="linker"
-                ></vxe-column>
-                <vxe-column
-                  type="seq"
-                  title="序号"
-                  width="60"
-                  align="center"
-                ></vxe-column>
-                <vxe-column
-                  field="id"
-                  title="id"
-                  width="60"
-                  align="center"
-                ></vxe-column
-                ><vxe-column
-                  field="nickname"
-                  title="昵称"
-                  align="center"
-                ></vxe-column>
-                <vxe-column
-                  field="headimg"
-                  title="头像"
-                  align="center"
-                ></vxe-column>
-                <vxe-column
-                  field="create_time"
-                  title="时间"
-                  align="center"
-                ></vxe-column>
-                <vxe-column title="操作" align="center">
-                  <template v-slot="sec">
-                    <el-button type="danger" @click="personneDetil(sec.row)"
-                      >删除</el-button
-                    >
-
-                    <el-dialog
-                      title="提示"
-                      v-model="personneDetils"
-                      width="30%"
-                    >
-                      <span>
-                        <el-button @click="personneDetils = false"
-                          >取 消</el-button
-                        >
-                        <el-button type="primary" @click="personneDetilYes"
-                          >确 定</el-button
-                        >
-                      </span>
-                    </el-dialog>
-                  </template>
-                </vxe-column>
-              </vxe-table>
-            </el-dialog>
           </template>
         </vxe-column>
         <vxe-column title="论坛数" width="80" align="center">
@@ -184,113 +107,6 @@
             <div class="textVuel" @click="forum_countClick(scoped.row)">
               {{ scoped.row.forum_count }}
             </div>
-            <el-dialog title="提示" v-model="forum_countInput" width="70%">
-              <vxe-table
-                round
-                border="true"
-                ref="xTable3"
-                :row-config="{ isHover: true }"
-                :data="forum_countTab"
-                row-id="id"
-                show-overflow="tooltip"
-              >
-                <vxe-column
-                  align="center"
-                  type="checkbox"
-                  width="50"
-                ></vxe-column>
-                <vxe-column
-                  type="seq"
-                  title="序号"
-                  width="60"
-                  align="center"
-                ></vxe-column>
-                <vxe-column
-                  field="id"
-                  title="id"
-                  width="60"
-                  align="center"
-                ></vxe-column>
-                <vxe-column
-                  field="circle_id"
-                  title="圈子id"
-                  width="70"
-                  align="center"
-                ></vxe-column>
-                <vxe-column
-                  field="title"
-                  title="话题"
-                  width="150"
-                  align="center"
-                ></vxe-column>
-                <vxe-column
-                  field="content"
-                  title="内容"
-                  align="center"
-                ></vxe-column>
-                <vxe-column field="status" title="状态" align="center">
-                  <template v-slot="scr">
-                    <el-switch
-                      v-model="scr.row.status"
-                      active-color="#13ce66"
-                      @change="forumStatus(scr.row)"
-                      :active-value="1"
-                      :inactive-value="0"
-                    ></el-switch>
-                  </template>
-                </vxe-column>
-                <vxe-column
-                  field="browse"
-                  title="浏览量"
-                  align="center"
-                ></vxe-column>
-                <vxe-column
-                  field="comment_count"
-                  title="评论量"
-                  align="center"
-                ></vxe-column>
-                <vxe-column
-                  field="type"
-                  title="类型"
-                  align="center"
-                ></vxe-column>
-                <vxe-column title="操作" align="center" width="200">
-                  <template v-slot="forumed">
-                    <el-row>
-                      <el-button
-                        type="primary"
-                        @click="forumDetails(forumed.row)"
-                        >详情</el-button
-                      >
-                      <el-button type="danger" @click="forumDle(forumed.row)"
-                        >删除</el-button
-                      >
-                    </el-row>
-                  </template>
-                </vxe-column>
-              </vxe-table>
-              <vxe-pager
-                :current-page="forum_countId.offset"
-                :page-size="forum_countId.limit"
-                :total="forum_countId.totalResult"
-                :layouts="[
-                  'PrevPage',
-                  'JumpNumber',
-                  'NextPage',
-                  'FullJump',
-                  'Sizes',
-                  'Total',
-                ]"
-                @page-change="handlePageChangeFroum_count"
-              >
-              </vxe-pager>
-              <span>
-                <el-button @click="forum_countInput = false">取 消</el-button>
-                <el-button type="primary" @click="forum_countInput = false"
-                  >确 定</el-button
-                >
-              </span>
-            </el-dialog>
           </template>
         </vxe-column>
         <vxe-column title="操作" align="center">
@@ -317,7 +133,168 @@
       >
       </vxe-pager>
     </div>
-    <el-dialog title="论坛详情" v-model="forumDetailsDialog" width="30%">
+    <el-dialog
+      title="提示"
+      v-model="member_countClicks"
+      width="70%"
+      :destroy-on-close="true"
+    >
+      <div class="seachStyle">
+        <el-input
+          v-model="personneInput"
+          placeholder="请输入内容"
+          class="inputlong"
+        ></el-input
+        ><el-button type="success" @click="keywordSeach(scoped.row)"
+          >成功按钮</el-button
+        >
+      </div>
+      <vxe-table
+        round
+        border="true"
+        ref="xTable2"
+        :row-config="{ isHover: true }"
+        :data="circlePersonnelTab"
+        row-id="id"
+      >
+        <vxe-column
+          align="center"
+          type="checkbox"
+          width="50"
+          class="linker"
+        ></vxe-column>
+        <vxe-column
+          type="seq"
+          title="序号"
+          width="60"
+          align="center"
+        ></vxe-column>
+        <vxe-column field="id" title="id" width="60" align="center"></vxe-column
+        ><vxe-column field="nickname" title="昵称" align="center"></vxe-column>
+        <vxe-column field="headimg" title="头像" align="center"></vxe-column>
+        <vxe-column
+          field="create_time"
+          title="时间"
+          align="center"
+        ></vxe-column>
+        <vxe-column title="操作" align="center">
+          <template v-slot="sec">
+            <el-button type="danger" @click="personneDetil(sec.row)"
+              >删除</el-button
+            >
+
+            <el-dialog title="提示" v-model="personneDetils" width="30%">
+              <span>
+                <el-button @click="personneDetils = false">取 消</el-button>
+                <el-button type="primary" @click="personneDetilYes"
+                  >确 定</el-button
+                >
+              </span>
+            </el-dialog>
+          </template>
+        </vxe-column>
+      </vxe-table>
+    </el-dialog>
+    <el-dialog
+      title="提示"
+      v-model="forum_countInput"
+      width="70%"
+      :destroy-on-close="true"
+    >
+      <vxe-table
+        round
+        border="true"
+        ref="xTable3"
+        :row-config="{ isHover: true }"
+        :data="forum_countTab"
+        row-id="id"
+        show-overflow="tooltip"
+      >
+        <vxe-column align="center" type="checkbox" width="50"></vxe-column>
+        <vxe-column
+          type="seq"
+          title="序号"
+          width="60"
+          align="center"
+        ></vxe-column>
+        <vxe-column
+          field="id"
+          title="id"
+          width="60"
+          align="center"
+        ></vxe-column>
+        <vxe-column
+          field="circle_id"
+          title="圈子id"
+          width="70"
+          align="center"
+        ></vxe-column>
+        <vxe-column
+          field="title"
+          title="话题"
+          width="150"
+          align="center"
+        ></vxe-column>
+        <vxe-column field="content" title="内容" align="center"></vxe-column>
+        <vxe-column field="status" title="状态" align="center">
+          <template v-slot="scr">
+            <el-switch
+              v-model="scr.row.status"
+              active-color="#13ce66"
+              @change="forumStatus(scr.row)"
+              :active-value="1"
+              :inactive-value="0"
+            ></el-switch>
+          </template>
+        </vxe-column>
+        <vxe-column field="browse" title="浏览量" align="center"></vxe-column>
+        <vxe-column
+          field="comment_count"
+          title="评论量"
+          align="center"
+        ></vxe-column>
+        <vxe-column field="type" title="类型" align="center"></vxe-column>
+        <vxe-column title="操作" align="center" width="200">
+          <template v-slot="forumed">
+            <el-row>
+              <el-button type="primary" @click="forumDetails(forumed.row)"
+                >详情</el-button
+              >
+              <el-button type="danger" @click="forumDle(forumed.row)"
+                >删除</el-button
+              >
+            </el-row>
+          </template>
+        </vxe-column>
+      </vxe-table>
+      <vxe-pager
+        :current-page="forum_countId.offset"
+        :page-size="forum_countId.limit"
+        :total="forum_countId.totalResult"
+        :layouts="[
+          'PrevPage',
+          'JumpNumber',
+          'NextPage',
+          'FullJump',
+          'Sizes',
+          'Total',
+        ]"
+        @page-change="handlePageChangeFroum_count"
+      >
+      </vxe-pager>
+      <span>
+        <el-button @click="forum_countInput = false">取 消</el-button>
+        <el-button type="primary" @click="forum_countInput = false"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
+    <el-dialog
+      title="论坛详情"
+      v-model="forumDetailsDialog"
+      width="30%"
+      :destroy-on-close="true"
+    >
       <el-descriptions direction="vertical" :column="3" border>
         <el-descriptions-item label="id">{{
           forumDetailsValue.id
@@ -356,9 +333,11 @@
           forumDetailsValue.update_time
         }}</el-descriptions-item>
       </el-descriptions>
-      <span>
-        <el-button @click="forumDetailsDialog = false">返 回</el-button>
-      </span>
+      <div class="forumDetailsDialogStyle">
+        <span>
+          <el-button @click="forumDetailsDialog = false">返 回</el-button>
+        </span>
+      </div>
     </el-dialog>
   </div>
 </template>

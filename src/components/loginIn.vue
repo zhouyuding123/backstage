@@ -122,7 +122,7 @@ export default {
             if (res.code !== 200) return this.$message.error("登入失败");
             this.$message.success("登入成功");
             localStorage.setItem("token", res.token);
-            localStorage.setItem("use",res.data.username)
+            localStorage.setItem("use", res.data.username);
             this.$router.push("/home");
           })
           .catch((err) => {

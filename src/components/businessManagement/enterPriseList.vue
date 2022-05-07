@@ -2,301 +2,303 @@
   <div class="backColor">
     <div class="firstColor">
       <div class="buttonStyle">
-        <p  @click="enterpriseDeletes">批量删除</p>
+        <p @click="enterpriseDeletes">批量删除</p>
       </div>
+      <!-- <div class="buttondel">
+        <p class="as">批量删除</p>
+      </div> -->
     </div>
     <div class="twons">
-          <vxe-table
-            round
-            border="true"
-            ref="xTable1"
-            :align="allAlign"
-            :row-config="{ isHover: true }"
-            :data="tableData"
-            row-id="id"
-            @checkbox-change="checkboxChangeEvent"
-            @checkbox-all="checkboxChangeEvent"
-            :row-style="tableRowStyle"
-            :header-row-style="tableStyle"
+      <vxe-table
+        round
+        border="true"
+        ref="xTable1"
+        :align="allAlign"
+        :row-config="{ isHover: true }"
+        :data="tableData"
+        row-id="id"
+        @checkbox-change="checkboxChangeEvent"
+        @checkbox-all="checkboxChangeEvent"
+        :row-style="tableRowStyle"
+        :header-row-style="tableStyle"
+      >
+        <vxe-column
+          align="center"
+          type="checkbox"
+          width="50"
+          class="linker"
+        ></vxe-column>
+        <vxe-column
+          type="seq"
+          title="序号"
+          width="60"
+          align="center"
+        ></vxe-column>
+        <vxe-column
+          field="in_code"
+          title="邀请码"
+          width="70"
+          align="center"
+        ></vxe-column>
+        <vxe-column
+          field="username"
+          title="用户名"
+          width="110"
+          align="center"
+        ></vxe-column>
+        <vxe-column
+          field="nickname"
+          title="昵称"
+          width="120"
+          align="center"
+        ></vxe-column>
+        <vxe-column width="100" align="center">
+          <template v-slot="scoped">
+            <el-image
+              :src="
+                'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                scoped.row.headimage
+              "
+              alt=""
+              :preview-src-list="[
+                'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                  scoped.row.headimage,
+              ]"
+              style="width: 40px; height: 40px"
+              class="imgStyle"
+            />
+          </template>
+        </vxe-column>
+        <vxe-column
+          field="tel"
+          title="手机号"
+          width="110"
+          align="center"
+        ></vxe-column>
+        <vxe-column field="status" title="状态" width="80" align="center">
+          <template v-slot="scoped">
+            <el-switch
+              v-model="scoped.row.status"
+              active-color="#13ce66"
+              @change="editStatChange(scoped.row)"
+              :active-value="1"
+              :inactive-value="0"
+            ></el-switch>
+          </template>
+        </vxe-column>
+        <vxe-column
+          field="is_vip"
+          title="Vip"
+          width="100"
+          align="center"
+        ></vxe-column>
+        <vxe-column
+          field="create_time"
+          title="创建时间"
+          width="150"
+          align="center"
+        ></vxe-column>
+        <vxe-column
+          field="update_time"
+          title="更新时间"
+          width="150"
+          align="center"
+        ></vxe-column>
+        <vxe-column
+          field="vip_start_time"
+          title="vip开始时间"
+          width="150"
+          align="center"
+        ></vxe-column>
+        <vxe-column
+          field="vip_end_time"
+          title="贵宾时间"
+          width="150"
+          align="center"
+        ></vxe-column>
+        <vxe-column title="审核状态" width="120" align="center">
+          <template v-slot="scoped">
+            <div @click="companySetAuth(scoped.row)">
+              <div
+                class="clickHeader"
+                :class="{
+                  green: scoped.row.auth === 2,
+                  yellow: scoped.row.auth == 1,
+                  red: scoped.row.auth === 3,
+                  white: scoped.row.auth === null,
+                }"
+              >
+                {{ filterStatus(scoped.row.auth) }}
+              </div>
+            </div>
+            <el-dialog title="提示" v-model="SetAuth" width="50%">
+              <el-radio-group v-model="SetAuthRadio.auth">
+                <el-radio :label="1">已认证待审核</el-radio>
+                <el-radio :label="2">审核通过</el-radio>
+                <el-radio :label="3">审核不通过</el-radio>
+              </el-radio-group>
+              <span class="dialog-footer">
+                <el-button @click="SetAuth = false">取 消</el-button>
+                <el-button type="primary" @click="SetAuthadd">确 定</el-button>
+              </span>
+            </el-dialog>
+          </template>
+        </vxe-column>
+        <vxe-column title="操作" align="center">
+          <template v-slot="scoped">
+            <div class="postDyex">
+              <div class="Edit">
+                <el-button type="primary" @click="companyDetails(scoped.row)">
+                  详情
+                </el-button>
+              </div>
+              <div class="postDyexer">
+                <el-button type="danger" @click="companyRemoveRow(scoped.row)">
+                  删除
+                </el-button>
+              </div>
+            </div>
+          </template>
+        </vxe-column>
+      </vxe-table>
+    </div>
+    <el-dialog
+      title="详情"
+      v-model="companyDetailser"
+      width="50%"
+      :destroy-on-close="true"
+    >
+      <el-descriptions direction="vertical" :column="3" border>
+        <el-descriptions-item label="账号">{{
+          authCompanyValue.username
+        }}</el-descriptions-item>
+        <el-descriptions-item label="id">{{
+          authCompanyValue.id
+        }}</el-descriptions-item>
+        <el-descriptions-item label="企业名称">{{
+          authCompanyValue.nickname
+        }}</el-descriptions-item>
+        <el-descriptions-item label="企业电话">{{
+          authCompanyValue.tel
+        }}</el-descriptions-item>
+        <el-descriptions-item>
+          <el-image
+            class="heaimageStyle"
+            :src="
+              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+              authCompanyValue.headimage
+            "
+            alt=""
+            :preview-src-list="[
+              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                authCompanyValue.headimage,
+            ]"
+            style="width: 30px; height: 30px"
+          />
+        </el-descriptions-item>
+        <el-descriptions-item label="企业描述">{{
+          authCompanyValue.description
+        }}</el-descriptions-item>
+        <el-descriptions-item label="省">{{
+          authCompanyValue.province
+        }}</el-descriptions-item>
+        <el-descriptions-item label="市">{{
+          authCompanyValue.city
+        }}</el-descriptions-item>
+        <el-descriptions-item label="区">{{
+          authCompanyValue.area
+        }}</el-descriptions-item>
+        <el-descriptions-item label="详细地址">{{
+          authCompanyValue.detail
+        }}</el-descriptions-item>
+        <el-descriptions-item label="负责人">{{
+          authCompanyValue.name
+        }}</el-descriptions-item>
+        <el-descriptions-item label="负责人电话">{{
+          authCompanyValue.tel_f
+        }}</el-descriptions-item>
+        <el-descriptions-item label="身份证号码">{{
+          authCompanyValue.card_no
+        }}</el-descriptions-item>
+        <el-descriptions-item label="身份证正面照片">
+          <el-image
+            class="heaimageStyle"
+            :src="
+              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+              authCompanyValue.card_z
+            "
+            alt=""
+            :preview-src-list="[
+              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                authCompanyValue.card_z,
+            ]"
+            style="width: 30px; height: 30px"
+          />
+        </el-descriptions-item>
+        <el-descriptions-item label="身份证反面照片">
+          <el-image
+            class="heaimageStyle"
+            :src="
+              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+              authCompanyValue.card_f
+            "
+            alt=""
+            :preview-src-list="[
+              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                authCompanyValue.card_f,
+            ]"
+            style="width: 30px; height: 30px"
+          />
+        </el-descriptions-item>
+        <el-descriptions-item label="店铺照片">
+          <el-image
+            class="heaimageStyle"
+            :src="
+              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+              authCompanyValue.shop_img
+            "
+            alt=""
+            :preview-src-list="[
+              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                authCompanyValue.shop_img,
+            ]"
+            style="width: 30px; height: 30px"
+          />
+        </el-descriptions-item>
+        <el-descriptions-item label="营业执照">
+          <el-image
+            class="heaimageStyle"
+            :src="
+              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+              authCompanyValue.license
+            "
+            alt=""
+            :preview-src-list="[
+              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                authCompanyValue.license,
+            ]"
+            style="width: 30px; height: 30px"
+          />
+        </el-descriptions-item>
+        <el-descriptions-item label="账号认证状态">
+          <div
+            :class="{
+              green: authCompanyValue.auth === 2,
+              yellow: authCompanyValue.auth == 1,
+              red: authCompanyValue.auth === 3,
+            }"
           >
-            <vxe-column
-              align="center"
-              type="checkbox"
-              width="50"
-              class="linker"
-            ></vxe-column>
-            <vxe-column
-              type="seq"
-              title="序号"
-              width="60"
-              align="center"
-            ></vxe-column>
-            <vxe-column
-              field="in_code"
-              title="邀请码"
-              width="70"
-              align="center"
-            ></vxe-column>
-            <vxe-column
-              field="username"
-              title="用户名"
-              width="110"
-              align="center"
-            ></vxe-column>
-            <vxe-column
-              field="nickname"
-              title="昵称"
-              width="120"
-              align="center"
-            ></vxe-column>
-            <vxe-column width="100" align="center">
-              <template v-slot="scoped">
-                <el-image
-                  :src="
-                    'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                    scoped.row.headimage
-                  "
-                  alt=""
-                  :preview-src-list="[
-                    'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                      scoped.row.headimage,
-                  ]"
-                  style="width: 40px; height: 40px"
-                  class="imgStyle"
-                />
-              </template>
-            </vxe-column>
-            <vxe-column
-              field="tel"
-              title="手机号"
-              width="110"
-              align="center"
-            ></vxe-column>
-            <vxe-column field="status" title="状态" width="80" align="center">
-              <template v-slot="scoped">
-                <el-switch
-                  v-model="scoped.row.status"
-                  active-color="#13ce66"
-                  @change="editStatChange(scoped.row)"
-                  :active-value="1"
-                  :inactive-value="0"
-                ></el-switch>
-              </template>
-            </vxe-column>
-            <vxe-column
-              field="is_vip"
-              title="Vip"
-              width="100"
-              align="center"
-            ></vxe-column>
-            <vxe-column
-              field="create_time"
-              title="创建时间"
-              width="150"
-              align="center"
-            ></vxe-column>
-            <vxe-column
-              field="update_time"
-              title="更新时间"
-              width="150"
-              align="center"
-            ></vxe-column>
-            <vxe-column
-              field="vip_start_time"
-              title="vip开始时间"
-              width="150"
-              align="center"
-            ></vxe-column>
-            <vxe-column
-              field="vip_end_time"
-              title="贵宾时间"
-              width="150"
-              align="center"
-            ></vxe-column>
-            <vxe-column title="审核状态" width="120" align="center">
-              <template v-slot="scoped">
-                <div @click="companySetAuth(scoped.row)">
-                  <div
-                    class="clickHeader"
-                    :class="{
-                      green: scoped.row.auth === 2,
-                      yellow: scoped.row.auth == 1,
-                      red: scoped.row.auth === 3,
-                      white: scoped.row.auth === null,
-                    }"
-                  >
-                    {{ filterStatus(scoped.row.auth) }}
-                  </div>
-                </div>
-                <el-dialog title="提示" v-model="SetAuth" width="50%">
-                  <el-radio-group v-model="SetAuthRadio.auth">
-                    <el-radio :label="1">已认证待审核</el-radio>
-                    <el-radio :label="2">审核通过</el-radio>
-                    <el-radio :label="3">审核不通过</el-radio>
-                  </el-radio-group>
-                  <span class="dialog-footer">
-                    <el-button @click="SetAuth = false">取 消</el-button>
-                    <el-button type="primary" @click="SetAuthadd"
-                      >确 定</el-button
-                    >
-                  </span>
-                </el-dialog>
-              </template>
-            </vxe-column>
-            <vxe-column title="操作" align="center">
-              <template v-slot="scoped">
-                <div class="postDyex">
-                  <div class="Edit">
-                    <el-button
-                      type="primary"
-                      @click="companyDetails(scoped.row)"
-                    >
-                      详情
-                    </el-button>
-                    <el-dialog
-                      title="详情"
-                      v-model="companyDetailser"
-                      width="50%"
-                    >
-                      <el-descriptions direction="vertical" :column="3" border>
-                        <el-descriptions-item label="账号">{{
-                          authCompanyValue.username
-                        }}</el-descriptions-item>
-                        <el-descriptions-item label="id">{{
-                          authCompanyValue.id
-                        }}</el-descriptions-item>
-                        <el-descriptions-item label="企业名称">{{
-                          authCompanyValue.nickname
-                        }}</el-descriptions-item>
-                        <el-descriptions-item label="企业电话">{{
-                          authCompanyValue.tel
-                        }}</el-descriptions-item>
-                        <el-descriptions-item>
-                          <el-image
-                            class="heaimageStyle"
-                            :src="
-                              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                              authCompanyValue.headimage
-                            "
-                            alt=""
-                            :preview-src-list="[
-                              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                                authCompanyValue.headimage,
-                            ]"
-                            style="width: 30px; height: 30px"
-                          />
-                        </el-descriptions-item>
-                        <el-descriptions-item label="企业描述">{{
-                          authCompanyValue.description
-                        }}</el-descriptions-item>
-                        <el-descriptions-item label="省">{{
-                          authCompanyValue.province
-                        }}</el-descriptions-item>
-                        <el-descriptions-item label="市">{{
-                          authCompanyValue.city
-                        }}</el-descriptions-item>
-                        <el-descriptions-item label="区">{{
-                          authCompanyValue.area
-                        }}</el-descriptions-item>
-                        <el-descriptions-item label="详细地址">{{
-                          authCompanyValue.detail
-                        }}</el-descriptions-item>
-                        <el-descriptions-item label="负责人">{{
-                          authCompanyValue.name
-                        }}</el-descriptions-item>
-                        <el-descriptions-item label="负责人电话">{{
-                          authCompanyValue.tel_f
-                        }}</el-descriptions-item>
-                        <el-descriptions-item label="身份证号码">{{
-                          authCompanyValue.card_no
-                        }}</el-descriptions-item>
-                        <el-descriptions-item label="身份证正面照片">
-                          <el-image
-                            class="heaimageStyle"
-                            :src="
-                              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                              authCompanyValue.card_z
-                            "
-                            alt=""
-                            :preview-src-list="[
-                              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                                authCompanyValue.card_z,
-                            ]"
-                            style="width: 30px; height: 30px"
-                          />
-                        </el-descriptions-item>
-                        <el-descriptions-item label="身份证反面照片">
-                          <el-image
-                            class="heaimageStyle"
-                            :src="
-                              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                              authCompanyValue.card_f
-                            "
-                            alt=""
-                            :preview-src-list="[
-                              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                                authCompanyValue.card_f,
-                            ]"
-                            style="width: 30px; height: 30px"
-                          />
-                        </el-descriptions-item>
-                        <el-descriptions-item label="店铺照片">
-                          <el-image
-                            class="heaimageStyle"
-                            :src="
-                              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                              authCompanyValue.shop_img
-                            "
-                            alt=""
-                            :preview-src-list="[
-                              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                                authCompanyValue.shop_img,
-                            ]"
-                            style="width: 30px; height: 30px"
-                          />
-                        </el-descriptions-item>
-                        <el-descriptions-item label="营业执照">
-                          <el-image
-                            class="heaimageStyle"
-                            :src="
-                              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                              authCompanyValue.license
-                            "
-                            alt=""
-                            :preview-src-list="[
-                              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                                authCompanyValue.license,
-                            ]"
-                            style="width: 30px; height: 30px"
-                          />
-                        </el-descriptions-item>
-                        <el-descriptions-item label="账号认证状态">
-                          {{ filterStatus(authCompanyValue.auth) }}
-                        </el-descriptions-item>
-                      </el-descriptions>
-                      <div class="dialog-footer">
-                        <span>
-                          <el-button @click="companyDetailser = false"
-                            >关闭</el-button
-                          >
-                        </span>
-                      </div>
-                    </el-dialog>
-                  </div>
-                  <div class="postDyexer">
-                    <el-button
-                      type="danger"
-                      @click="companyRemoveRow(scoped.row)"
-                    >
-                      删除
-                    </el-button>
-                  </div>
-                </div>
-              </template>
-            </vxe-column>
-          </vxe-table>
-        </div>
+            {{ filterStatus(authCompanyValue.auth) }}
+          </div>
+        </el-descriptions-item>
+      </el-descriptions>
+      <div class="dialog-footer">
+        <span>
+          <el-button @click="companyDetailser = false">关闭</el-button>
+        </span>
       </div>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
@@ -606,5 +608,31 @@ export default {
   background: #ffffff;
   box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);
   opacity: 1;
+}
+</style>
+<style>
+.as {
+  width: 150px;
+  height: 38px;
+  line-height: 38px;
+  text-align: center;
+  color: #ffffff;
+  text-decoration: none;
+  background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
+  border-radius: 10px 10px 10px 10px;
+  background-size: 400%;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+.as:hover {
+  animation: animate 8s linear infinite;
+}
+@keyframes animate {
+  0% {
+    background-position: 0%;
+  }
+  100% {
+    background-position: 400%;
+  }
 }
 </style>

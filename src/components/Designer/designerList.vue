@@ -108,17 +108,6 @@
                 {{ filterStyles(scoped.row.auth) }}
               </div>
             </div>
-            <el-dialog title="提示" v-model="SetAuth" width="50%">
-              <el-radio-group v-model="SetAuthRadio.auth">
-                <el-radio :label="0">待认证</el-radio>
-                <el-radio :label="1">已认证审核状态</el-radio>
-                <el-radio :label="2">已审核通过</el-radio>
-              </el-radio-group>
-              <span class="dialog-footer">
-                <el-button @click="SetAuth = false">取 消</el-button>
-                <el-button type="primary" @click="SetAuthadd">确 定</el-button>
-              </span>
-            </el-dialog>
           </template>
         </vxe-column>
         <vxe-column
@@ -253,6 +242,17 @@
           <el-button @click="designerDialog = false">返 回</el-button>
         </span>
       </div>
+    </el-dialog>
+    <el-dialog title="提示" v-model="SetAuth" width="50%">
+      <el-radio-group v-model="SetAuthRadio.auth">
+        <el-radio :label="0">待认证</el-radio>
+        <el-radio :label="1">已认证审核状态</el-radio>
+        <el-radio :label="2">已审核通过</el-radio>
+      </el-radio-group>
+      <span class="dialog-footer">
+        <el-button @click="SetAuth = false">取 消</el-button>
+        <el-button type="primary" @click="SetAuthadd">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>

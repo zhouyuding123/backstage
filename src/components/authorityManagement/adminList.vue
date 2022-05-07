@@ -9,69 +9,6 @@
                 <el-button type="success" @click="addUser = true"
                   >添加</el-button
                 >
-                <el-dialog
-                  title="添加"
-                  width="50%"
-                  v-model="addUser"
-                  @close="addListClosed"
-                >
-                  <span class="dialog-footer">
-                    <el-form
-                      :model="addList"
-                      :rules="addListRules"
-                      ref="addListRef"
-                      label-width="100px"
-                    >
-                      <el-form-item label="用户名" prop="username">
-                        <el-input v-model="addList.username"></el-input>
-                      </el-form-item>
-                      <el-form-item label="昵称" prop="nickname">
-                        <el-input v-model="addList.nickname"></el-input>
-                      </el-form-item>
-                      <el-form-item label="组别">
-                        <vxe-select
-                          v-model="addList.group_id"
-                          placeholder="请选择"
-                        >
-                          <vxe-option
-                            v-for="item in group"
-                            :key="item.id"
-                            :value="item.id"
-                            :label="item.title"
-                          ></vxe-option>
-                        </vxe-select>
-                      </el-form-item>
-                      <el-form-item label="密码" prop="password">
-                        <el-input v-model="addList.password"></el-input>
-                      </el-form-item>
-                      <el-form-item label="头像">
-                        <el-upload
-                          class="avatar-uploader"
-                          action="http://weisou.chengduziyi.com/admin/Uploads/uploadFile"
-                          :show-file-list="false"
-                          :on-success="handleAvatarSuccess"
-                          :before-upload="beforeAvatarUpload"
-                          :data="{ fileType: this.fileType }"
-                        >
-                          <img
-                            v-if="imageUrl"
-                            :src="imageUrl"
-                            class="avatar"
-                            :v-model="imageUrl"
-                          />
-                          <i
-                            v-else
-                            class="el-icon-plus avatar-uploader-icon"
-                          ></i>
-                        </el-upload>
-                      </el-form-item>
-                    </el-form>
-                    <el-button @click="addUser = false">取 消</el-button>
-                    <el-button type="primary" @click="addUserList"
-                      >确 定</el-button
-                    >
-                  </span>
-                </el-dialog>
               </div></el-col
             >
             <el-col :span="1"
@@ -185,83 +122,6 @@
                       ></path></svg
                     >编辑</el-button
                   >
-                  <el-dialog
-                    title="修改信息"
-                    v-model="adminListeditAddmodify"
-                    width="50%"
-                  >
-                    <el-form
-                      :model="adminListeditFrom"
-                      :rules="adminListeditFromRules"
-                      ref="adminListeditFromref"
-                      label-width="70px"
-                    >
-                      <el-form-item label="用户名" prop="username">
-                        <el-input
-                          v-model="adminListeditFrom.username"
-                        ></el-input>
-                      </el-form-item>
-                      <el-form-item label="真实姓名" prop="nickname">
-                        <el-input
-                          v-model="adminListeditFrom.nickname"
-                        ></el-input>
-                      </el-form-item>
-                      <el-form-item label="密码" prop="password">
-                        <el-input
-                          v-model="adminListeditFrom.password"
-                        ></el-input>
-                      </el-form-item>
-                      <el-form-item label="组别">
-                        <vxe-select
-                          v-model="adminListeditFrom.group_id"
-                          placeholder="请选择"
-                        >
-                          <vxe-option
-                            v-for="item in group"
-                            :key="item.id"
-                            :value="item.id"
-                            :label="item.title"
-                          ></vxe-option>
-                        </vxe-select>
-                      </el-form-item>
-                      <el-form-item label="状态">
-                        <el-radio-group v-model="adminListeditFrom.status">
-                          <el-radio :label="1">开启</el-radio>
-                          <el-radio :label="0">关闭</el-radio>
-                        </el-radio-group>
-                      </el-form-item>
-                      <el-form-item label="头像">
-                        <el-upload
-                          class="avatar-uploader"
-                          action="http://weisou.chengduziyi.com/admin/Uploads/uploadFile"
-                          :show-file-list="false"
-                          :on-success="handleAvatarSuccesser"
-                          :before-upload="beforeAvatarUploader"
-                          :data="{ fileType: this.fileType }"
-                        >
-                          <img
-                            v-if="imageUrlValue"
-                            :src="imageUrlValue"
-                            class="avatar"
-                            :v-model="imageUrlValue"
-                          />
-                          <i
-                            v-else
-                            class="el-icon-plus avatar-uploader-icon"
-                          ></i>
-                        </el-upload>
-                      </el-form-item>
-                    </el-form>
-
-                    <span>
-                      <el-button @click="adminListeditAddmodify = false"
-                        >取消</el-button
-                      >
-                      <el-button type="primary" @click="adminListinfo"
-                        >确定</el-button
-                      >
-                    </span>
-                  </el-dialog>
                 </div>
                 <div class="postDyexer">
                   <el-button
@@ -301,6 +161,119 @@
         </vxe-table>
       </div>
     </div>
+    <el-dialog
+      title="添加"
+      width="50%"
+      v-model="addUser"
+      @close="addListClosed"
+      :destroy-on-close="true"
+    >
+      <span class="dialog-footer">
+        <el-form
+          :model="addList"
+          :rules="addListRules"
+          ref="addListRef"
+          label-width="100px"
+        >
+          <el-form-item label="用户名" prop="username">
+            <el-input v-model="addList.username"></el-input>
+          </el-form-item>
+          <el-form-item label="昵称" prop="nickname">
+            <el-input v-model="addList.nickname"></el-input>
+          </el-form-item>
+          <el-form-item label="组别">
+            <vxe-select v-model="addList.group_id" placeholder="请选择">
+              <vxe-option
+                v-for="item in group"
+                :key="item.id"
+                :value="item.id"
+                :label="item.title"
+              ></vxe-option>
+            </vxe-select>
+          </el-form-item>
+          <el-form-item label="密码" prop="password">
+            <el-input v-model="addList.password"></el-input>
+          </el-form-item>
+          <el-form-item label="头像">
+            <el-upload
+              class="avatar-uploader"
+              action="http://weisou.chengduziyi.com/admin/Uploads/uploadFile"
+              :show-file-list="false"
+              :on-success="handleAvatarSuccess"
+              :before-upload="beforeAvatarUpload"
+              :data="{ fileType: this.fileType }"
+            >
+              <img
+                v-if="imageUrl"
+                :src="imageUrl"
+                class="avatar"
+                :v-model="imageUrl"
+              />
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </el-form-item>
+        </el-form>
+        <el-button @click="addUser = false">取 消</el-button>
+        <el-button type="primary" @click="addUserList">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog title="修改信息" v-model="adminListeditAddmodify" width="50%" :destroy-on-close="true">
+      <el-form
+        :model="adminListeditFrom"
+        :rules="adminListeditFromRules"
+        ref="adminListeditFromref"
+        label-width="70px"
+      >
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="adminListeditFrom.username"></el-input>
+        </el-form-item>
+        <el-form-item label="真实姓名" prop="nickname">
+          <el-input v-model="adminListeditFrom.nickname"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="adminListeditFrom.password"></el-input>
+        </el-form-item>
+        <el-form-item label="组别">
+          <vxe-select v-model="adminListeditFrom.group_id" placeholder="请选择">
+            <vxe-option
+              v-for="item in group"
+              :key="item.id"
+              :value="item.id"
+              :label="item.title"
+            ></vxe-option>
+          </vxe-select>
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-radio-group v-model="adminListeditFrom.status">
+            <el-radio :label="1">开启</el-radio>
+            <el-radio :label="0">关闭</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="头像">
+          <el-upload
+            class="avatar-uploader"
+            action="http://weisou.chengduziyi.com/admin/Uploads/uploadFile"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccesser"
+            :before-upload="beforeAvatarUploader"
+            :data="{ fileType: this.fileType }"
+          >
+            <img
+              v-if="imageUrlValue"
+              :src="imageUrlValue"
+              class="avatar"
+              :v-model="imageUrlValue"
+            />
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+        </el-form-item>
+      </el-form>
+
+      <span>
+        <el-button @click="adminListeditAddmodify = false">取消</el-button>
+        <el-button type="primary" @click="adminListinfo">确定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
