@@ -230,7 +230,6 @@
 <script>
 import { postD } from "../../api/index.js";
 export default {
-  inject: ["reload"],
   data() {
     return {
       removeRowFrom: {
@@ -428,7 +427,6 @@ export default {
       this.adminGroupEditFrom.id = id.id;
       this.adminGroupEditFrom.title = id.title;
       this.adminGroupEditFrom.status = id.status;
-
       this.rules = id.rules;
       this.rules = id.rules.split(",");
       this.adminGroupEditadd = true;
@@ -468,7 +466,6 @@ export default {
       }
     },
     handleNodeClickEdit(data, checked) {
-      console.log(checked);
       this.adminGroupEditFrom.rules = checked.checkedKeys.toString();
     },
     adminGroupEditaddinfo() {
@@ -477,6 +474,8 @@ export default {
           (res) => {
             if (res.code == "200") {
               this.$message.success("状态修改成功");
+              this.adminGroupEditadd = false;
+              this.groupVaule();
             } else if (res.code == "-200") {
               this.$message.error("参数错误，或暂无数据");
             } else if (res.code == "-201") {
@@ -486,7 +485,6 @@ export default {
             } else {
               this.$message.error("注册失败，账号已存在");
             }
-            this.adminGroupEditadd = false;
           }
         );
       });

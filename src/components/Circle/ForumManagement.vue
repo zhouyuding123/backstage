@@ -1,5 +1,6 @@
 <template>
-  <div class="backColor">
+  <div class="backColor" >
+    <forum-seatch @change="costPlannedAmountChange" />
     <div class="twons">
       <vxe-table
         round
@@ -13,12 +14,6 @@
         :header-row-style="tableStyle"
       >
         <vxe-column align="center" type="checkbox" width="50"></vxe-column>
-        <vxe-column
-          type="seq"
-          title="序号"
-          width="60"
-          align="center"
-        ></vxe-column>
         <vxe-column
           field="username"
           title="username"
@@ -120,6 +115,20 @@
           </template>
         </vxe-column>
       </vxe-table>
+      <vxe-pager
+        :current-page="page1.offset"
+        :page-size="page1.limit"
+        :total="page1.totalResult"
+        :layouts="[
+          'PrevPage',
+          'JumpNumber',
+          'NextPage',
+          'FullJump',
+          'Sizes',
+          'Total',
+        ]"
+        @page-change="handlePageChange"
+      ></vxe-pager>
     </div>
     <el-dialog
       title="提示"
@@ -256,19 +265,45 @@
               </div>
               <div>
                 <div class="DetailPhoper">
-                <p>{{votoCountnum}}人参与</p>
-              </div>
-              <div
-                class="DetailRadio"
-                v-for="item in forumDetailsValue.voto"
-                :key="item.id"
-              >
-                <div>
+                  <p>{{ votoCountnum }}人参与</p>
+                </div>
+                <div v-if="imagesShows">
+                  <div
+                    class="DetailRadio"
+                    v-for="item in forumDetailsValue.voto"
+                    :key="item.id"
+                  >
+                    <div>
+                      <el-radio-group
+                        v-model="votoValue.id"
+                        @change="changelabel"
+                      >
+                        <el-radio>{{ item.item }}</el-radio>
+                      </el-radio-group>
+                    </div>
+                  </div>
+                </div>
+                <div class="placeOrder" v-if="imagesShow">
                   <el-radio-group v-model="votoValue.id" @change="changelabel">
-                    <el-radio :label="item.id">{{ item.item }}</el-radio>
+                    <div
+                      class="radioDiv"
+                      v-for="item in forumDetailsValue.voto"
+                      :key="item.id"
+                    >
+                      <el-image
+                        :src="
+                          'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                          forumDetailsValue.headimage
+                        "
+                      ></el-image>
+                      <el-radio
+                        ><div class="diemPost">
+                          {{ item.item }}
+                        </div></el-radio
+                      >
+                    </div>
                   </el-radio-group>
                 </div>
-              </div>
               </div>
             </div>
           </div>
@@ -283,9 +318,23 @@
 </template>
 <script>
 import { postD } from "../../api/index.js";
+import ForumSeatch from "./Forum/ForumSeatch.vue";
 export default {
+  provide() {
+    return {
+      listForumValue: this.listForumValue,
+    };
+  },
+  components: {
+    ForumSeatch,
+  },
   data() {
     return {
+      page1: {
+        offset: 1,
+        limit: 10,
+        totalResult: 0,
+      },
       url: {
         ListForumInterface: "Circle/listForum",
         setForumStatInterface: "Circle/setForumStat",
@@ -307,8 +356,11 @@ export default {
         id: "",
       },
       show: false,
-      votoCount:[],
-      votoCountnum:""
+      imagesShow: false,
+      imagesShows: false,
+      votoCount: [],
+      votoCountnum: "",
+      votoImages: [],
     };
   },
   created() {
@@ -324,7 +376,13 @@ export default {
     listForumValue() {
       postD(this.url.ListForumInterface).then((res) => {
         this.tableData = res.list;
+        this.page1.totalResult = res.count;
       });
+    },
+    handlePageChange({ currentPage, pageSize }) {
+      this.page1.offset = currentPage;
+      this.page1.limit = pageSize;
+      this.listForumValue();
     },
     // 同城
     filterStyle(val) {
@@ -376,14 +434,21 @@ export default {
       postD(this.url.showForumInterface, this.forumDetailsId).then((res) => {
         this.forumDetailsValue = res.data;
         this.votoValue = res.data.voto;
-         this.votoValue.forEach((v)=> {
-        this.votoCount.push(v.count);
-        this.votoCountnum = eval(Object.values(this.votoCount).join("+"))
-      })
+        this.votoValue.forEach((v) => {
+          this.votoCount.push(v.count);
+          this.votoImages = v.is_img;
+          this.votoCountnum = eval(Object.values(this.votoCount).join("+"));
+        });
         if (this.forumDetailsValue.is_voto === 1) {
+          if (this.votoImages === 1) {
+            this.imagesShow = true;
+          } else if (this.votoImages === 0) {
+            this.imagesShow = !true;
+            this.imagesShows = true;
+          }
           this.show = true;
-        }else {
-          this.show = false
+        } else {
+          this.show = false;
         }
       });
     },
@@ -404,13 +469,10 @@ export default {
     changelabel(va) {
       this.votoValue.id = va;
     },
-    csadas() {
-      this.votoValue.forEach((v)=> {
-        this.votoCount.push(v.count);
-        this.num = eval(Object.values(this.votoCount).join("+"))
-        console.log(this.num);
-      })
-    }
+    // 事件处理函数
+    async costPlannedAmountChange(param1) {
+      this.tableData = param1
+    },
   },
 };
 </script>
@@ -488,6 +550,7 @@ export default {
   background-color: black;
   padding: 2% 0;
   width: 415px;
+  margin: 20px auto;
 }
 .DetailBody {
   background-color: white;
@@ -540,7 +603,6 @@ export default {
   }
   .DetailOption {
     width: 100%;
-    height: 260px;
     background: #f5f5f5;
     border-radius: 6px 6px 6px 6px;
     opacity: 1;
@@ -570,5 +632,57 @@ export default {
       }
     }
   }
+}
+.placeOrder {
+  /deep/.el-radio.is-bordered.is-checked::before {
+    content: "";
+    width: 11px;
+    height: 12px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+  /deep/.el-radio.is-bordered {
+    padding: 0 150px;
+  }
+  /deep/.el-radio__label {
+    padding-left: 0;
+  }
+  .radioDiv {
+    margin-left: 15px;
+    margin-top: 10px;
+    width: 150px;
+    height: 210px;
+    background: #ffffff;
+    border-radius: 6px 6px 6px 6px;
+    opacity: 1;
+    box-shadow: 1px 1px 50px rgb(0 21 41 / 18%);
+  }
+  /deep/.el-radio {
+    margin-top: 10px;
+    width: 140;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .el-image {
+    width: 150px;
+    height: 170px;
+    border-radius: 6px 6px 0px 0px;
+  }
+}
+.diemPost {
+  position: absolute;
+  left: 38%;
+  top: -30px;
+  color: #eeeeee;
+}
+/deep/.el-radio__input.is-checked .el-radio__inner {
+  border-color: greenyellow;
+  background-color: greenyellow;
+}
+/deep/.el-radio__inner:hover {
+  border-color: greenyellow;
 }
 </style>

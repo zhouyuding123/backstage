@@ -217,7 +217,7 @@
         <el-button type="primary" @click="addUserList">确 定</el-button>
       </span>
     </el-dialog>
-    <el-dialog title="修改信息" v-model="adminListeditAddmodify" width="50%" :destroy-on-close="true">
+    <el-dialog title="修改信息" v-model="adminListeditAddmodify" width="50%">
       <el-form
         :model="adminListeditFrom"
         :rules="adminListeditFromRules"
@@ -494,6 +494,8 @@ export default {
           (res) => {
             if (res.code == "200") {
               this.$message.success("状态修改成功");
+              this.adminListeditAddmodify = false;
+              this.tableDataValue();
             } else if (res.code == "-200") {
               this.$message.error("参数错误，或暂无数据");
             } else if (res.code == "-201") {
@@ -503,9 +505,6 @@ export default {
             } else {
               this.$message.error("注册失败，账号已存在");
             }
-            this.adminListeditAddmodify = false;
-
-            this.tableDataValue();
           }
         );
       });
