@@ -1,5 +1,5 @@
 <template>
-  <div class="backColor" >
+  <div class="backColor">
     <forum-seatch @change="costPlannedAmountChange" />
     <div class="twons">
       <vxe-table
@@ -293,14 +293,10 @@
                       <el-image
                         :src="
                           'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                          forumDetailsValue.headimage
+                          item.item
                         "
                       ></el-image>
-                      <el-radio
-                        ><div class="diemPost">
-                          {{ item.item }}
-                        </div></el-radio
-                      >
+                      <el-radio><div class="diemPost"></div></el-radio>
                     </div>
                   </el-radio-group>
                 </div>
@@ -471,7 +467,7 @@ export default {
     },
     // 事件处理函数
     async costPlannedAmountChange(param1) {
-      this.tableData = param1
+      this.tableData = param1;
     },
   },
 };
@@ -486,63 +482,12 @@ export default {
     width: 100%;
     display: flex;
     flex-flow: row;
-    .buttonStyles {
-      line-height: 48px;
-      width: 170px;
-      height: 48px;
-      background: rgb(39, 224, 248);
-      box-shadow: 2px 5px 20px 1px rgba(58, 203, 233, 0.15);
-      border-radius: 10px 10px 10px 10px;
-      opacity: 1;
-      cursor: pointer;
-      p {
-        font-size: 14px;
-        font-weight: 500;
-        color: #ffffff;
-      }
-    }
-    .buttonStyle {
-      line-height: 48px;
-      width: 170px;
-      height: 48px;
-      background: red;
-      box-shadow: 2px 5px 20px 1px rgba(58, 203, 233, 0.15);
-      border-radius: 10px 10px 10px 10px;
-      opacity: 1;
-      cursor: pointer;
-      margin-left: 15px;
-      p {
-        font-size: 14px;
-        font-weight: 500;
-        color: #ffffff;
-      }
-    }
   }
   .twons {
     padding: 20px;
   }
 }
-.blue {
-  color: aqua;
-}
-.orange {
-  color: darkorange;
-}
-.blueqing {
-  color: blueviolet;
-}
-.green {
-  color: #39b54a;
-}
-.yellow {
-  color: #f29124;
-}
-.red {
-  color: #e6432d;
-}
-.white {
-  color: white;
-}
+
 .forumDet {
   width: 50px;
 }

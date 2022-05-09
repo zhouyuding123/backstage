@@ -373,7 +373,6 @@ export default {
     editInfo() {
       this.$refs.editFromref.validate((valid) => {
         if (!valid) return;
-        console.log(this.editFrom);
         postD(this.url.ruleEditInterface, this.editFrom).then((res) => {
           if (res.code == "200") {
           this.$message.success("状态修改成功");

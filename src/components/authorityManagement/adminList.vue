@@ -415,7 +415,6 @@ export default {
     },
     // 添加用户
     addUserList() {
-      console.log(this.addList.image);
       this.$refs.addListRef.validate((valid) => {
         if (!valid) return;
         postD(this.url.adminAddInterface, this.addList).then((res) => {

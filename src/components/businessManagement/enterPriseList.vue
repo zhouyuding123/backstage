@@ -1,12 +1,15 @@
 <template>
   <div class="backColor">
+    <enter-prise-list-seatch v-show="seatchShow" @enterProseListSeatch="costPlannedAmountChange" />
     <div class="firstColor">
-      <div class="buttonStyle">
-        <p @click="enterpriseDeletes">批量删除</p>
+      <div>
+        <el-button type="danger" plain @click="enterpriseDeletes">批量删除</el-button>
       </div>
-      <!-- <div class="buttondel">
-        <p class="as">批量删除</p>
-      </div> -->
+      <div class="contentRight">
+        <el-button type="info" plain ref="btn1" @click="showCont($event)"
+          >查询</el-button
+        >
+      </div>
     </div>
     <div class="twons">
       <vxe-table
@@ -303,9 +306,17 @@
 
 <script>
 import { postD } from "../../api/index.js";
+import enterPriseListSeatch from "./enterPriseList/enterPriseListSeatch.vue";
 export default {
+  provide() {
+    return {
+      enterprise: this.enterprise,
+    };
+  },
+  components: { enterPriseListSeatch },
   data() {
     return {
+      seatchShow: false,
       url: {
         CompanyInterface: "Company/index",
         selectDelInterface: "Company/selectDel",
@@ -510,6 +521,13 @@ export default {
     tableStyle() {
       return "box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);border-radius: 10px 10px 10px 10px;opacity: 1;";
     },
+    showCont() {
+      this.seatchShow = !this.seatchShow;
+      this.$refs.btn1.$el.innerText;
+    },
+    async costPlannedAmountChange(param1) {
+      this.tableData = param1;
+    },
   },
 };
 </script>
@@ -523,21 +541,6 @@ export default {
     width: 100%;
     display: flex;
     flex-flow: row;
-    .buttonStyle {
-      line-height: 48px;
-      width: 170px;
-      height: 48px;
-      background: red;
-      box-shadow: 2px 5px 20px 1px rgba(58, 203, 233, 0.15);
-      border-radius: 10px 10px 10px 10px;
-      opacity: 1;
-      cursor: pointer;
-      p {
-        font-size: 14px;
-        font-weight: 500;
-        color: #ffffff;
-      }
-    }
   }
   .twons {
     padding: 20px;
@@ -609,30 +612,7 @@ export default {
   box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);
   opacity: 1;
 }
-</style>
-<style>
-.as {
-  width: 150px;
-  height: 38px;
-  line-height: 38px;
-  text-align: center;
-  color: #ffffff;
-  text-decoration: none;
-  background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
-  border-radius: 10px 10px 10px 10px;
-  background-size: 400%;
-  font-size: 14px;
-  text-transform: uppercase;
-}
-.as:hover {
-  animation: animate 8s linear infinite;
-}
-@keyframes animate {
-  0% {
-    background-position: 0%;
-  }
-  100% {
-    background-position: 400%;
-  }
+.contentRight {
+  padding-left: 91.1%;
 }
 </style>

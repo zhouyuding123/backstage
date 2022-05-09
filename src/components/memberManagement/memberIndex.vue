@@ -50,6 +50,7 @@
                   range-separator="至"
                   start-placeholder="开始日期"
                   end-placeholder="结束日期"
+                  @change="getTime"
                 >
                 </el-date-picker>
               </div></div
@@ -217,7 +218,7 @@ export default {
         },
       ],
       // 会员日期
-      value1: [],
+      vipGetTime: [],
       // 搜索展示开启关闭
       show: false,
       // 状态改变
@@ -237,22 +238,6 @@ export default {
       },
     };
   },
-  computed: {
-    // 监听时间
-    vipGetTime: {
-      get: function () {
-        if (this.search.vip_start_time) {
-          return [this.search.vip_start_time, this.search.vip_end_time];
-        } else {
-          return this.value1;
-        }
-      },
-      set: function (time) {
-        this.search.vip_start_time = time[0].getTime() / 1000;
-        this.search.vip_end_time = time[1].getTime() / 1000;
-      },
-    },
-  },
   created() {
     // 会员列表
     this.indexValue();
@@ -269,6 +254,11 @@ export default {
       this.page1.offset = currentPage;
       this.page1.limit = pageSize;
       this.indexValue();
+    },
+    getTime(date) {
+      this.vipGetTime = date;
+      this.search.vip_start_time = this.vipGetTime[0].getTime() / 1000;
+      this.search.vip_end_time = this.vipGetTime[1].getTime() / 1000;
     },
     // 状态
     vipUserAuthChaged(status) {
@@ -289,8 +279,6 @@ export default {
       });
     },
     submitSearch() {
-      this.vip_start_time = this.value1[0];
-      this.vip_end_time = this.value1[1];
       postD(this.url.indexInterface, this.search).then((res) => {
         this.tableData = res.data;
       });

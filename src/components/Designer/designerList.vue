@@ -1,8 +1,14 @@
 <template>
   <div class="backColor">
+    <designer-seatch v-show="seatchShow" @designerChange ="costPlannedAmountChange"  />
     <div class="firstColor">
-      <div class="buttonStyle">
-        <p @click="designerDelsList">批量删除</p>
+      <div>
+        <el-button type="danger" plain @click="designerDelsList">批量删除</el-button>
+      </div>
+      <div class="contentRight">
+        <el-button type="info" plain ref="btn1" @click="showCont($event)"
+          >查询</el-button
+        >
       </div>
     </div>
     <div class="twons">
@@ -82,7 +88,7 @@
               :inactive-value="0"
             ></el-switch>
           </template> </vxe-column
-        ><vxe-column field="is_vip" title="is_vip" width="80" align="center">
+        ><vxe-column field="is_vip" title="VIP" width="80" align="center">
           <template v-slot="scoped">
             <div>
               {{ filterStyle(scoped.row.is_vip) }}
@@ -90,8 +96,8 @@
           </template> </vxe-column
         ><vxe-column
           field="auth"
-          title="auth"
-          width="90"
+          title="审核状态"
+          width="120"
           align="center"
           show-overflow="ellipsis"
         >
@@ -112,25 +118,19 @@
         </vxe-column>
         <vxe-column
           field="vip_start_time"
-          title="vip_start_time"
+          title="vip开始时间"
           align="center"
           show-overflow="title"
         ></vxe-column>
         <vxe-column
           field="vip_end_time"
-          title="vip_end_time"
+          title="vip结束时间"
           align="center"
           show-overflow="title"
         ></vxe-column>
         <vxe-column
           field="create_time"
-          title="create_time"
-          show-overflow="title"
-          align="center"
-        ></vxe-column>
-        <vxe-column
-          field="update_time"
-          title="update_time"
+          title="创建时间"
           show-overflow="title"
           align="center"
         ></vxe-column>
@@ -258,7 +258,16 @@
 </template>
 <script>
 import { postD } from "../../api/index.js";
+import designerSeatch from "./designerSeatch/designerSeatch.vue"
 export default {
+  provide() {
+    return {
+      designerListValue: this.designerListValue,
+    };
+  },
+  components: {
+    designerSeatch
+  },
   data() {
     return {
       url: {
@@ -317,6 +326,7 @@ export default {
         card_f: "",
       },
       designerDialog: false,
+      seatchShow:false
     };
   },
   created() {
@@ -489,7 +499,6 @@ export default {
       this.designerDetailsId.id = data.id;
       postD(this.url.authDesignerInterface, this.designerDetailsId).then(
         (res) => {
-          console.log(res);
           this.designerDetailsValue = res.data;
         }
       );
@@ -497,39 +506,17 @@ export default {
     designerDetailser() {
       this.designerDetailsId = [];
     },
+    showCont() {
+      this.seatchShow = !this.seatchShow;
+      this.$refs.btn1.$el.innerText;
+    },
+    async costPlannedAmountChange(param1) {
+      this.tableData = param1;
+    },
   },
 };
 </script>
 <style lang="less" scoped>
-.backColor {
-  background: #f9f9f9;
-  width: 100%;
-  height: 100%;
-  .firstColor {
-    padding: 20px 20px 0 20px;
-    width: 100%;
-    display: flex;
-    flex-flow: row;
-    .buttonStyle {
-      line-height: 48px;
-      width: 170px;
-      height: 48px;
-      background: red;
-      box-shadow: 2px 5px 20px 1px rgba(58, 203, 233, 0.15);
-      border-radius: 10px 10px 10px 10px;
-      opacity: 1;
-      cursor: pointer;
-      p {
-        font-size: 14px;
-        font-weight: 500;
-        color: #ffffff;
-      }
-    }
-  }
-  .twons {
-    padding: 20px;
-  }
-}
 .clickHeader {
   cursor: pointer;
 }
@@ -542,15 +529,7 @@ export default {
 .red {
   color: #e6432d;
 }
-.imgStyle {
-  position: absolute;
-  border-radius: 50%;
-  top: 10%;
-  left: 60%;
-  background: #ffffff;
-  box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);
-  opacity: 1;
-}
+
 .heaimageStyle {
   width: 500px;
   border-radius: 50%;
@@ -560,5 +539,8 @@ export default {
 }
 .desingnerStyle {
   margin-top: 10px;
+}
+.contentRight {
+  padding-left: 90%;
 }
 </style>

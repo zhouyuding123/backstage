@@ -1,8 +1,17 @@
 <template>
   <div class="backColor">
+    <circle-seatch
+      v-show="seatchShow"
+      @circleSeatch="costPlannedAmountChange"
+    />
     <div class="firstColor">
-      <div class="buttonStyle">
-        <p @click="selectDel">批量删除</p>
+      <div>
+        <el-button type="danger" plain @click="selectDel">批量删除</el-button>
+      </div>
+      <div class="contentRight">
+        <el-button type="info" plain ref="btn1" @click="showCont($event)"
+          >查询</el-button
+        >
       </div>
     </div>
     <div class="twons">
@@ -134,7 +143,7 @@
       </vxe-pager>
     </div>
     <el-dialog
-      title="提示"
+      title="人员"
       v-model="member_countClicks"
       width="70%"
       :destroy-on-close="true"
@@ -196,11 +205,24 @@
       </vxe-table>
     </el-dialog>
     <el-dialog
-      title="提示"
+      title="论坛"
       v-model="forum_countInput"
       width="70%"
       :destroy-on-close="true"
     >
+      <div class="seachStyle">
+        <el-input
+          v-model="forum_countInputInput.keyword"
+          placeholder="请输入内容"
+          class="inputlong"
+        ></el-input
+        ><el-button
+          type="success"
+          @click="forum_countInputKeywordSeach"
+          >成功按钮</el-button
+        >
+      </div>
+
       <vxe-table
         round
         border="true"
@@ -344,9 +366,19 @@
 
 <script>
 import { postD } from "../../api/index.js";
+import circleSeatch from "./Circle/circleSeatch.vue";
 export default {
+  provide() {
+    return {
+      circleValue: this.circleValue,
+    };
+  },
+  components: {
+    circleSeatch,
+  },
   data() {
     return {
+      seatchShow: false,
       tableData: [],
       allAlign: null,
       url: {
@@ -376,6 +408,10 @@ export default {
         id: "",
         keyword: "",
       },
+      // 论坛搜索
+      forum_countInputInput: {
+        keyword: null,
+      },
       // 圈子人员删除
       detilPersonne: {
         id: "",
@@ -384,6 +420,12 @@ export default {
       personneDetils: false,
       // 圈子分页
       page1: {
+        offset: 1,
+        limit: 10,
+        totalResult: 0,
+      },
+      // 论坛分页
+      page2: {
         offset: 1,
         limit: 10,
         totalResult: 0,
@@ -680,6 +722,18 @@ export default {
         }
       );
     },
+    showCont() {
+      this.seatchShow = !this.seatchShow;
+      this.$refs.btn1.$el.innerText;
+    },
+    async costPlannedAmountChange(param1) {
+      this.tableData = param1;
+    },
+    forum_countInputKeywordSeach() {
+      postD(this.url.getCircleForumInterface, this.forum_countInputInput).then((res) => {
+        this.tableData = res.list;
+      });
+    },
   },
 };
 </script>
@@ -694,21 +748,6 @@ export default {
     width: 100%;
     display: flex;
     flex-flow: row;
-    .buttonStyle {
-      line-height: 48px;
-      width: 170px;
-      height: 48px;
-      background: red;
-      box-shadow: 2px 5px 20px 1px rgba(58, 203, 233, 0.15);
-      border-radius: 10px 10px 10px 10px;
-      opacity: 1;
-      cursor: pointer;
-      p {
-        font-size: 14px;
-        font-weight: 500;
-        color: #ffffff;
-      }
-    }
   }
   .twons {
     padding: 20px;
@@ -758,5 +797,8 @@ export default {
 }
 .white {
   color: white;
+}
+.contentRight {
+  padding-left: 90%;
 }
 </style>

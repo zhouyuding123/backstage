@@ -14,11 +14,6 @@
       <el-row>
         <el-col :span="2"
           ><div>
-            <el-button type="success">提交投诉</el-button>
-          </div></el-col
-        >
-        <el-col :span="2"
-          ><div>
             <el-button type="danger" plain @click="compalanitDeletes"
               >批量删除</el-button
             >
@@ -31,7 +26,7 @@
           </div></el-col
         >
 
-        <el-col :span="18"><div></div></el-col>
+        <el-col :span="20"><div></div></el-col>
         <el-col :span="1"
           ><div>
             <el-button type="info" plain @click="showCont($event)" ref="btn1"

@@ -163,6 +163,14 @@ const routes = [
         , meta: {
           title: "设计师列表"
         }
+      },
+      {
+        path: "/match/listMacth",
+        name: "match",
+        component: () => import("../components/eventManagement/listMacth.vue")
+        , meta: {
+          title: "赛事列表"
+        }
       }
     ]
   },

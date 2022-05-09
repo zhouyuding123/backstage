@@ -1,5 +1,6 @@
 <template>
   <div class="backColor">
+    <demand-seatch v-show="seatchShow" @demandSeatchValue="costPlannedAmountChange" />
     <div class="memberDeleber">
       <el-row>
         <el-col :span="2"
@@ -14,7 +15,14 @@
             <el-button @click="Refresh">刷新</el-button>
           </div></el-col
         >
-        <el-col :span="21"></el-col>
+        <el-col :span="20"></el-col>
+        <el-col :span="1">
+          <div class="contentRight">
+            <el-button type="info" plain ref="btn1" @click="showCont($event)"
+              >查询</el-button
+            >
+          </div>
+        </el-col>
       </el-row>
     </div>
     <div class="memberTable">
@@ -76,7 +84,12 @@
           title="需求描述"
           align="center"
         ></vxe-column>
-        <vxe-column field="status" title="需求当前状态" align="center" width="80">
+        <vxe-column
+          field="status"
+          title="需求当前状态"
+          align="center"
+          width="80"
+        >
           <template v-slot="scoped">
             <div>
               {{ filterStatus(scoped.row.status) }}
@@ -85,12 +98,7 @@
         </vxe-column>
         <vxe-column
           field="create_time"
-          title="创造时间"
-          align="center"
-        ></vxe-column>
-        <vxe-column
-          field="update_time"
-          title="更新时间"
+          title="创建时间"
           align="center"
         ></vxe-column>
         <vxe-column title="操作" align="center">
@@ -101,13 +109,37 @@
           </template>
         </vxe-column>
       </vxe-table>
+      <vxe-pager
+        :current-page="page1.offset"
+        :page-size="page1.limit"
+        :total="page1.totalResult"
+        :layouts="[
+          'PrevPage',
+          'JumpNumber',
+          'NextPage',
+          'FullJump',
+          'Sizes',
+          'Total',
+        ]"
+        @page-change="handlePageChange"
+      >
+      </vxe-pager>
     </div>
   </div>
 </template>
 
 <script>
+import demandSeatch from "./demandSeatch/demandSeatch.vue";
 import { postD } from "../../api/index.js";
 export default {
+  provide() {
+    return {
+      demandIndexValue: this.demandIndexValue,
+    };
+  },
+  components: {
+    demandSeatch,
+  },
   data() {
     return {
       tableData: [],
@@ -128,6 +160,13 @@ export default {
       demandRemoveRowList: {
         id: "",
       },
+      // 分页
+      page1: {
+        offset: 1,
+        limit: 10,
+        totalResult: 0,
+      },
+      seatchShow: false,
     };
   },
   created() {
@@ -142,7 +181,13 @@ export default {
     demandIndexValue() {
       postD(this.url.demandIndexInterface).then((res) => {
         this.tableData = res.data;
+        this.page1.totalResult = res.count;
       });
+    },
+    handlePageChange({ currentPage, pageSize }) {
+      this.page1.offset = currentPage;
+      this.page1.limit = pageSize;
+      this.demandIndexValue();
     },
     // 批量删除
     checkboxChangeEvent(data) {
@@ -167,16 +212,16 @@ export default {
         });
         postD(this.url.selectDelInterface, this.idl).then((res) => {
           if (res.code == "200") {
-          this.$message.success("状态修改成功");
-        } else if (res.code == "-200") {
-          this.$message.error("参数错误，或暂无数据");
-        } else if (res.code == "-201") {
-          this.$message.error("未登陆");
-        } else if (res.code == "-203") {
-          this.$message.error("对不起，你没有此操作权限");
-        } else {
-          this.$message.error("注册失败，账号已存在");
-        }
+            this.$message.success("状态修改成功");
+          } else if (res.code == "-200") {
+            this.$message.error("参数错误，或暂无数据");
+          } else if (res.code == "-201") {
+            this.$message.error("未登陆");
+          } else if (res.code == "-203") {
+            this.$message.error("对不起，你没有此操作权限");
+          } else {
+            this.$message.error("注册失败，账号已存在");
+          }
           this.demandIndexValue();
         });
       }
@@ -199,16 +244,16 @@ export default {
         postD(this.url.demandDelInterface, this.demandRemoveRowList).then(
           (res) => {
             if (res.code == "200") {
-          this.$message.success("状态修改成功");
-        } else if (res.code == "-200") {
-          this.$message.error("参数错误，或暂无数据");
-        } else if (res.code == "-201") {
-          this.$message.error("未登陆");
-        } else if (res.code == "-203") {
-          this.$message.error("对不起，你没有此操作权限");
-        } else {
-          this.$message.error("注册失败，账号已存在");
-        }
+              this.$message.success("状态修改成功");
+            } else if (res.code == "-200") {
+              this.$message.error("参数错误，或暂无数据");
+            } else if (res.code == "-201") {
+              this.$message.error("未登陆");
+            } else if (res.code == "-203") {
+              this.$message.error("对不起，你没有此操作权限");
+            } else {
+              this.$message.error("注册失败，账号已存在");
+            }
             this.demandIndexValue();
           }
         );
@@ -257,6 +302,13 @@ export default {
     },
     tableStyle() {
       return "box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);border-radius: 10px 10px 10px 10px;opacity: 1;";
+    },
+    showCont() {
+      this.seatchShow = !this.seatchShow;
+      this.$refs.btn1.$el.innerText;
+    },
+    async costPlannedAmountChange(param1) {
+      this.tableData = param1;
     },
   },
 };

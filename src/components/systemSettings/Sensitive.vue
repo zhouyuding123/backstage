@@ -57,7 +57,6 @@ export default {
     readGetData(){
       postD(this.url.getDataInterface)
       .then((res)=>{
-        console.log(res);
         this.ruleForm.content = res.data.content
       })
     },

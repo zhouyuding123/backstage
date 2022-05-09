@@ -1,5 +1,6 @@
 <template>
   <div class="backColor">
+    <group-seatch @changes="costPlannedAmountChange" />
     <div class="group-left">
       <div class="addPage-Group">
         <el-row>
@@ -229,7 +230,16 @@
 
 <script>
 import { postD } from "../../api/index.js";
+import groupSeatch from "./Group/groupSeatch.vue";
 export default {
+  provide() {
+    return {
+      groupVaule: this.groupVaule,
+    };
+  },
+  components: {
+    groupSeatch,
+  },
   data() {
     return {
       removeRowFrom: {
@@ -499,6 +509,9 @@ export default {
     },
     tableStyle() {
       return "box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);border-radius: 10px 10px 10px 10px;opacity: 1;";
+    },
+    async costPlannedAmountChange(param1) {
+      this.tableData = param1;
     },
   },
 };

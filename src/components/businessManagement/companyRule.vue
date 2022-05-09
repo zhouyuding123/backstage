@@ -1,11 +1,11 @@
 <template>
   <div class="backColor">
     <div class="firstColor">
-      <div class="buttonStyles">
-        <p @click="addEnterprise">添加</p>
+      <div>
+        <el-button type="success" @click="addEnterprise">添加</el-button>
       </div>
-      <div class="buttonStyle">
-        <p @click="selectDel">批量删除</p>
+      <div style="padding-left:20px">
+        <el-button type="danger" plain @click="selectDel">批量删除</el-button>
       </div>
     </div>
     <div class="twons">
@@ -679,7 +679,6 @@ export default {
       this.detailsVisiblesId.id = data.id.toString();
       postD(this.url.authCompanyInterface, this.detailsVisiblesId).then(
         (res) => {
-          console.log(res);
           this.designerDetailsValue = res.data;
         }
       );
@@ -728,37 +727,6 @@ export default {
     width: 100%;
     display: flex;
     flex-flow: row;
-    .buttonStyles {
-      line-height: 48px;
-      width: 170px;
-      height: 48px;
-      background: rgb(39, 224, 248);
-      box-shadow: 2px 5px 20px 1px rgba(58, 203, 233, 0.15);
-      border-radius: 10px 10px 10px 10px;
-      opacity: 1;
-      cursor: pointer;
-      p {
-        font-size: 14px;
-        font-weight: 500;
-        color: #ffffff;
-      }
-    }
-    .buttonStyle {
-      line-height: 48px;
-      width: 170px;
-      height: 48px;
-      background: red;
-      box-shadow: 2px 5px 20px 1px rgba(58, 203, 233, 0.15);
-      border-radius: 10px 10px 10px 10px;
-      opacity: 1;
-      cursor: pointer;
-      margin-left: 15px;
-      p {
-        font-size: 14px;
-        font-weight: 500;
-        color: #ffffff;
-      }
-    }
   }
   .twons {
     padding: 20px;
