@@ -11,6 +11,7 @@ export default {
   data() {
     return {
       isRouterAlive: true,
+      imgUrl:"http://weisou.chengduziyi.com/admin/Uploads/uploadFile"
     };
   },
   methods: {

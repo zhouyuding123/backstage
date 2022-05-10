@@ -3,7 +3,119 @@
     <macth-seatch v-show="seatchShow" @macthSeatch="costPlannedAmountChange" />
     <div class="firstColor">
       <div>
-        <el-button type="success">添加</el-button>
+        <el-button type="success" @click="addMacth">添加</el-button>
+        <el-dialog
+          title="添加赛事"
+          v-model="addMacthShow"
+          width="70%"
+          :destroy-on-close="true"
+        >
+          <el-form
+            :model="addMacthValue"
+            :rules="addMacthValueRules"
+            ref="addMacthValueRef"
+            label-width="100px"
+          >
+            <el-form-item label="赛事主题" prop="title">
+              <el-input v-model="addMacthValue.title"></el-input>
+            </el-form-item>
+            <el-form-item label="征集类别" prop="category">
+              <el-input v-model="addMacthValue.category"></el-input>
+            </el-form-item>
+            <el-form-item label="赛事简介" prop="description">
+              <el-input v-model="addMacthValue.description"></el-input>
+            </el-form-item>
+            <el-form-item label="赛事机构" prop="mechanism">
+              <el-input v-model="addMacthValue.mechanism"></el-input>
+            </el-form-item>
+
+            <el-form-item label="报名时间" prop="sign_time">
+              <el-date-picker
+                v-model="sign_timeTime"
+                type="datetime"
+                placeholder="选择报名时间"
+                @change="getTime"
+              >
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item label="展示时间" prop="exh_time">
+              <el-date-picker
+                v-model="exh_timeTime"
+                type="datetime"
+                placeholder="选择展示时间"
+                @change="gitTime"
+              >
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item label="海报" prop="poster">
+              <el-upload
+                class="avatar-uploader"
+                action="http://weisou.chengduziyi.com/admin/Uploads/uploadFile"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                :before-upload="beforeAvatarUpload"
+                :data="{ fileType: this.fileType }"
+              >
+                <img
+                  v-if="imageUrl"
+                  :src="imageUrl"
+                  class="avatar"
+                  :v-model="imageUrl"
+                />
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+            </el-form-item>
+            <el-form-item label="封面图" prop="thumb">
+              <el-upload
+                class="avatar-uploader"
+                action="http://weisou.chengduziyi.com/admin/Uploads/uploadFile"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccessthumb"
+                :before-upload="beforeAvatarUploadthumb"
+                :data="{ fileType: this.fileType }"
+              >
+                <img
+                  v-if="imageUrlthumb"
+                  :src="imageUrlthumb"
+                  class="avatar"
+                  :v-model="imageUrlthumb"
+                />
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+            </el-form-item>
+            <!-- 后期改 -->
+            <el-form-item
+              label="赛事详情内容"
+              prop="content"
+              style="width: 100%"
+            >
+              <el-input
+                type="textarea"
+                v-model="addMacthValue.content"
+              ></el-input>
+            </el-form-item>
+            <div v-for="(item, index) in addMacthValue.prize" :key="index">
+              <el-form-item label="活动奖品" prop="prize" style="width: 100%">
+                <p>奖项名称:</p>
+                <el-input v-model="item.name" style="width: 15%"></el-input>
+                <p>数量:</p>
+                <el-input v-model="item.amount" style="width: 15%"></el-input>
+                <p>奖品:</p>
+                <el-input v-model="item.item" style="width: 15%"></el-input>
+                <p class="addInput" @click="addInputHandle" v-if="index === 0">
+                  <img src="../../assets/lovig/jiahao.png" alt="" />
+                </p>
+                <p class="addInput" v-else @click="delInputHandle(index)">
+                  <img src="../../assets/lovig/jianhao.png" alt="" />
+                </p>
+              </el-form-item>
+            </div>
+          </el-form>
+          <span>
+            <el-button @click="addMacthShow = false">取 消</el-button>
+            <el-button type="primary" @click="addEventContent">确 定</el-button>
+          </span>
+        </el-dialog>
       </div>
       <div style="padding-left: 20px">
         <el-button type="danger" plain @click="macthDels">批量删除</el-button>
@@ -39,40 +151,21 @@
             <el-image
               :src="
                 'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                scoped.row.thumb
+                scoped.row.headimage
               "
               alt=""
               :preview-src-list="[
                 'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                  scoped.row.thumb,
+                  scoped.row.headimage,
               ]"
               style="width: 40px; height: 40px"
               class="imgStyle"
             />
           </template>
         </vxe-column>
-        <vxe-column
-          field="title"
-          title="赛事主题" 
-          align="center"
-        ></vxe-column>
-        <vxe-column
-          field="category"
-          title="征集类别" 
-          width="100"
-          align="center"
-        ></vxe-column>
-        <vxe-column
-          field="mechanism"
-          title="赛事机构"
-          align="center"
-        ></vxe-column>
-        <vxe-column
-          field="description"
-          title="赛事简介"
-          width="100"
-          align="center"
-        ></vxe-column>
+        <vxe-column field="username" title="用户名" align="center"></vxe-column>
+        <vxe-column field="nickname" title="昵称" align="center"></vxe-column>
+        <vxe-column field="title" title="赛事主题" align="center"></vxe-column>
         <vxe-column
           field="auth"
           title="审核状态"
@@ -107,13 +200,7 @@
             ></el-switch>
           </template>
         </vxe-column>
-        <vxe-column
-          field="create_time"
-          title="创建时间"
-          align="center"
-          width="145"
-          show-overflow="title"
-        ></vxe-column>
+        
         <vxe-column
           field="sign_time"
           title="报名时间"
@@ -133,6 +220,13 @@
           title="浏览量"
           align="center"
           width="75"
+        ></vxe-column>
+        <vxe-column
+          field="create_time"
+          title="创建时间"
+          align="center"
+          width="145"
+          show-overflow="title"
         ></vxe-column>
         <vxe-column title="操作" align="center">
           <template v-slot="scoped">
@@ -156,7 +250,215 @@
           </template>
         </vxe-column>
       </vxe-table>
+      <vxe-pager
+        :current-page="page1.offset"
+        :page-size="page1.limit"
+        :total="page1.totalResult"
+        :layouts="[
+          'PrevPage',
+          'JumpNumber',
+          'NextPage',
+          'FullJump',
+          'Sizes',
+          'Total',
+        ]"
+        @page-change="handlePageChange"
+      ></vxe-pager>
     </div>
+    <el-dialog title="详情" v-model="dialogShow" width="70%">
+      <el-descriptions direction="vertical" :column="5" border>
+        <el-descriptions-item label="用户名" align="center">{{
+          detailsValues.username
+        }}</el-descriptions-item>
+        <el-descriptions-item label="昵称" align="center">{{
+          detailsValues.nickname
+        }}</el-descriptions-item>
+        <el-descriptions-item label="头像" align="center">
+          <el-image
+            :src="
+              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+              detailsValues.headimage
+            "
+            :preview-src-list="[
+              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                detailsValues.headimage,
+            ]"
+            style="width: 40px; height: 40px"
+            class="stylecss"
+          />
+        </el-descriptions-item>
+
+        <el-descriptions-item label="赛事主题" align="center">{{
+          detailsValues.title
+        }}</el-descriptions-item>
+        <el-descriptions-item label="征集类别" align="center">{{
+          detailsValues.category
+        }}</el-descriptions-item>
+        <el-descriptions-item label="赛事简介" align="center">{{
+          detailsValues.description
+        }}</el-descriptions-item>
+        <el-descriptions-item label="赛事机构" align="center">{{
+          detailsValues.mechanism
+        }}</el-descriptions-item>
+        <el-descriptions-item label="海报" align="center">
+          <el-image
+            :src="
+              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+              detailsValues.poster
+            "
+            :preview-src-list="[
+              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                detailsValues.poster,
+            ]"
+            style="width: 40px; height: 40px"
+            class="stylecss"
+          />
+        </el-descriptions-item>
+
+        <el-descriptions-item label="报名时间" align="center">{{
+          detailsValues.sign_time
+        }}</el-descriptions-item>
+        <el-descriptions-item label="展示时间" align="center">{{
+          detailsValues.exh_time
+        }}</el-descriptions-item>
+        <el-descriptions-item label="创建时间" align="center">{{
+          detailsValues.create_time
+        }}</el-descriptions-item>
+        <el-descriptions-item label="奖项" align="center">
+          <div v-for="(item, index) in detial" :key="index">
+            奖项:{{ item.name }}个数:
+            {{ item.amount }}奖品:{{ item.item }}
+          </div>
+        </el-descriptions-item>
+        <el-descriptions-item label="创建时间" align="center">
+          <div
+            :class="{
+              orange: detailsValues.status == 3,
+              yellow: detailsValues.status == 0,
+              green: detailsValues.status == 1,
+              red: detailsValues.status === 2,
+            }"
+          >
+            {{ filterStatus(detailsValues.status) }}
+          </div>
+        </el-descriptions-item>
+        <el-descriptions-item label="详情（平台发布）" align="center">{{
+          detailsValues.content
+        }}</el-descriptions-item>
+        <el-descriptions-item label="浏览量" align="center">{{
+          detailsValues.browse
+        }}</el-descriptions-item>
+      </el-descriptions>
+      <span>
+        <el-button @click="dialogShow = false">取 消</el-button>
+        <el-button type="primary" @click="dialogShow = false">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      title="修改"
+      v-model="dialogEditMatch"
+      width="70%"
+      :destroy-on-close="true"
+    >
+      <el-form
+        :model="editFrom"
+        :rules="editFromRules"
+        ref="editFromref"
+        label-width="70px"
+      >
+        <el-form-item label="赛事主题" prop="title">
+          <el-input v-model="editFrom.title"></el-input>
+        </el-form-item>
+        <el-form-item label="征集类别" prop="category">
+          <el-input v-model="editFrom.category"></el-input>
+        </el-form-item>
+        <el-form-item label="赛事简介" prop="description">
+          <el-input v-model="editFrom.description"></el-input>
+        </el-form-item>
+        <el-form-item label="赛事机构" prop="mechanism">
+          <el-input v-model="editFrom.mechanism"></el-input>
+        </el-form-item>
+        <el-form-item label="活动奖品" prop="prize">
+          <p>奖项名称:</p>
+          <el-input v-model="name" style="width: 25.2%"></el-input>
+          <p>数量:</p>
+          <el-input v-model="amount" style="width: 25.2%"></el-input>
+          <p>奖品:</p>
+          <el-input v-model="item" style="width: 25.3%"></el-input>
+        </el-form-item>
+        <el-form-item label="" prop=""> </el-form-item>
+        <el-form-item label="报名时间" prop="sign_time">
+          <el-date-picker
+            v-model="editFrom.sign_timeTime"
+            type="datetime"
+            placeholder="选择报名时间"
+            @change="getTime"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="展示时间" prop="exh_time">
+          <el-date-picker
+            v-model="editFrom.exh_timeTime"
+            type="datetime"
+            placeholder="选择展示时间"
+            @change="gitTime"
+          >
+          </el-date-picker>
+        </el-form-item>
+
+        <el-form-item label="海报" prop="poster">
+          <el-upload
+            class="avatar-uploader"
+            action="http://weisou.chengduziyi.com/admin/Uploads/uploadFile"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+            :data="{ fileType: this.fileType }"
+          >
+            <img
+              v-if="editFrom.poster"
+              :src="
+                'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                editFrom.poster
+              "
+              class="avatar"
+              :v-model="editFrom.poster"
+            />
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="封面图" prop="thumb">
+          <el-upload
+            class="avatar-uploader"
+            action="http://weisou.chengduziyi.com/admin/Uploads/uploadFile"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccessthumb"
+            :before-upload="beforeAvatarUploadthumb"
+            :data="{ fileType: this.fileType }"
+          >
+            <img
+              v-if="editFrom.thumb"
+              :src="
+                'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
+                editFrom.thumb
+              "
+              class="avatar"
+              :v-model="editFrom.thumb"
+            />
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="赛事详情内容" prop="content" style="width: 70%">
+          <el-input type="textarea" v-model="editFrom.content"></el-input>
+        </el-form-item>
+      </el-form>
+      <span>
+        <el-button @click="dialogEditMatch = false">取 消</el-button>
+        <el-button type="primary" @click="dialogEditMatch = false"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -164,6 +466,7 @@
 import macthSeatch from "./macthSeatch/macthSeatch.vue";
 import { postD } from "../../api/index.js";
 import { styleModify, styleModifytwo } from "../../assets/js/modifyStyle.js";
+import { timestampToTime } from "../../assets/js/time.js";
 export default {
   provide() {
     return {
@@ -182,6 +485,9 @@ export default {
         listMacthInterface: "match/listMacth",
         adminSelectDelMatchInterface: "Match/adminSelectDelMatch",
         delMatchInterface: "Match/delMatch",
+        editMatchInterface: "match/editMatch",
+        releaseInterface: "match/release",
+        showMatchInterface: "match/showMatch",
       },
       listMacth: {
         id: "",
@@ -198,6 +504,125 @@ export default {
       oneCompanyvalue: {
         id: "",
       },
+      // 分页
+      page1: {
+        offset: 1,
+        limit: 10,
+        totalResult: 0,
+      },
+      // 添加对话框显示
+      addMacthShow: false,
+      // 添加数据
+      addMacthValue: {
+        title: "",
+        category: "",
+        poster: "",
+        description: "",
+        mechanism: "",
+        thumb: "",
+        prize: [
+          {
+            name: "",
+            amount: "",
+            item: "",
+          },
+        ],
+        sign_time: "",
+        exh_time: "",
+        content: "",
+      },
+      name: "",
+      amount: "",
+      item: "",
+      // 时间
+      sign_timeTime: "",
+      exh_timeTime: "",
+      addMacthValueRules: {
+        title: [
+          {
+            required: true,
+            message: "请输入赛事主题",
+            tirgger: "blur",
+          },
+        ],
+        category: [
+          {
+            required: true,
+            message: "请输入征集类别",
+            tirgger: "blur",
+          },
+        ],
+        poster: [
+          {
+            required: true,
+            message: "请输入海报",
+            tirgger: "blur",
+          },
+        ],
+        description: [
+          {
+            required: true,
+            message: "请输入赛事简介",
+            tirgger: "blur",
+          },
+        ],
+        mechanism: [
+          {
+            required: true,
+            message: "请输入赛事机构",
+            tirgger: "blur",
+          },
+        ],
+        thumb: [
+          {
+            required: true,
+            message: "请输入封面图",
+            tirgger: "blur",
+          },
+        ],
+        sign_time: [
+          {
+            required: true,
+            message: "请输入报名时间",
+            tirgger: "blur",
+          },
+        ],
+        exh_time: [
+          {
+            required: true,
+            message: "请输入展示时间",
+            tirgger: "blur",
+          },
+        ],
+      },
+      // 海报图片上传
+      imageUrl: "",
+      fileType: "images",
+      // 封面图
+      imageUrlthumb: "",
+      // 详情
+      dialogShow: false,
+      detailsId: {
+        id: "",
+      },
+      detailsValues: [],
+      detial: "",
+      // 编辑
+      dialogEditMatch: false,
+      editFrom: {
+        title: "",
+        category: "",
+        description: "",
+        mechanism: "",
+        poster: "",
+        sign_time: "",
+        exh_time: "",
+        prize: "",
+        content: "",
+        thumb: "",
+        id: "",
+      },
+      editFromRules: {},
     };
   },
   created() {
@@ -207,7 +632,14 @@ export default {
     MacthValue() {
       postD(this.url.listMacthInterface).then((res) => {
         this.tableData = res.list;
+        this.page1.totalResult = res.count;
       });
+    },
+    // 分页
+    handlePageChange({ currentPage, pageSize }) {
+      this.page1.offset = currentPage;
+      this.page1.limit = pageSize;
+      this.MacthValue();
     },
     filterStatus(val) {
       if (val === 0) {
@@ -224,7 +656,7 @@ export default {
     is_openChaged(data) {
       this.listMacth.is_open = data.is_open;
       this.listMacth.id = data.id;
-      postD(this.url.listMacthInterface, this.listMacth).then((res) => {
+      postD(this.url.editMatchInterface, this.listMacth).then((res) => {
         if (res.code == "200") {
           this.$message.success("状态修改成功");
         } else if (res.code == "-200") {
@@ -255,7 +687,7 @@ export default {
       if (macthDelsValue !== "confirm") {
         return this.$message.info("取消删除");
       }
-      if (selectDelValue === "confirm") {
+      if (macthDelsValue === "confirm") {
         this.arrs.forEach((v) => {
           this.ids.push(v.id);
         });
@@ -310,6 +742,78 @@ export default {
         });
       }
     },
+    // 添加
+    addMacth() {
+      this.addMacthShow = true;
+    },
+    addInputHandle() {
+      this.addMacthValue.prize.push({ name: "", amount: "", item: "" });
+    },
+    delInputHandle(index) {
+      this.addMacthValue.prize.splice(index, 1);
+    },
+    addEventContent() {
+      this.$refs.addMacthValueRef.validate((valid) => {
+        if (!valid) return;
+        postD(this.url.releaseInterface, this.addMacthValue).then((res) => {
+          if (res.code == "200") {
+            this.$message.success("状态修改成功");
+            this.MacthValue();
+            this.addMacthShow = false;
+          } else if (res.code == "-200") {
+            this.$message.error("参数错误，或暂无数据");
+          } else if (res.code == "-201") {
+            this.$message.error("未登陆");
+          } else if (res.code == "-203") {
+            this.$message.error("对不起，你没有此操作权限");
+          } else {
+            this.$message.error("注册失败，账号已存在");
+          }
+        });
+      });
+    },
+    getTime(date) {
+      this.sign_timeTime = date;
+      this.addMacthValue.sign_time = timestampToTime(this.sign_timeTime / 1000);
+    },
+    gitTime(date) {
+      this.exh_timeTime = date;
+      this.addMacthValue.exh_time = timestampToTime(this.exh_timeTime / 1000);
+    },
+    // 海报
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+      this.addMacthValue.poster = res.url;
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
+    },
+    // 封面图
+    handleAvatarSuccessthumb(res, file) {
+      this.imageUrlthumb = URL.createObjectURL(file.raw);
+      this.addMacthValue.thumb = res.url;
+    },
+    beforeAvatarUploadthumb(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
+    },
     tableRowStyle() {
       styleModify();
     },
@@ -322,6 +826,34 @@ export default {
     },
     async costPlannedAmountChange(param1) {
       this.tableData = param1;
+    },
+    showEditAddmodify(data) {
+      this.editFrom.id = data.id;
+      this.dialogEditMatch = true;
+      postD(this.url.showMatchInterface, this.editFrom).then((res) => {
+        console.log(res.data);
+        this.editFrom = res.data;
+      });
+    },
+    // 详情
+    detailsValue(data) {
+      this.detailsId.id = data.id;
+      this.dialogShow = true;
+      postD(this.url.showMatchInterface, this.detailsId).then((res) => {
+        this.detailsValues = res.data;
+        this.detial = res.data.prize;
+      });
+    },
+    filterStatus(val) {
+      if (val === 0) {
+        return "等待平台审核";
+      } else if (val === 1) {
+        return "平台通过";
+      } else if (val === 2) {
+        return "驳回";
+      } else if (val === 3) {
+        return "结束";
+      }
     },
   },
 };
@@ -337,5 +869,32 @@ export default {
 }
 .postDyexer {
   padding: 0 5px;
+}
+.el-form {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-left: 50px;
+  margin-right: 50px;
+  .el-form-item {
+    width: 45%;
+    p {
+      font-size: 12px;
+    }
+  }
+}
+/deep/ .el-date-editor {
+  position: relative;
+  .el-input__prefix {
+    display: none;
+  }
+}
+.stylecss {
+  margin-left: -19px;
+  margin-top: -8px;
+  position: absolute;
+}
+.addInput {
+  line-height: 10px;
 }
 </style>

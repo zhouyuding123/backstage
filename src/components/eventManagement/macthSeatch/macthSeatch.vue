@@ -50,6 +50,24 @@
               </el-option>
             </el-select></div
         ></el-col>
+        <el-col :span="1"
+          ><div>
+            <div class="divText">平台审核:</div>
+          </div></el-col
+        >
+        <el-col :span="3"
+          ><div>
+            <el-select v-model="search.status" placeholder="请选择">
+              <el-option
+                v-for="item in statusOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select></div
+        ></el-col>
+
 
         <el-col :span="3"
           ><div>
@@ -80,7 +98,8 @@ export default {
         keyword: null,
         sign_time:null,
         exh_time:null,
-        is_open:null
+        is_open:null,
+        status:null
       },
       vipGetTime:[],
       is_openOptions:[
@@ -91,6 +110,24 @@ export default {
         {
           value: "0",
           label: "关闭",
+        },
+      ],
+      statusOptions:[
+        {
+          value: "0",
+          label: "等待平台审核",
+        },
+        {
+          value: "1",
+          label: "平台通过,进行中",
+        },
+        {
+          value: "2",
+          label: "驳回",
+        },
+        {
+          value: "3",
+          label: "结束",
         },
       ]
     };
@@ -104,8 +141,8 @@ export default {
       this.search.sign_time = "";
       this.search.exh_time = "";
       this.search.is_open = "";
+      this.search.status = "";
       this.vipGetTime=""
-      
       },
       getTime(date) {
       this.vipGetTime = date;

@@ -5,7 +5,6 @@
         <div>
           <div class="logStyle">
             <img src="../../assets/logo.png" alt="" />
-            <p>MOPHY</p>
           </div>
           <div class="toggle-button" @click="toggleButton">+-</div>
         </div>
@@ -197,11 +196,12 @@ export default {
   justify-content: center;
   font-weight: bold;
   padding-top: 15px;
+  padding-bottom: 10px;
   color: white;
   font-family: Manrope3-Bold, Manrope3;
   img {
-    width: 58px;
-    height: 50px;
+    width: 100px;
+    height: 40px;
   }
 }
 .layout-container-demo .el-aside {
