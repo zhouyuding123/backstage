@@ -27,6 +27,6 @@ export default {
 <style lang="less" scoped>
 .crumbs {
   position: absolute;
-  padding: 25px 0 0 0;
+  margin: 25px 0 0 50px;
 }
 </style>

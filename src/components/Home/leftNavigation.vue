@@ -6,7 +6,6 @@
           <div class="logStyle">
             <img src="../../assets/logo.png" alt="" />
           </div>
-          <div class="toggle-button" @click="toggleButton">+-</div>
         </div>
         <el-menu
           :collapse="isCollapse"
@@ -47,6 +46,7 @@
           opacity: 1;
         "
       >
+      <div class="toggle-button" @click="toggleButton"><svg t="1652198536671" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1869" width="16" height="16"><path d="M866.8672 257.024H157.184c-30.208 0-54.6304-22.8864-54.6304-51.2 0-28.2624 24.4736-51.2 54.6304-51.2H866.816c30.208 0 54.6304 22.9376 54.6304 51.2 0 28.3136-24.4736 51.2-54.6304 51.2z m0 307.2H157.184c-30.208 0-54.6304-22.8864-54.6304-51.2 0-28.2624 24.4736-51.2 54.6304-51.2H866.816c30.208 0 54.6304 22.9376 54.6304 51.2 0 28.3136-24.4736 51.2-54.6304 51.2z m0 307.2H157.184c-30.208 0-54.6304-22.8864-54.6304-51.2 0-28.2624 24.4736-51.2 54.6304-51.2H866.816c30.208 0 54.6304 22.9376 54.6304 51.2 0 28.3136-24.4736 51.2-54.6304 51.2z" fill="#333333" p-id="1870"></path></svg></div>
         <Crumbs></Crumbs>
         <div class="fullScreen" @click="fullScreen">
           <svg
@@ -200,7 +200,7 @@ export default {
   color: white;
   font-family: Manrope3-Bold, Manrope3;
   img {
-    width: 100px;
+    width: 120px;
     height: 40px;
   }
 }
@@ -242,13 +242,11 @@ export default {
   color: #ffffff;
 }
 .toggle-button {
-  background-color: #672fdb;
-  font-size: 10px;
-  line-height: 24px;
   color: #fff;
-  text-align: center;
-  letter-spacing: 0.2em;
+  text-align: left;
   cursor: pointer;
+  position: absolute;
+  padding-top: 24px;
 }
 .indexhomePage {
   cursor: pointer;
