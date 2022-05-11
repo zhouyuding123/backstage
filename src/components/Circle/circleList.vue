@@ -61,15 +61,9 @@
         <vxe-column width="60" align="center">
           <template v-slot="scoped">
             <el-image
-              :src="
-                'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                scoped.row.headimg
-              "
+              :src="imagesValue + scoped.row.headimg"
               alt=""
-              :preview-src-list="[
-                'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                  scoped.row.headimg,
-              ]"
+              :preview-src-list="[imagesValue + scoped.row.headimg]"
               style="width: 40px; height: 40px"
               class="imgStyle"
             />
@@ -216,9 +210,7 @@
           placeholder="请输入内容"
           class="inputlong"
         ></el-input
-        ><el-button
-          type="success"
-          @click="forum_countInputKeywordSeach"
+        ><el-button type="success" @click="forum_countInputKeywordSeach"
           >成功按钮</el-button
         >
       </div>
@@ -367,6 +359,7 @@
 <script>
 import { postD } from "../../api/index.js";
 import circleSeatch from "./Circle/circleSeatch.vue";
+import { imgUrl } from "../../assets/js/modifyStyle.js";
 export default {
   provide() {
     return {
@@ -378,6 +371,7 @@ export default {
   },
   data() {
     return {
+      imagesValue: "",
       seatchShow: false,
       tableData: [],
       allAlign: null,
@@ -480,6 +474,7 @@ export default {
       postD(this.url.getListInterface, this.page1).then((res) => {
         this.tableData = res.list;
         this.page1.totalResult = res.count;
+        this.imagesValue = imgUrl();
       });
     },
     tableRowStyle() {
@@ -730,9 +725,11 @@ export default {
       this.tableData = param1;
     },
     forum_countInputKeywordSeach() {
-      postD(this.url.getCircleForumInterface, this.forum_countInputInput).then((res) => {
-        this.tableData = res.list;
-      });
+      postD(this.url.getCircleForumInterface, this.forum_countInputInput).then(
+        (res) => {
+          this.tableData = res.list;
+        }
+      );
     },
   },
 };

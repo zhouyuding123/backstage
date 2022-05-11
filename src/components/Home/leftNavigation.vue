@@ -13,7 +13,11 @@
           router
           background-color="#7a40f2"
         >
-          <router-link class="indexhomePage" to="/pageHome">首页</router-link>
+          <div class="indexhomePageStyle">
+            <router-link class="indexhomePage" to="/pageHome">
+              <div>控制台</div></router-link
+            >
+          </div>
           <el-sub-menu
             v-for="item in leftNavigationValue"
             :key="item.id"
@@ -46,7 +50,24 @@
           opacity: 1;
         "
       >
-      <div class="toggle-button" @click="toggleButton"><svg t="1652198536671" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1869" width="16" height="16"><path d="M866.8672 257.024H157.184c-30.208 0-54.6304-22.8864-54.6304-51.2 0-28.2624 24.4736-51.2 54.6304-51.2H866.816c30.208 0 54.6304 22.9376 54.6304 51.2 0 28.3136-24.4736 51.2-54.6304 51.2z m0 307.2H157.184c-30.208 0-54.6304-22.8864-54.6304-51.2 0-28.2624 24.4736-51.2 54.6304-51.2H866.816c30.208 0 54.6304 22.9376 54.6304 51.2 0 28.3136-24.4736 51.2-54.6304 51.2z m0 307.2H157.184c-30.208 0-54.6304-22.8864-54.6304-51.2 0-28.2624 24.4736-51.2 54.6304-51.2H866.816c30.208 0 54.6304 22.9376 54.6304 51.2 0 28.3136-24.4736 51.2-54.6304 51.2z" fill="#333333" p-id="1870"></path></svg></div>
+        <div class="toggle-button" @click="toggleButton">
+          <svg
+            t="1652198536671"
+            class="icon"
+            viewBox="0 0 1024 1024"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            p-id="1869"
+            width="16"
+            height="16"
+          >
+            <path
+              d="M866.8672 257.024H157.184c-30.208 0-54.6304-22.8864-54.6304-51.2 0-28.2624 24.4736-51.2 54.6304-51.2H866.816c30.208 0 54.6304 22.9376 54.6304 51.2 0 28.3136-24.4736 51.2-54.6304 51.2z m0 307.2H157.184c-30.208 0-54.6304-22.8864-54.6304-51.2 0-28.2624 24.4736-51.2 54.6304-51.2H866.816c30.208 0 54.6304 22.9376 54.6304 51.2 0 28.3136-24.4736 51.2-54.6304 51.2z m0 307.2H157.184c-30.208 0-54.6304-22.8864-54.6304-51.2 0-28.2624 24.4736-51.2 54.6304-51.2H866.816c30.208 0 54.6304 22.9376 54.6304 51.2 0 28.3136-24.4736 51.2-54.6304 51.2z"
+              fill="#333333"
+              p-id="1870"
+            ></path>
+          </svg>
+        </div>
         <Crumbs></Crumbs>
         <div class="fullScreen" @click="fullScreen">
           <svg
@@ -254,6 +275,15 @@ export default {
   color: #cfb8ff;
   font-size: 14px;
   line-height: 30px;
+  div {
+    margin-left: -10px;
+  }
+}
+.indexhomePageStyle:active {
+  background-color: #672fdb;
+}
+.indexhomePage:focus {
+  color: white;
 }
 .indexhomePage {
   text-decoration: none;

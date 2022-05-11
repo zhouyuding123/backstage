@@ -1,3 +1,3 @@
 <template>
-    <div>首页</div>
+    <div>控制台</div>
 </template>

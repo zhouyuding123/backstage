@@ -1,9 +1,14 @@
 <template>
   <div class="backColor">
-    <designer-seatch v-show="seatchShow" @designerChange ="costPlannedAmountChange"  />
+    <designer-seatch
+      v-show="seatchShow"
+      @designerChange="costPlannedAmountChange"
+    />
     <div class="firstColor">
       <div>
-        <el-button type="danger" plain @click="designerDelsList">批量删除</el-button>
+        <el-button type="danger" plain @click="designerDelsList"
+          >批量删除</el-button
+        >
       </div>
       <div class="contentRight">
         <el-button type="info" plain ref="btn1" @click="showCont($event)"
@@ -40,15 +45,9 @@
         <vxe-column width="80" align="center">
           <template v-slot="scoped">
             <el-image
-              :src="
-                'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                scoped.row.headimage
-              "
+              :src="imagesValue + scoped.row.headimage"
               alt=""
-              :preview-src-list="[
-                'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                  scoped.row.headimage,
-              ]"
+              :preview-src-list="[imagesValue + scoped.row.headimage]"
               style="width: 40px; height: 40px"
               class="imgStyle"
             />
@@ -180,15 +179,9 @@
         <el-descriptions-item label="头像">
           <el-image
             class="heaimageStyle"
-            :src="
-              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-              designerDetailsValue.headimage
-            "
+            :src="imagesValue + designerDetailsValue.headimage"
             alt=""
-            :preview-src-list="[
-              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                designerDetailsValue.headimage,
-            ]"
+            :preview-src-list="[imagesValue + designerDetailsValue.headimage]"
             style="width: 30px; height: 30px"
           />
         </el-descriptions-item>
@@ -208,30 +201,16 @@
         }}</el-descriptions-item
         ><el-descriptions-item label="身份证正面">
           <el-image
-            class="heaimageStyle"
-            :src="
-              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-              designerDetailsValue.card_z
-            "
+            :src="imagesValue + designerDetailsValue.card_z"
             alt=""
-            :preview-src-list="[
-              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                designerDetailsValue.card_z,
-            ]"
+            :preview-src-list="[imagesValue + designerDetailsValue.card_z]"
             style="width: 30px; height: 30px"
           /> </el-descriptions-item
         ><el-descriptions-item label="身份证反面">
           <el-image
-            class="heaimageStyle"
-            :src="
-              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-              designerDetailsValue.card_f
-            "
+            :src="imagesValue + designerDetailsValue.card_f"
             alt=""
-            :preview-src-list="[
-              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                designerDetailsValue.card_f,
-            ]"
+            :preview-src-list="[imagesValue + designerDetailsValue.card_f]"
             style="width: 30px; height: 30px"
           />
         </el-descriptions-item>
@@ -258,7 +237,8 @@
 </template>
 <script>
 import { postD } from "../../api/index.js";
-import designerSeatch from "./designerSeatch/designerSeatch.vue"
+import { imgUrl } from "../../assets/js/modifyStyle.js";
+import designerSeatch from "./designerSeatch/designerSeatch.vue";
 export default {
   provide() {
     return {
@@ -266,10 +246,11 @@ export default {
     };
   },
   components: {
-    designerSeatch
+    designerSeatch,
   },
   data() {
     return {
+      imagesValue: "",
       url: {
         DesignerindexInterface: "Designer/index",
         setAuthInterface: "designer/setAuth",
@@ -326,7 +307,7 @@ export default {
         card_f: "",
       },
       designerDialog: false,
-      seatchShow:false
+      seatchShow: false,
     };
   },
   created() {
@@ -338,6 +319,7 @@ export default {
         (res) => {
           this.tableData = res.data;
           this.designerParameter.totalResult = res.count;
+          this.imagesValue = imgUrl();
         }
       );
     },

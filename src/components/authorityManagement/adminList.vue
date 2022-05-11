@@ -1,165 +1,133 @@
 <template>
   <div class="backColor">
-    <div class="leftser">
+    <div class="firstColor">
       <div>
-        <div class="Query-search">
-          <el-row>
-            <el-col :span="1"
-              ><div>
-                <el-button type="success" @click="addUser = true"
-                  >添加</el-button
-                >
-              </div></el-col
-            >
-            <el-col :span="1"
-              ><el-button type="danger" plain @click="deleteUser"
-                >批量删除</el-button
-              ></el-col
-            >
-          </el-row>
-        </div>
+        <el-button type="success" @click="addUser = true">添加</el-button>
       </div>
-      <div>
-        <vxe-table
-          round
-          border="true"
-          ref="xTable1"
-          :align="allAlign"
-          :row-config="{ isHover: true }"
-          :data="tableData"
-          row-id="id"
-          @checkbox-change="checkboxChangeEvent"
-          @checkbox-all="checkboxChangeEvent"
-          :row-style="tableRowStyle"
-          :header-row-style="tableStyle"
-        >
-          <vxe-column
-            align="center"
-            type="checkbox"
-            width="80"
-            class="linker"
-          ></vxe-column>
-          <vxe-column
-            type="seq"
-            title="id"
-            width="60"
-            align="center"
-          ></vxe-column>
-          <vxe-column width="100">
-            <template v-slot="scoped">
-              <el-image
-                class="imgStyle"
-                :src="
-                  'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                  scoped.row.image
-                "
-                alt=""
-                :preview-src-list="[
-                  'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                    scoped.row.image,
-                ]"
-                style="width: 50px; height: 50px"
-              />
-            </template>
-          </vxe-column>
-          <vxe-column
-            field="username"
-            title="用户名"
-            align="center"
-          ></vxe-column>
-          <vxe-column
-            field="nickname"
-            title="真实姓名"
-            align="center"
-          ></vxe-column>
-          <vxe-column
-            field="group"
-            title="所属组别"
-            align="center"
-          ></vxe-column>
-          <vxe-column
-            field="loginip"
-            title="登录ip"
-            align="center"
-          ></vxe-column>
+      <div style="padding-left: 20px">
+        <el-button type="danger" plain @click="deleteUser">批量删除</el-button>
+      </div>
+    </div>
+    <div class="twons">
+      <vxe-table
+        round
+        border="true"
+        ref="xTable1"
+        :align="allAlign"
+        :row-config="{ isHover: true }"
+        :data="tableData"
+        row-id="id"
+        @checkbox-change="checkboxChangeEvent"
+        @checkbox-all="checkboxChangeEvent"
+        :row-style="tableRowStyle"
+        :header-row-style="tableStyle"
+      >
+        <vxe-column
+          align="center"
+          type="checkbox"
+          width="80"
+          class="linker"
+        ></vxe-column>
+        <vxe-column
+          type="seq"
+          title="id"
+          width="60"
+          align="center"
+        ></vxe-column>
+        <vxe-column width="100">
+          <template v-slot="scoped">
+            <el-image
+              class="imgStyle"
+              :src="imagesValue + scoped.row.image"
+              alt=""
+              :preview-src-list="[imagesValue + scoped.row.image]"
+              style="width: 50px; height: 50px"
+            />
+          </template>
+        </vxe-column>
+        <vxe-column field="username" title="用户名" align="center"></vxe-column>
+        <vxe-column
+          field="nickname"
+          title="真实姓名"
+          align="center"
+        ></vxe-column>
+        <vxe-column field="group" title="所属组别" align="center"></vxe-column>
+        <vxe-column field="loginip" title="登录ip" align="center"></vxe-column>
 
-          <vxe-column
-            field="create_time"
-            title="登陆时间"
-            align="center"
-          ></vxe-column>
-          <vxe-column
-            field="update_time"
-            title="最后登录"
-            align="center"
-          ></vxe-column>
-          <vxe-column title="操作" align="center">
-            <template v-slot="scoped">
-              <div class="postDyex">
-                <div class="Edit">
-                  <el-button
-                    type="primary"
-                    @click="adminListEditAddmodify(scoped.row)"
-                    ><svg
-                      t="1649929274884"
-                      class="icon"
-                      viewBox="0 0 1024 1024"
-                      version="1.1"
-                      xmlns="http://www.w3.org/2000/svg"
-                      p-id="6151"
-                      width="16"
-                      height="16"
-                    >
-                      <path
-                        d="M784.9 925.8H239.1c-77.7 0-140.9-63.2-140.9-140.9V239.1c0-77.7 63.2-140.9 140.9-140.9H512c27.5 0 49.9 22.3 49.9 49.9S539.6 198 512 198H239.1c-22.7 0-41.2 18.5-41.2 41.2v545.7c0 22.7 18.5 41.2 41.2 41.2h545.7c22.7 0 41.2-18.5 41.2-41.2V512c0-27.6 22.3-49.9 49.9-49.9 27.5 0 49.9 22.3 49.9 49.9v272.8c0 77.8-63.3 141-140.9 141z"
-                        p-id="6152"
-                        fill="#ffffff"
-                      ></path>
-                      <path
-                        d="M427.6 646.3c-12.8 0-25.5-4.9-35.3-14.6-19.5-19.5-19.5-51 0-70.5L816.5 137c19.5-19.5 51-19.5 70.5 0s19.5 51 0 70.5L462.8 631.7c-9.7 9.7-22.5 14.6-35.2 14.6z"
-                        p-id="6153"
-                        fill="#ffffff"
-                      ></path></svg
-                    >编辑</el-button
+        <vxe-column
+          field="create_time"
+          title="登陆时间"
+          align="center"
+        ></vxe-column>
+        <vxe-column
+          field="update_time"
+          title="最后登录"
+          align="center"
+        ></vxe-column>
+        <vxe-column title="操作" align="center">
+          <template v-slot="scoped">
+            <div class="postDyex">
+              <div class="Edit">
+                <el-button
+                  type="primary"
+                  @click="adminListEditAddmodify(scoped.row)"
+                  ><svg
+                    t="1649929274884"
+                    class="icon"
+                    viewBox="0 0 1024 1024"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    p-id="6151"
+                    width="16"
+                    height="16"
                   >
-                </div>
-                <div class="postDyexer">
-                  <el-button
-                    type="danger"
-                    @click="adminListremoveRow(scoped.row)"
-                    ><svg
-                      t="1649929178133"
-                      class="icon"
-                      viewBox="0 0 1024 1024"
-                      version="1.1"
-                      xmlns="http://www.w3.org/2000/svg"
-                      p-id="4525"
-                      width="16"
-                      height="16"
-                    >
-                      <path
-                        d="M872.7 278.8H151.5c-30.3 0-55-24.7-55-55v-32.7c0-22 17.9-39.9 39.9-39.9h744.4c25.7 0 46.7 21 46.7 46.7v25.9c0 30.4-24.6 55-54.8 55z m-736.3-96.3c-4.8 0-8.6 3.9-8.6 8.7v32.7c0 13.1 10.7 23.7 23.7 23.7h721.2c13.2 0 23.6-10.4 23.6-23.7V198c0-8.5-7-15.5-15.5-15.5H136.4z"
-                        fill="#ffffff"
-                        p-id="4526"
-                      ></path>
-                      <path
-                        d="M602.9 182.5H421.1v-17.6c0-50.1 40.8-90.8 90.9-90.8 50.1 0 90.9 40.8 90.9 90.8v17.6zM454 151.2h116c-6.2-26.3-29.9-45.9-58-45.9-28.2 0-51.8 19.6-58 45.9zM695.8 948H328.1C267.4 948 218 898.6 218 837.9V247.6h588v590.3c0 60.7-49.4 110.1-110.2 110.1zM249.3 278.8v559c0 43.5 35.4 78.9 78.9 78.9h367.7c43.5 0 78.9-35.4 78.9-78.9v-559H249.3z"
-                        fill="#ffffff"
-                        p-id="4527"
-                      ></path>
-                      <path
-                        d="M400.7 784.9c-8.6 0-15.6-7-15.6-15.6v-386c0-8.6 7-15.6 15.6-15.6s15.6 7 15.6 15.6v386c0 8.6-7 15.6-15.6 15.6zM512 784.9c-8.6 0-15.6-7-15.6-15.6v-386c0-8.6 7-15.6 15.6-15.6s15.6 7 15.6 15.6v386c0 8.6-7 15.6-15.6 15.6zM623.3 728.9c-8.6 0-15.6-7-15.6-15.6v-330c0-8.6 7-15.6 15.6-15.6s15.6 7 15.6 15.6v330c0 8.6-7 15.6-15.6 15.6z"
-                        fill="#ffffff"
-                        p-id="4528"
-                      ></path></svg
-                    >删除</el-button
-                  >
-                </div>
+                    <path
+                      d="M784.9 925.8H239.1c-77.7 0-140.9-63.2-140.9-140.9V239.1c0-77.7 63.2-140.9 140.9-140.9H512c27.5 0 49.9 22.3 49.9 49.9S539.6 198 512 198H239.1c-22.7 0-41.2 18.5-41.2 41.2v545.7c0 22.7 18.5 41.2 41.2 41.2h545.7c22.7 0 41.2-18.5 41.2-41.2V512c0-27.6 22.3-49.9 49.9-49.9 27.5 0 49.9 22.3 49.9 49.9v272.8c0 77.8-63.3 141-140.9 141z"
+                      p-id="6152"
+                      fill="#ffffff"
+                    ></path>
+                    <path
+                      d="M427.6 646.3c-12.8 0-25.5-4.9-35.3-14.6-19.5-19.5-19.5-51 0-70.5L816.5 137c19.5-19.5 51-19.5 70.5 0s19.5 51 0 70.5L462.8 631.7c-9.7 9.7-22.5 14.6-35.2 14.6z"
+                      p-id="6153"
+                      fill="#ffffff"
+                    ></path></svg
+                  >编辑</el-button
+                >
               </div>
-            </template>
-          </vxe-column>
-        </vxe-table>
-      </div>
+              <div class="postDyexer">
+                <el-button type="danger" @click="adminListremoveRow(scoped.row)"
+                  ><svg
+                    t="1649929178133"
+                    class="icon"
+                    viewBox="0 0 1024 1024"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    p-id="4525"
+                    width="16"
+                    height="16"
+                  >
+                    <path
+                      d="M872.7 278.8H151.5c-30.3 0-55-24.7-55-55v-32.7c0-22 17.9-39.9 39.9-39.9h744.4c25.7 0 46.7 21 46.7 46.7v25.9c0 30.4-24.6 55-54.8 55z m-736.3-96.3c-4.8 0-8.6 3.9-8.6 8.7v32.7c0 13.1 10.7 23.7 23.7 23.7h721.2c13.2 0 23.6-10.4 23.6-23.7V198c0-8.5-7-15.5-15.5-15.5H136.4z"
+                      fill="#ffffff"
+                      p-id="4526"
+                    ></path>
+                    <path
+                      d="M602.9 182.5H421.1v-17.6c0-50.1 40.8-90.8 90.9-90.8 50.1 0 90.9 40.8 90.9 90.8v17.6zM454 151.2h116c-6.2-26.3-29.9-45.9-58-45.9-28.2 0-51.8 19.6-58 45.9zM695.8 948H328.1C267.4 948 218 898.6 218 837.9V247.6h588v590.3c0 60.7-49.4 110.1-110.2 110.1zM249.3 278.8v559c0 43.5 35.4 78.9 78.9 78.9h367.7c43.5 0 78.9-35.4 78.9-78.9v-559H249.3z"
+                      fill="#ffffff"
+                      p-id="4527"
+                    ></path>
+                    <path
+                      d="M400.7 784.9c-8.6 0-15.6-7-15.6-15.6v-386c0-8.6 7-15.6 15.6-15.6s15.6 7 15.6 15.6v386c0 8.6-7 15.6-15.6 15.6zM512 784.9c-8.6 0-15.6-7-15.6-15.6v-386c0-8.6 7-15.6 15.6-15.6s15.6 7 15.6 15.6v386c0 8.6-7 15.6-15.6 15.6zM623.3 728.9c-8.6 0-15.6-7-15.6-15.6v-330c0-8.6 7-15.6 15.6-15.6s15.6 7 15.6 15.6v330c0 8.6-7 15.6-15.6 15.6z"
+                      fill="#ffffff"
+                      p-id="4528"
+                    ></path></svg
+                  >删除</el-button
+                >
+              </div>
+            </div>
+          </template>
+        </vxe-column>
+      </vxe-table>
     </div>
     <el-dialog
       title="添加"
@@ -278,9 +246,11 @@
 </template>
 <script>
 import { postD } from "../../api/index.js";
+import { imgUrl } from "../../assets/js/modifyStyle.js";
 export default {
   data() {
     return {
+      imagesValue: "",
       imageUrlValue: "",
       imageUrl: "",
       fileType: "images",
@@ -411,6 +381,7 @@ export default {
     tableDataValue() {
       postD(this.url.adminListInterface).then((res) => {
         this.tableData = res.list;
+        this.imagesValue = imgUrl();
       });
     },
     // 添加用户
@@ -613,21 +584,7 @@ export default {
     padding: 20px;
   }
 }
-.leftser {
-  margin-left: 2.5%;
-  margin-right: 2.5%;
-}
 
-.Query-search {
-  .el-row {
-    text-align: left;
-    padding-top: 15px;
-    padding-bottom: 15px;
-  }
-  .el-select {
-    width: 100%;
-  }
-}
 .postDyex {
   display: table;
   width: 100%;

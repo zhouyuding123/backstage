@@ -15,7 +15,7 @@ const routes = [
     name: "home",
     component: () => import("../views/Home.vue"),
     meta: {
-      title: "首页"
+      title: "控制台"
     },
     children: [
       {
@@ -170,6 +170,14 @@ const routes = [
         component: () => import("../components/eventManagement/listMacth.vue")
         , meta: {
           title: "赛事列表"
+        }
+      },
+      {
+        path: "/Activity/listActivity",
+        name: "Activity",
+        component: () => import("../components/activityManagement/Activity.vue")
+        , meta: {
+          title: "活动列表"
         }
       }
     ]

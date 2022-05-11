@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="contentLift" v-show="seatchShow">
+    <div class="contentLift">
       <el-row :gutter="20">
         <el-col :span="1"
           ><div>
@@ -27,11 +27,6 @@
         >
       </el-row>
     </div>
-    <div class="contentRight">
-      <el-button type="info" plain @click="showCont($event)" ref="btn1"
-        >查询</el-button
-      >
-    </div>
   </div>
 </template>
 
@@ -41,7 +36,7 @@ export default {
     inject:['groupVaule'],
   data() {
     return {
-      seatchShow: false,
+     
       search: {
         keyword: null,
       },
@@ -54,10 +49,6 @@ export default {
   methods: {
     Refresh() {
       this.groupVaule();
-    },
-    showCont() {
-      this.seatchShow = !this.seatchShow;
-      this.$refs.btn1.$el.innerText;
     },
     submitReset() {
       this.search.keyword = "";
@@ -82,10 +73,5 @@ export default {
     font-size: 9px;
     line-height: 36px;
   }
-}
-.contentRight {
-  text-align: right;
-  padding-right: 20px;
-  padding-top: 20px;
 }
 </style>

@@ -98,7 +98,7 @@ export default {
         is_vip: null,
         vip_start_time: null,
         vip_end_time: null,
-        auth:null
+        auth: null,
       },
       is_vipOption: [
         {
@@ -111,8 +111,8 @@ export default {
         },
       ],
       vipGetTime: [],
-      authOption:[
-          {
+      authOption: [
+        {
           value: "0",
           label: "待认证",
         },
@@ -128,7 +128,7 @@ export default {
           value: "3",
           label: "审核不通过",
         },
-      ]
+      ],
     };
   },
   methods: {
@@ -137,7 +137,7 @@ export default {
       this.search.is_vip = "";
       this.search.vip_start_time = "";
       this.search.vip_end_time = "";
-      this.vipGetTime = ''
+      this.vipGetTime = "";
       this.search.auth = "";
     },
     getTime(date) {

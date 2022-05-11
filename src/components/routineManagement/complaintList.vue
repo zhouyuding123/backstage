@@ -18,8 +18,7 @@
               >批量删除</el-button
             >
           </div>
-          </el-col
-        >
+        </el-col>
         <el-col :span="1"
           ><div>
             <el-button @click="Refresh">刷新</el-button>
@@ -84,15 +83,9 @@
         <vxe-column title="照片" width="80" align="center">
           <template v-slot="scoped">
             <el-image
-              :src="
-                'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                scoped.row.images
-              "
+              :src="imagesValue + scoped.row.images"
               alt=""
-              :preview-src-list="[
-                'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                  scoped.row.images,
-              ]"
+              :preview-src-list="[imagesValue + scoped.row.images]"
               style="width: 50px; height: 50px"
               class="textphoto"
             />
@@ -117,10 +110,12 @@
 </template>
 
 <script>
+import { imgUrl } from "../../assets/js/modifyStyle.js";
 import { postD } from "../../api/index.js";
 export default {
   data() {
     return {
+      imagesValue: "",
       url: {
         getListInterface: "Complaint/getList",
         selectDelInterface: "Complaint/selectDel",
@@ -160,6 +155,7 @@ export default {
     getListValue() {
       postD(this.url.getListInterface).then((res) => {
         this.tableData = res.list;
+        this.imagesValue = imgUrl();
       });
     },
     // 批量删除

@@ -4,7 +4,7 @@
       <div>
         <el-button type="success" @click="addEnterprise">添加</el-button>
       </div>
-      <div style="padding-left:20px">
+      <div style="padding-left: 20px">
         <el-button type="danger" plain @click="selectDel">批量删除</el-button>
       </div>
     </div>
@@ -322,11 +322,13 @@
 <script>
 import { postD } from "@/api";
 import choiceIcon from "./iconchoice/choiceIcon.vue";
+import { imgUrl } from "../../assets/js/modifyStyle.js";
 export default {
   components: { choiceIcon },
   inject: ["reload"],
   data() {
     return {
+      imagesValue: "",
       allAlign: null,
       tableData: [],
       url: {
@@ -493,6 +495,7 @@ export default {
     listRuleValue() {
       postD(this.url.listRuleInterface).then((res) => {
         this.tableData = res.list;
+        this.imagesValue = imgUrl();
       });
     },
     // 父级选择数据

@@ -68,7 +68,6 @@
             </el-select></div
         ></el-col>
 
-
         <el-col :span="3"
           ><div>
             <el-button type="success" @click="submitSearch">搜索</el-button>
@@ -86,7 +85,7 @@
 </template>
 <script>
 import { postD } from "../../../api/index.js";
-import {timestampToTime} from "../../../assets/js/time.js"
+import { timestampToTime } from "../../../assets/js/time.js";
 export default {
   inject: ["MacthValue"],
   data() {
@@ -96,14 +95,14 @@ export default {
       },
       search: {
         keyword: null,
-        sign_time:null,
-        exh_time:null,
-        is_open:null,
-        status:null
+        sign_time: null,
+        exh_time: null,
+        is_open: null,
+        status: null,
       },
-      vipGetTime:[],
-      is_openOptions:[
-          {
+      vipGetTime: [],
+      is_openOptions: [
+        {
           value: "1",
           label: "开启",
         },
@@ -112,7 +111,7 @@ export default {
           label: "关闭",
         },
       ],
-      statusOptions:[
+      statusOptions: [
         {
           value: "0",
           label: "等待平台审核",
@@ -129,7 +128,7 @@ export default {
           value: "3",
           label: "结束",
         },
-      ]
+      ],
     };
   },
   methods: {
@@ -142,15 +141,15 @@ export default {
       this.search.exh_time = "";
       this.search.is_open = "";
       this.search.status = "";
-      this.vipGetTime=""
-      },
-      getTime(date) {
-      this.vipGetTime = date;
-      this.search.sign_time = timestampToTime(this.vipGetTime[0]/1000);
-      this.search.exh_time = timestampToTime(this.vipGetTime[1]/1000);
+      this.vipGetTime = "";
     },
-      submitSearch() {
-      postD(this.url.listMacthInterface,this.search).then((res) => {
+    getTime(date) {
+      this.vipGetTime = date;
+      this.search.sign_time = timestampToTime(this.vipGetTime[0] / 1000);
+      this.search.exh_time = timestampToTime(this.vipGetTime[1] / 1000);
+    },
+    submitSearch() {
+      postD(this.url.listMacthInterface, this.search).then((res) => {
         this.tableDatas = res.list;
         this.$emit("macthSeatch", this.tableDatas);
       });

@@ -1,9 +1,14 @@
 <template>
   <div class="backColor">
-    <enter-prise-list-seatch v-show="seatchShow" @enterProseListSeatch="costPlannedAmountChange" />
+    <enter-prise-list-seatch
+      v-show="seatchShow"
+      @enterProseListSeatch="costPlannedAmountChange"
+    />
     <div class="firstColor">
       <div>
-        <el-button type="danger" plain @click="enterpriseDeletes">批量删除</el-button>
+        <el-button type="danger" plain @click="enterpriseDeletes"
+          >批量删除</el-button
+        >
       </div>
       <div class="contentRight">
         <el-button type="info" plain ref="btn1" @click="showCont($event)"
@@ -58,15 +63,9 @@
         <vxe-column width="100" align="center">
           <template v-slot="scoped">
             <el-image
-              :src="
-                'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                scoped.row.headimage
-              "
+              :src="imagesValue + scoped.row.headimage"
               alt=""
-              :preview-src-list="[
-                'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                  scoped.row.headimage,
-              ]"
+              :preview-src-list="[imagesValue + scoped.row.headimage]"
               style="width: 40px; height: 40px"
               class="imgStyle"
             />
@@ -187,15 +186,9 @@
         <el-descriptions-item>
           <el-image
             class="heaimageStyle"
-            :src="
-              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-              authCompanyValue.headimage
-            "
+            :src="imagesValue + authCompanyValue.headimage"
             alt=""
-            :preview-src-list="[
-              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                authCompanyValue.headimage,
-            ]"
+            :preview-src-list="[imagesValue + authCompanyValue.headimage]"
             style="width: 30px; height: 30px"
           />
         </el-descriptions-item>
@@ -226,60 +219,36 @@
         <el-descriptions-item label="身份证正面照片">
           <el-image
             class="heaimageStyle"
-            :src="
-              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-              authCompanyValue.card_z
-            "
+            :src="imagesValue + authCompanyValue.card_z"
             alt=""
-            :preview-src-list="[
-              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                authCompanyValue.card_z,
-            ]"
+            :preview-src-list="[imagesValue + authCompanyValue.card_z]"
             style="width: 30px; height: 30px"
           />
         </el-descriptions-item>
         <el-descriptions-item label="身份证反面照片">
           <el-image
             class="heaimageStyle"
-            :src="
-              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-              authCompanyValue.card_f
-            "
+            :src="imagesValue + authCompanyValue.card_f"
             alt=""
-            :preview-src-list="[
-              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                authCompanyValue.card_f,
-            ]"
+            :preview-src-list="[imagesValue + authCompanyValue.card_f]"
             style="width: 30px; height: 30px"
           />
         </el-descriptions-item>
         <el-descriptions-item label="店铺照片">
           <el-image
             class="heaimageStyle"
-            :src="
-              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-              authCompanyValue.shop_img
-            "
+            :src="imagesValue + authCompanyValue.shop_img"
             alt=""
-            :preview-src-list="[
-              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                authCompanyValue.shop_img,
-            ]"
+            :preview-src-list="[imagesValue + authCompanyValue.shop_img]"
             style="width: 30px; height: 30px"
           />
         </el-descriptions-item>
         <el-descriptions-item label="营业执照">
           <el-image
             class="heaimageStyle"
-            :src="
-              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-              authCompanyValue.license
-            "
+            :src="imagesValue + authCompanyValue.license"
             alt=""
-            :preview-src-list="[
-              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                authCompanyValue.license,
-            ]"
+            :preview-src-list="[imagesValue + authCompanyValue.license]"
             style="width: 30px; height: 30px"
           />
         </el-descriptions-item>
@@ -307,6 +276,7 @@
 <script>
 import { postD } from "../../api/index.js";
 import enterPriseListSeatch from "./enterPriseList/enterPriseListSeatch.vue";
+import { imgUrl } from "../../assets/js/modifyStyle.js";
 export default {
   provide() {
     return {
@@ -316,6 +286,7 @@ export default {
   components: { enterPriseListSeatch },
   data() {
     return {
+      imagesValue: "",
       seatchShow: false,
       url: {
         CompanyInterface: "Company/index",
@@ -382,6 +353,7 @@ export default {
     enterprise() {
       postD(this.url.CompanyInterface).then((res) => {
         this.tableData = res.data;
+        this.imagesValue = imgUrl();
       });
     },
     // 批量删除

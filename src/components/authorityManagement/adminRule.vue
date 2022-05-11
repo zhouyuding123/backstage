@@ -1,10 +1,26 @@
 <template>
   <div class="backColor">
     <!-- 添加 -->
-    <rule-add />
-    <div>
+    <!-- <rule-add />
+    <div class="deleteRow">
+      <vxe-button @click="deleteRow" status="danger" icon="fa fa-trash-o"
+        >批量删除</vxe-button
+      >
+    </div> -->
+
+<div class="firstColor">
+      <div>
+        <rule-add />
+      </div>
+      <div style="padding-left: 20px">
+        <el-button type="danger" plain @click="deleteRow">批量删除</el-button>
+      </div>
+    </div>
+
+
+
+    <div class="twons">
       <vxe-table
-        class="leftser"
         round
         ref="xTree"
         row-id="id"
@@ -145,11 +161,7 @@
         </vxe-column>
       </vxe-table>
     </div>
-    <div class="deleteRow">
-      <vxe-button @click="deleteRow" status="danger" icon="fa fa-trash-o"
-        >批量删除</vxe-button
-      >
-    </div>
+
     <el-dialog
       title="修改信息"
       v-model="editAddmodify"
@@ -458,10 +470,30 @@ export default {
   background: #f9f9f9;
   width: 100%;
   height: 100%;
-}
-.leftser {
-  margin-left: 2.5%;
-  margin-right: 2.5%;
+  .firstColor {
+    padding: 20px 20px 0 20px;
+    width: 100%;
+    display: flex;
+    flex-flow: row;
+    .buttonStyle {
+      line-height: 48px;
+      width: 170px;
+      height: 48px;
+      background: red;
+      box-shadow: 2px 5px 20px 1px rgba(58, 203, 233, 0.15);
+      border-radius: 10px 10px 10px 10px;
+      opacity: 1;
+      cursor: pointer;
+      p {
+        font-size: 14px;
+        font-weight: 500;
+        color: #ffffff;
+      }
+    }
+  }
+  .twons {
+    padding: 20px;
+  }
 }
 .linker {
   margin-top: 10%;
@@ -480,16 +512,5 @@ export default {
 }
 .el-select {
   width: 60em;
-}
-.deleteRow {
-  text-align: left;
-  .vxe-button {
-    margin: 1em 2.5% 1em 2.5%;
-  }
-}
-.ssss {
-  width: 100px;
-  height: 100px;
-  background-color: aqua;
 }
 </style>

@@ -148,10 +148,7 @@
         }}</el-descriptions-item>
         <el-descriptions-item label="缩略图" align="center">
           <el-image
-            :src="
-              'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-              forumDetailsValue.thumb
-            "
+            :src="imagesValue + forumDetailsValue.thumb"
             style="width: 40px; height: 40px"
           >
           </el-image>
@@ -224,10 +221,7 @@
             <div class="DetailImage">
               <div class="Detailel-image">
                 <el-image
-                  :src="
-                    'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                    forumDetailsValue.headimage
-                  "
+                  :src="imagesValue + forumDetailsValue.headimage"
                 ></el-image>
               </div>
               <div class="DetailelName">
@@ -290,12 +284,7 @@
                       v-for="item in forumDetailsValue.voto"
                       :key="item.id"
                     >
-                      <el-image
-                        :src="
-                          'https://weisoutc.oss-cn-shanghai.aliyuncs.com/' +
-                          item.item
-                        "
-                      ></el-image>
+                      <el-image :src="imagesValue + item.item"></el-image>
                       <el-radio><div class="diemPost"></div></el-radio>
                     </div>
                   </el-radio-group>
@@ -306,7 +295,6 @@
         </div>
       </div>
       <span class="dialog-footer">
-        <button @click="csadas">1231</button>
         <el-button @click="forumDetailsShow = false">返回</el-button>
       </span>
     </el-dialog>
@@ -315,6 +303,7 @@
 <script>
 import { postD } from "../../api/index.js";
 import ForumSeatch from "./Forum/ForumSeatch.vue";
+import { imgUrl } from "../../assets/js/modifyStyle.js";
 export default {
   provide() {
     return {
@@ -326,6 +315,7 @@ export default {
   },
   data() {
     return {
+      imagesValue: "",
       page1: {
         offset: 1,
         limit: 10,
@@ -373,6 +363,7 @@ export default {
       postD(this.url.ListForumInterface).then((res) => {
         this.tableData = res.list;
         this.page1.totalResult = res.count;
+        this.imagesValue = imgUrl();
       });
     },
     handlePageChange({ currentPage, pageSize }) {

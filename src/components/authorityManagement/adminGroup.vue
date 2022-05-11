@@ -1,20 +1,22 @@
 <template>
   <div class="backColor">
-    <group-seatch @changes="costPlannedAmountChange" />
-    <div class="group-left">
-      <div class="addPage-Group">
-        <el-row>
-          <el-col :span="1">
-            <el-button type="success" @click="addGroup = true">添加</el-button>
-          </el-col>
-          <el-col :span="1">
-            <el-button type="danger" plain @click="deleteUser"
-              >批量删除</el-button
-            >
-          </el-col>
-        </el-row>
+    <group-seatch @changes="costPlannedAmountChange" v-show="seatchShow" />
+      <div class="firstColor">
+        <div>
+          <el-button type="success" @click="addGroup = true">添加</el-button>
+        </div>
+        <div style="padding-left: 20px">
+          <el-button type="danger" plain @click="deleteUser"
+            >批量删除</el-button
+          >
+        </div>
+        <div class="contentRight">
+          <el-button type="info" plain ref="btn1" @click="showCont($event)"
+            >查询</el-button
+          >
+        </div>
       </div>
-      <div class="table-padding">
+      <div class="twons">
         <vxe-table
           round
           border="true"
@@ -121,7 +123,7 @@
         >
         </vxe-pager>
       </div>
-    </div>
+
     <el-dialog
       title="添加"
       width="50%"
@@ -242,6 +244,7 @@ export default {
   },
   data() {
     return {
+       seatchShow: false,
       removeRowFrom: {
         id: "",
       },
@@ -323,6 +326,10 @@ export default {
     this.addPermissioner();
   },
   methods: {
+    showCont() {
+      this.seatchShow = !this.seatchShow;
+      this.$refs.btn1.$el.innerText;
+    },
     checkboxChangeEventer(data) {
       this.abb = data.records;
     },
@@ -572,5 +579,8 @@ export default {
 .Edit {
   width: 100%;
   display: table-cell;
+}
+.contentRight {
+  padding-left: 86.5%;
 }
 </style>

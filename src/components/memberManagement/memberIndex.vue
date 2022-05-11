@@ -1,101 +1,29 @@
 <template>
   <div class="backColor">
-    <div class="memberDeleber">
-      <div class="memberDelebers" v-if="show">
-        <el-row :gutter="20">
-          <el-col :span="8">
-            <div class="grid-content bg-purple">
-              <div class="divText">关键词搜索:</div>
-              <el-input
-                v-model="search.keyword"
-                placeholder="关键词搜索"
-              ></el-input>
-            </div>
-          </el-col>
-          <el-col :span="8"
-            ><div class="grid-content bg-purple">
-              <div class="divText">性别:</div>
-              <el-select v-model="search.sex" placeholder="请选择">
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                >
-                </el-option>
-              </el-select></div
-          ></el-col>
-          <el-col :span="8"
-            ><div class="grid-content bg-purple">
-              <div class="divText">VIP:</div>
-              <el-select v-model="search.is_vip" placeholder="请选择">
-                <el-option
-                  v-for="item in viptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                >
-                </el-option>
-              </el-select></div
-          ></el-col>
-        </el-row>
-        <el-row :gutter="20" style="padding-top: 15px">
-          <el-col :span="12"
-            ><div class="grid-content bg-purple">
-              <div class="block">
-                <span class="demonstration">会员开始与结束时间</span>
-                <el-date-picker
-                  v-model="vipGetTime"
-                  type="datetimerange"
-                  range-separator="至"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
-                  @change="getTime"
-                >
-                </el-date-picker>
-              </div></div
-          ></el-col>
-          <el-col :span="12"
-            ><div class="grid-content bg-purple">
-              <el-row>
-                <el-button type="success" @click="submitSearch">提交</el-button>
-                <el-button type="info" @click="submitReset">重置</el-button>
-              </el-row>
-            </div></el-col
-          >
-        </el-row>
+    <mernber-seatch
+      v-show="seatchShow"
+      @mernberSeatch="costPlannedAmountChange"
+    />
+    <div class="firstColor">
+      <div>
+        <el-button type="danger" plain @click="vipBatchDelete"
+          >批量删除</el-button
+        >
+      </div>
+      <div style="padding-left: 20px">
+        <el-button @click="Refresh">刷新</el-button>
+      </div>
+      <div style="padding-left: 20px">
+        <vxe-button @click="exportSelectEvent">导出选中</vxe-button>
+      </div>
+      <div class="contentRight">
+        <el-button type="info" plain @click="showCont($event)" ref="btn1"
+          >查询</el-button
+        >
       </div>
     </div>
-    <div class="memberDeleber">
-      <el-row>
-        <el-col :span="2"
-          ><div class="grid-content bg-purple">
-            <el-button type="danger" plain @click="vipBatchDelete"
-              >批量删除</el-button
-            >
-          </div></el-col
-        >
-        <el-col :span="1"
-          ><div class="grid-content bg-purple-light">
-            <el-button @click="Refresh">刷新</el-button>
-          </div></el-col
-        >
-        <el-col :span="1"
-          ><div class="grid-content bg-purple">
-            <vxe-button @click="exportSelectEvent">导出选中</vxe-button>
-          </div></el-col
-        >
-        <el-col :span="19"><div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="1"
-          ><div class="grid-content bg-purple-light">
-            <el-button type="info" plain @click="showCont($event)" ref="btn1"
-              >查询</el-button
-            >
-          </div></el-col
-        >
-      </el-row>
-    </div>
-    <div class="memberTable">
+
+    <div class="twons">
       <vxe-table
         round
         border="true"
@@ -170,7 +98,11 @@
 
 <script>
 import { postD } from "../../api/index.js";
+import mernberSeatch from "./merberSeatch/mernberSeatch.vue";
 export default {
+  components: {
+    mernberSeatch,
+  },
   data() {
     return {
       tableData: [],
@@ -187,40 +119,8 @@ export default {
         limit: 10,
         totalResult: 0,
       },
-      // 搜索
-      search: {
-        keyword: null,
-        sex: null,
-        is_vip: null,
-        vip_start_time: null,
-        vip_end_time: null,
-      },
-      // 性别
-      options: [
-        {
-          value: "1",
-          label: "男",
-        },
-        {
-          value: "2",
-          label: "女",
-        },
-      ],
-      // 是否为vip
-      viptions: [
-        {
-          value: "0",
-          label: "非VIP",
-        },
-        {
-          value: "1",
-          label: "VIP",
-        },
-      ],
-      // 会员日期
-      vipGetTime: [],
       // 搜索展示开启关闭
-      show: false,
+      seatchShow: false,
       // 状态改变
       VipStatus: {
         id: "",
@@ -255,11 +155,6 @@ export default {
       this.page1.limit = pageSize;
       this.indexValue();
     },
-    getTime(date) {
-      this.vipGetTime = date;
-      this.search.vip_start_time = this.vipGetTime[0].getTime() / 1000;
-      this.search.vip_end_time = this.vipGetTime[1].getTime() / 1000;
-    },
     // 状态
     vipUserAuthChaged(status) {
       this.VipStatus.id = status.id;
@@ -278,22 +173,10 @@ export default {
         }
       });
     },
-    submitSearch() {
-      postD(this.url.indexInterface, this.search).then((res) => {
-        this.tableData = res.data;
-      });
-    },
-    // 重置
-    submitReset() {
-      this.search.keyword = "";
-      this.search.sex = "";
-      this.search.is_vip = "";
-      this.search.vip_start_time = "";
-      this.search.vip_end_time = "";
-    },
+
     // 搜索显示隐藏
     showCont() {
-      this.show = !this.show;
+      this.seatchShow = !this.seatchShow;
       this.$refs.btn1.$el.innerText;
     },
     // 批量删除
@@ -378,6 +261,9 @@ export default {
     tableStyle() {
       return "box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);border-radius: 10px 10px 10px 10px;opacity: 1;";
     },
+    async costPlannedAmountChange(param1) {
+      this.tableData = param1;
+    },
   },
 };
 </script>
@@ -387,27 +273,32 @@ export default {
   background: #f9f9f9;
   width: 100%;
   height: 100%;
+  .firstColor {
+    padding: 20px 20px 0 20px;
+    width: 100%;
+    display: flex;
+    flex-flow: row;
+    .buttonStyle {
+      line-height: 48px;
+      width: 170px;
+      height: 48px;
+      background: red;
+      box-shadow: 2px 5px 20px 1px rgba(58, 203, 233, 0.15);
+      border-radius: 10px 10px 10px 10px;
+      opacity: 1;
+      cursor: pointer;
+      p {
+        font-size: 14px;
+        font-weight: 500;
+        color: #ffffff;
+      }
+    }
+  }
+  .twons {
+    padding: 20px;
+  }
 }
-.memberDeleber {
-  text-align: left;
-  padding: 1% 2.5% 1% 2.5%;
-}
-.memberDelebers {
-  text-align: left;
-  padding: 0 5% 0 5%;
-}
-.grid-content {
-  float: left;
-}
-.divText {
-  display: inline-block;
-  text-align: left;
-  font-size: 14px;
-}
-.el-input {
-  width: 71%;
-}
-.memberTable {
-  padding: 0 2.5% 0 2.5%;
+.contentRight {
+  padding-left: 80.3%;
 }
 </style>

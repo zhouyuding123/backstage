@@ -170,12 +170,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.tike {
-  text-align: left;
-  .el-button {
-    margin: 1em 2.5% 1em 2.5%;
-  }
-}
 .el-select {
   width: 60em;
 }
