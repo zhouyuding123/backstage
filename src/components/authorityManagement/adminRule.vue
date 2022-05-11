@@ -1,14 +1,6 @@
 <template>
   <div class="backColor">
-    <!-- 添加 -->
-    <!-- <rule-add />
-    <div class="deleteRow">
-      <vxe-button @click="deleteRow" status="danger" icon="fa fa-trash-o"
-        >批量删除</vxe-button
-      >
-    </div> -->
-
-<div class="firstColor">
+    <div class="firstColor">
       <div>
         <rule-add />
       </div>
@@ -16,8 +8,6 @@
         <el-button type="danger" plain @click="deleteRow">批量删除</el-button>
       </div>
     </div>
-
-
 
     <div class="twons">
       <vxe-table

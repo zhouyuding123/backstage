@@ -349,7 +349,7 @@ import {
   beforeAvatar,
 } from "../../assets/js/modifyStyle.js";
 import { timestampToTime } from "../../assets/js/time.js";
-import AddMacth from './macthSeatch/addMacth.vue';
+import AddMacth from "./macthSeatch/addMacth.vue";
 export default {
   provide() {
     return {
@@ -602,10 +602,10 @@ export default {
       }
     },
     addInputHandle() {
-      this.addMacthValue.prize.push({ name: "", amount: "", item: "" });
+      this.editFrom.prize.push({ name: "", amount: "", item: "" });
     },
     delInputHandle(index) {
-      this.addMacthValue.prize.splice(index, 1);
+      this.editFrom.prize.splice(index, 1);
     },
     getTimes(date) {
       this.sign_timeTimes = date;
@@ -635,10 +635,10 @@ export default {
       beforeAvatar(file);
     },
     tableRowStyle() {
-     return styleModify();
+      return styleModify();
     },
     tableStyle() {
-     return styleModifytwo();
+      return styleModifytwo();
     },
     showCont() {
       this.seatchShow = !this.seatchShow;

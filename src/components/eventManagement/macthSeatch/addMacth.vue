@@ -210,6 +210,12 @@ export default {
     addMacth() {
       this.addMacthShow = true;
     },
+    addInputHandle() {
+      this.addMacthValue.prize.push({ name: "", amount: "", item: "" });
+    },
+    delInputHandle(index) {
+      this.addMacthValue.prize.splice(index, 1);
+    },
     handleAvatarSuccessthumb(res, file) {
       this.imageUrlthumb = URL.createObjectURL(file.raw);
       this.addMacthValue.thumb = res.url;

@@ -13,7 +13,7 @@
   </div>
 </template>
 <script>
-import { bannerListApi } from "../../../urls/urls.js";
+import { postD } from "../../../api/index.js";
 export default {
   inject: ["activityListValue"],
   props: ["detialFort"],
@@ -30,11 +30,14 @@ export default {
     };
   },
   methods: {
-    async detailsValue() {
+    detailsValue() {
       this.dialogVisible = true;
       this.ActivityDetailsId.id = this.detialFort.id;
-      const res = await bannerListApi(this.ActivityDetailsId);
-      console.log(res);
+      postD(this.url.showActiyityInterface, this.ActivityDetailsId).then(
+        (res) => {
+          console.log(res);
+        }
+      );
     },
   },
 };

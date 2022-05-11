@@ -2,9 +2,7 @@
   <div class="backColor">
     <activity-seatch />
     <div class="firstColor">
-      <div>
-        <el-button type="success">发布活动</el-button>
-      </div>
+      <add-activity />
       <div style="padding-left: 20px">
         <el-button type="danger">批量删除</el-button>
       </div>
@@ -186,9 +184,8 @@
         ></vxe-column>
         <vxe-column title="操作" align="center">
           <template v-slot="scoped">
-            <activity-detil :detialFort = 'scoped.row' />
+            <activity-detil :detialFort="scoped.row" />
           </template>
-          
         </vxe-column>
       </vxe-table>
     </div>
@@ -198,6 +195,7 @@
 <script>
 import activityDetil from "./activitySeatch/activityDetil.vue";
 import activitySeatch from "./activitySeatch/activitySeatch.vue";
+import addActivity from "./activitySeatch/addActivity.vue";
 import { postD } from "../../api/index.js";
 import {
   styleModify,
@@ -213,6 +211,7 @@ export default {
   components: {
     activitySeatch,
     activityDetil,
+    addActivity,
   },
   data() {
     return {
@@ -282,12 +281,14 @@ export default {
 .contentRight {
   padding-left: 85%;
 }
+
 .linker {
   background: #ffffff;
   border-radius: 3px 3px 3px 3px;
   opacity: 1;
   border: 1px solid #b5b2b2;
 }
+
 .imgStyles {
   position: absolute;
   top: 10%;
@@ -295,5 +296,11 @@ export default {
   background: #ffffff;
   box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);
   opacity: 1;
+}
+/deep/ .el-date-editor {
+  position: relative;
+  .el-input__prefix {
+    display: none;
+  }
 }
 </style>
