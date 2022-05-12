@@ -126,6 +126,7 @@ export default {
   data() {
     return {
       imagesValue: "",
+      imagesValue: "",
       dialogVisible: false,
       url: {
         showActiyityInterface: "Activity/showActiyity",
