@@ -738,11 +738,22 @@ export default {
   }
 }
 .stylecss {
-  margin-left: -19px;
-  margin-top: -8px;
   position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 .addInput {
   line-height: 10px;
+}
+.itemImgBody {
+  width: 40px;
+  float: left;;
+  .itemImg {
+    width: 40px;
+    .el-image {
+      display: flex;
+    }
+  }
 }
 </style>

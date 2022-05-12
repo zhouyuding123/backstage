@@ -1,6 +1,6 @@
 <template>
   <div class="backColor">
-    <activity-seatch />
+    <activity-seatch v-show="seatchShow" @activitySeatch="costPlannedAmountChange" />
     <div class="firstColor">
       <add-activity />
       <div style="padding-left: 20px">
@@ -188,6 +188,20 @@
           </template>
         </vxe-column>
       </vxe-table>
+      <vxe-pager
+        :current-page="page1.offset"
+        :page-size="page1.limit"
+        :total="page1.totalResult"
+        :layouts="[
+          'PrevPage',
+          'JumpNumber',
+          'NextPage',
+          'FullJump',
+          'Sizes',
+          'Total',
+        ]"
+        @page-change="handlePageChange"
+      ></vxe-pager>
     </div>
   </div>
 </template>
@@ -221,6 +235,13 @@ export default {
       },
       allAlign: null,
       tableData: [],
+      // 分页
+      page1: {
+        offset: 1,
+        limit: 10,
+        totalResult: 0,
+      },
+      seatchShow: false,
     };
   },
   created() {
@@ -237,6 +258,7 @@ export default {
       postD(this.url.listActivityInterface).then((res) => {
         this.tableData = res.list;
         this.imagesValue = imgUrl();
+        this.page1.totalResult = res.count;
       });
     },
     filterCategory(val) {
@@ -272,6 +294,19 @@ export default {
       } else if (val === 3) {
         return "结束";
       }
+    },
+    // 分页
+    handlePageChange({ currentPage, pageSize }) {
+      this.page1.offset = currentPage;
+      this.page1.limit = pageSize;
+      this.activityListValue();
+    },
+    showCont() {
+      this.seatchShow = !this.seatchShow;
+      this.$refs.btn1.$el.innerText;
+    },
+    async costPlannedAmountChange(param1) {
+      this.tableData = param1;
     },
   },
 };
