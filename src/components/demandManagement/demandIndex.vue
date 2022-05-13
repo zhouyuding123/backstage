@@ -1,6 +1,9 @@
 <template>
   <div class="backColor">
-    <demand-seatch v-show="seatchShow" @demandSeatchValue="costPlannedAmountChange" />
+    <demand-seatch
+      v-show="seatchShow"
+      @demandSeatchValue="costPlannedAmountChange"
+    />
     <div class="memberDeleber">
       <el-row>
         <el-col :span="2"
@@ -131,6 +134,11 @@
 <script>
 import demandSeatch from "./demandSeatch/demandSeatch.vue";
 import { postD } from "../../api/index.js";
+import {
+  DemandIndexApi,
+  DemandDelApi,
+  DemandSelectDelApi,
+} from "@/urls/demandUrl.js";
 export default {
   provide() {
     return {
@@ -144,11 +152,6 @@ export default {
     return {
       tableData: [],
       allAlign: null,
-      url: {
-        demandIndexInterface: "Demand/index",
-        selectDelInterface: "Demand/selectDel",
-        demandDelInterface: "Demand/del",
-      },
       // 批量删除
       ids: [],
       idL: {
@@ -179,7 +182,7 @@ export default {
     },
     // 获取列表
     demandIndexValue() {
-      postD(this.url.demandIndexInterface).then((res) => {
+      postD(DemandIndexApi()).then((res) => {
         this.tableData = res.data;
         this.page1.totalResult = res.count;
       });
@@ -210,7 +213,7 @@ export default {
         this.arrs.forEach((v) => {
           this.ids.push(v.id);
         });
-        postD(this.url.selectDelInterface, this.idl).then((res) => {
+        postD(DemandSelectDelApi(), this.idl).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
           } else if (res.code == "-200") {
@@ -241,7 +244,7 @@ export default {
       }
       if (demandRemoveRows === "confirm") {
         this.demandRemoveRowList.id = data.id;
-        postD(this.url.demandDelInterface, this.demandRemoveRowList).then(
+        postD(DemandDelApi(), this.demandRemoveRowList).then(
           (res) => {
             if (res.code == "200") {
               this.$message.success("状态修改成功");

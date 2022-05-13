@@ -219,7 +219,7 @@
           <el-input v-model="editEnterprise.sort"></el-input>
         </el-form-item>
         <el-form-item label="图标" prop="icon">
-          <choice-icon @update:modelValue="insert"></choice-icon>
+          <choice-icon @update:modelValue="inserts"></choice-icon>
         </el-form-item>
         <el-form-item label="权限验证" prop="auth_open">
           <el-radio-group v-model="editEnterprise.auth_open">
@@ -513,6 +513,9 @@ export default {
     insert(value) {
       this.EnterpriseruleForm.icon = value;
     },
+    inserts(value) {
+      this.editEnterprise.icon = value;
+    },
     // 添加
     addEnterpriseValue() {
       this.$refs.EnterpriseruleFormRef.validate((valid) => {
@@ -715,6 +718,9 @@ export default {
       } else {
         return "两端";
       }
+    },
+    asdqwe(data) {
+      console.log(data);
     },
   },
 };

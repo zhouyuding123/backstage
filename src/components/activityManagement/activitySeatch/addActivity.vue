@@ -278,16 +278,13 @@ import { beforeAvatar } from "../../../assets/js/modifyStyle.js";
 import { postD } from "../../../api/index.js";
 import { timestampToTime } from "../../../assets/js/time.js";
 import { imgUrl } from "../../../assets/js/modifyStyle.js";
+import {ActivityReleaseApi} from "@/urls/activityUrl.js"
 export default {
   inject: ["activityListValue"],
   data() {
     return {
       isShow: false,
       imagesValue: "",
-      url: {
-        listActivityInterface: "Activity/listActivity",
-        releaseInterface: "Activity/release",
-      },
       addActivityShow: false,
       addForm: {
         title: "",
@@ -452,7 +449,7 @@ export default {
     addUser() {
       this.$refs.addFormRef.validate((valid) => {
         if (!valid) return;
-        postD(this.url.releaseInterface, this.addForm).then((res) => {
+        postD(ActivityReleaseApi(), this.addForm).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
             this.addActivityShow = false;

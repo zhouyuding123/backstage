@@ -80,7 +80,6 @@
             ></el-switch>
           </template>
         </vxe-column>
-
         <vxe-column title="操作" align="center">
           <template v-slot="scoped">
             <div class="postDyex">

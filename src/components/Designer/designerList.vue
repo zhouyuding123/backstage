@@ -239,6 +239,14 @@
 import { postD } from "../../api/index.js";
 import { imgUrl } from "../../assets/js/modifyStyle.js";
 import designerSeatch from "./designerSeatch/designerSeatch.vue";
+import {
+  DesignerIndexApi,
+  designerAuthDesignerApi,
+  designerEditStatApi,
+  DesignerSelectDelApi,
+  designerDelApi,
+  designerSetAuthApi,
+} from "@/urls/designerUrl.js";
 export default {
   provide() {
     return {
@@ -251,14 +259,6 @@ export default {
   data() {
     return {
       imagesValue: "",
-      url: {
-        DesignerindexInterface: "Designer/index",
-        setAuthInterface: "designer/setAuth",
-        selectDelInterface: "Designer/selectDel",
-        delInterface: "designer/del",
-        editStatInterface: "designer/editStat",
-        authDesignerInterface: "designer/authDesigner",
-      },
       tableData: [],
       allAlign: null,
       //   分頁
@@ -315,19 +315,21 @@ export default {
   },
   methods: {
     designerListValue() {
-      postD(this.url.DesignerindexInterface, this.designerParameter).then(
-        (res) => {
-          this.tableData = res.data;
-          this.designerParameter.totalResult = res.count;
-          this.imagesValue = imgUrl();
-        }
-      );
+      postD(DesignerIndexApi()).then((res) => {
+        this.tableData = res.data;
+        this.designerParameter.totalResult = res.count;
+        this.imagesValue = imgUrl();
+      });
     },
     // 分頁
     handlePageChange({ currentPage, pageSize }) {
       this.designerParameter.offset = currentPage;
       this.designerParameter.limit = pageSize;
-      this.designerListValue();
+      postD(DesignerIndexApi(), this.designerParameter).then(
+        (res) => {
+          this.tableData = res.data;
+        }
+      );
     },
     // 是否為vip
     filterStyle(val) {
@@ -363,7 +365,7 @@ export default {
       this.SetAuthRadio.auth = data.auth;
     },
     SetAuthadd() {
-      postD(this.url.setAuthInterface, this.SetAuthRadio).then((res) => {
+      postD(designerSetAuthApi(), this.SetAuthRadio).then((res) => {
         if (res.code == "200") {
           this.$message.success("状态修改成功");
         } else if (res.code == "-200") {
@@ -408,7 +410,7 @@ export default {
           this.ids.push(v.id);
         });
         this.designerDelsValue.id = this.ids.toString();
-        postD(this.url.selectDelInterface, this.designerDelsValue).then(
+        postD(DesignerSelectDelApi(), this.designerDelsValue).then(
           (res) => {
             if (res.code == "200") {
               this.$message.success("状态修改成功");
@@ -442,7 +444,7 @@ export default {
       }
       if (designerDelOnlyser === "confirm") {
         this.designerDelOnlys.id = data.id;
-        postD(this.url.delInterface, this.designerDelOnlys).then((res) => {
+        postD(designerDelApi(), this.designerDelOnlys).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
             this.designerListValue();
@@ -462,7 +464,7 @@ export default {
     editStatChange(data) {
       this.designerStatus.id = data.id;
       this.designerStatus.status = data.status;
-      postD(this.url.editStatInterface, this.designerStatus).then((res) => {
+      postD(designerEditStatApi(), this.designerStatus).then((res) => {
         if (res.code == "200") {
           this.$message.success("状态修改成功");
         } else if (res.code == "-200") {
@@ -479,7 +481,7 @@ export default {
     designerDetails(data) {
       this.designerDialog = true;
       this.designerDetailsId.id = data.id;
-      postD(this.url.authDesignerInterface, this.designerDetailsId).then(
+      postD(designerAuthDesignerApi(), this.designerDetailsId).then(
         (res) => {
           this.designerDetailsValue = res.data;
         }

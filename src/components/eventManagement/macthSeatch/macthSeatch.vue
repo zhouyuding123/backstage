@@ -86,13 +86,11 @@
 <script>
 import { postD } from "../../../api/index.js";
 import { timestampToTime } from "../../../assets/js/time.js";
+import { matchListMacthApi } from "@/urls/matchUrl.js";
 export default {
   inject: ["MacthValue"],
   data() {
     return {
-      url: {
-        listMacthInterface: "match/listMacth",
-      },
       search: {
         keyword: null,
         sign_time: null,
@@ -149,7 +147,7 @@ export default {
       this.search.exh_time = timestampToTime(this.vipGetTime[1] / 1000);
     },
     submitSearch() {
-      postD(this.url.listMacthInterface, this.search).then((res) => {
+      postD(matchListMacthApi(), this.search).then((res) => {
         this.tableDatas = res.list;
         this.$emit("macthSeatch", this.tableDatas);
       });

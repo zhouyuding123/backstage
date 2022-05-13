@@ -112,13 +112,11 @@
 import { beforeAvatar } from "../../../assets/js/modifyStyle.js";
 import { timestampToTime } from "../../../assets/js/time.js";
 import { postD } from "../../../api/index.js";
+import { matchReleaseApi } from "@/urls/matchUrl.js";
 export default {
   inject: ["MacthValue"],
   data() {
     return {
-      url: {
-        releaseInterface: "match/release",
-      },
       // 添加对话框显示
       addMacthShow: false,
       addMacthValue: {
@@ -243,7 +241,7 @@ export default {
     addEventContent() {
       this.$refs.addMacthValueRef.validate((valid) => {
         if (!valid) return;
-        postD(this.url.releaseInterface, this.addMacthValue).then((res) => {
+        postD(matchReleaseApi(), this.addMacthValue).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
             this.MacthValue();

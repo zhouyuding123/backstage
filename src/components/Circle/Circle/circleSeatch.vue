@@ -49,6 +49,7 @@
 
 <script>
 import { postD } from "../../../api/index.js";
+import { CircleGetListApi } from "@/urls/circleUrl.js";
 export default {
   inject: ["circleValue"],
   data() {
@@ -56,12 +57,9 @@ export default {
       tableDatas: [],
       search: {
         keyword: null,
-        status:null
+        status: null,
       },
-      url: {
-        getListInterface: "Circle/getList",
-      },
-      statusOtions:[
+      statusOtions: [
         {
           value: "0",
           label: "审核中",
@@ -74,19 +72,19 @@ export default {
           value: "2",
           label: "关闭",
         },
-      ]
+      ],
     };
   },
   methods: {
     submitReset() {
-      this.search.keyword = "";
-      this.search.status = "";
+      this.search.keyword = null;
+      this.search.status = null;
     },
     Refresh() {
       this.circleValue();
     },
     submitSearch() {
-      postD(this.url.getListInterface, this.search).then((res) => {
+      postD(CircleGetListApi(), this.search).then((res) => {
         this.tableDatas = res.list;
         this.$emit("circleSeatch", this.tableDatas);
       });

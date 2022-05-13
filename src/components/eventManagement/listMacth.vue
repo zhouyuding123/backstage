@@ -168,7 +168,6 @@
             :src="imagesValue + detailsValues.headimage"
             :preview-src-list="[imagesValue + detailsValues.headimage]"
             style="width: 40px; height: 40px"
-            class="stylecss"
           />
         </el-descriptions-item>
         <el-descriptions-item label="赛事主题" align="center">{{
@@ -188,7 +187,6 @@
             :src="imagesValue + detailsValues.poster"
             :preview-src-list="[imagesValue + detailsValues.poster]"
             style="width: 40px; height: 40px"
-            class="stylecss"
           />
         </el-descriptions-item>
 
@@ -350,6 +348,13 @@ import {
 } from "../../assets/js/modifyStyle.js";
 import { timestampToTime } from "../../assets/js/time.js";
 import AddMacth from "./macthSeatch/addMacth.vue";
+import {
+  matchShowMatchApi,
+  MatchDelMatchApi,
+  matchListMacthApi,
+  matchEditMatchApi,
+  MatchAdminSelectDelMatchApi,
+} from "@/urls/matchUrl.js";
 export default {
   provide() {
     return {
@@ -366,14 +371,6 @@ export default {
       seatchShow: false,
       allAlign: null,
       tableData: [],
-      url: {
-        listMacthInterface: "match/listMacth",
-        adminSelectDelMatchInterface: "Match/adminSelectDelMatch",
-        delMatchInterface: "Match/delMatch",
-        editMatchInterface: "match/editMatch",
-        releaseInterface: "match/release",
-        showMatchInterface: "match/showMatch",
-      },
       listMacth: {
         id: "",
         is_open: "",
@@ -488,7 +485,7 @@ export default {
   },
   methods: {
     MacthValue() {
-      postD(this.url.listMacthInterface).then((res) => {
+      postD(matchListMacthApi()).then((res) => {
         this.tableData = res.list;
         this.page1.totalResult = res.count;
         this.imagesValue = imgUrl();
@@ -498,7 +495,9 @@ export default {
     handlePageChange({ currentPage, pageSize }) {
       this.page1.offset = currentPage;
       this.page1.limit = pageSize;
-      this.MacthValue();
+      postD(matchListMacthApi(), this.page1).then((res) => {
+        this.tableData = res.list;
+      });
     },
     filterStatus(val) {
       if (val === 0) {
@@ -515,7 +514,7 @@ export default {
     is_openChaged(data) {
       this.listMacth.is_open = data.is_open;
       this.listMacth.id = data.id;
-      postD(this.url.editMatchInterface, this.listMacth).then((res) => {
+      postD(matchEditMatchApi(), this.listMacth).then((res) => {
         if (res.code == "200") {
           this.$message.success("状态修改成功");
         } else if (res.code == "-200") {
@@ -551,7 +550,7 @@ export default {
           this.ids.push(v.id);
         });
         this.macthDelsValues.id = this.ids.toString();
-        postD(this.url.adminSelectDelMatchInterface, this.macthDelsValues).then(
+        postD(MatchAdminSelectDelMatchApi(), this.macthDelsValues).then(
           (res) => {
             if (res.code == "200") {
               this.$message.success("状态修改成功");
@@ -585,7 +584,7 @@ export default {
       }
       if (oneCompanyList === "confirm") {
         this.oneCompanyvalue.id = data.id;
-        postD(this.url.delMatchInterface, this.oneCompanyvalue).then((res) => {
+        postD(MatchDelMatchApi(), this.oneCompanyvalue).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
             this.MacthValue();
@@ -650,7 +649,7 @@ export default {
     showEditAddmodify(data) {
       this.editFrom.id = data.id;
       this.dialogEditMatch = true;
-      postD(this.url.showMatchInterface, this.editFrom).then((res) => {
+      postD(matchShowMatchApi(), this.editFrom).then((res) => {
         this.editFrom.title = res.data.title;
         this.editFrom.category = res.data.category;
         this.editFrom.description = res.data.description;
@@ -666,7 +665,7 @@ export default {
     dialogEditMatchs() {
       this.$refs.editFromref.validate((valid) => {
         if (!valid) return;
-        postD(this.url.editMatchInterface, this.editFrom).then((res) => {
+        postD(matchEditMatchApi(), this.editFrom).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
             this.MacthValue();
@@ -687,7 +686,7 @@ export default {
     detailsValue(data) {
       this.detailsId.id = data.id;
       this.dialogShow = true;
-      postD(this.url.showMatchInterface, this.detailsId).then((res) => {
+      postD(matchShowMatchApi(), this.detailsId).then((res) => {
         this.detailsValues = res.data;
         this.detial = res.data.prize;
       });
@@ -737,18 +736,12 @@ export default {
     display: none;
   }
 }
-.stylecss {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
 .addInput {
   line-height: 10px;
 }
 .itemImgBody {
   width: 40px;
-  float: left;;
+  float: left;
   .itemImg {
     width: 40px;
     .el-image {

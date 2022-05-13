@@ -304,6 +304,11 @@
 import { postD } from "../../api/index.js";
 import ForumSeatch from "./Forum/ForumSeatch.vue";
 import { imgUrl } from "../../assets/js/modifyStyle.js";
+import {
+  CircleListForumApi,
+  CircleShowForumApi,
+  CircleSetForumStatApi,
+} from "@/urls/circleUrl.js";
 export default {
   provide() {
     return {
@@ -320,11 +325,6 @@ export default {
         offset: 1,
         limit: 10,
         totalResult: 0,
-      },
-      url: {
-        ListForumInterface: "Circle/listForum",
-        setForumStatInterface: "Circle/setForumStat",
-        showForumInterface: "Circle/showForum",
       },
       allAlign: null,
       tableData: [],
@@ -360,7 +360,7 @@ export default {
       return "box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);border-radius: 10px 10px 10px 10px;opacity: 1;";
     },
     listForumValue() {
-      postD(this.url.ListForumInterface).then((res) => {
+      postD(CircleListForumApi()).then((res) => {
         this.tableData = res.list;
         this.page1.totalResult = res.count;
         this.imagesValue = imgUrl();
@@ -398,27 +398,25 @@ export default {
     circleStatys(data) {
       this.statusModelRadio.id = data.id.toString();
       this.statusModelRadio.status = data.status.toString();
-      postD(this.url.setForumStatInterface, this.statusModelRadio).then(
-        (res) => {
-          if (res.code == "200") {
-            this.$message.success("状态修改成功");
-          } else if (res.code == "-200") {
-            this.$message.error("参数错误，或暂无数据");
-          } else if (res.code == "-201") {
-            this.$message.error("未登陆");
-          } else if (res.code == "-203") {
-            this.$message.error("对不起，你没有此操作权限");
-          } else {
-            this.$message.error("注册失败，账号已存在");
-          }
+      postD(CircleSetForumStatApi(), this.statusModelRadio).then((res) => {
+        if (res.code == "200") {
+          this.$message.success("状态修改成功");
+        } else if (res.code == "-200") {
+          this.$message.error("参数错误，或暂无数据");
+        } else if (res.code == "-201") {
+          this.$message.error("未登陆");
+        } else if (res.code == "-203") {
+          this.$message.error("对不起，你没有此操作权限");
+        } else {
+          this.$message.error("注册失败，账号已存在");
         }
-      );
+      });
     },
     // 详情
     forumDetails(data) {
       this.forumDetailsShow = true;
       this.forumDetailsId.id = data.id;
-      postD(this.url.showForumInterface, this.forumDetailsId).then((res) => {
+      postD(CircleShowForumApi(), this.forumDetailsId).then((res) => {
         this.forumDetailsValue = res.data;
         this.votoValue = res.data.voto;
         this.votoValue.forEach((v) => {

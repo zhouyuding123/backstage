@@ -85,14 +85,12 @@
 </template>
 <script>
 import { postD } from "../../../api/index.js";
+import { DesignerIndexApi } from "@/urls/designerUrl.js";
 export default {
   inject: ["designerListValue"],
   data() {
     return {
       tableDatas: [],
-      url: {
-        DesignerindexInterface: "Designer/index",
-      },
       search: {
         keyword: null,
         is_vip: null,
@@ -146,7 +144,7 @@ export default {
       this.search.vip_end_time = this.vipGetTime[1].getTime() / 1000;
     },
     submitSearch() {
-      postD(this.url.DesignerindexInterface, this.search).then((res) => {
+      postD(DesignerIndexApi(), this.search).then((res) => {
         this.tableDatas = res.data;
         this.$emit("designerChange", this.tableDatas);
       });

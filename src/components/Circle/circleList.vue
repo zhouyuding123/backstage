@@ -360,6 +360,18 @@
 import { postD } from "../../api/index.js";
 import circleSeatch from "./Circle/circleSeatch.vue";
 import { imgUrl } from "../../assets/js/modifyStyle.js";
+import {
+  CircleGetListApi,
+  CircleDelApi,
+  CircleSelectDelApi,
+  CircleGetCircleMemberApi,
+  CircleDelCircleMemberApi,
+  CircleDelCircleForumApi,
+  CircleGetCircleForumApi,
+  CircleShowForumApi,
+  CircleSetCircleStatApi,
+  CircleSetForumStatApi,
+} from "@/urls/circleUrl.js";
 export default {
   provide() {
     return {
@@ -375,19 +387,6 @@ export default {
       seatchShow: false,
       tableData: [],
       allAlign: null,
-      url: {
-        getListInterface: "Circle/getList",
-        getCircleMemberInterface: "Circle/getCircleMember",
-        delCircleMemberInterface: "Circle/delCircleMember",
-        selectDelInterface: "Circle/selectDel",
-        delInterface: "Circle/del",
-        getCircleForumInterface: "Circle/getCircleForum",
-        delCircleForumInterface: "Circle/delCircleForum",
-        showForumInterface: "Circle/showForum",
-        listForumInterface: "Circle/listForum",
-        setCircleStatInterface: "Circle/setCircleStat",
-        setForumStatInterface: "Circle/setForumStat",
-      },
       // 打开人员
       member_countClicks: false,
       // 人员接口id
@@ -471,7 +470,7 @@ export default {
   methods: {
     // 读取圈子列表
     circleValue() {
-      postD(this.url.getListInterface, this.page1).then((res) => {
+      postD(CircleGetListApi(), this.page1).then((res) => {
         this.tableData = res.list;
         this.page1.totalResult = res.count;
         this.imagesValue = imgUrl();
@@ -486,7 +485,7 @@ export default {
     member_countClick(data) {
       this.circlePersonnel.id = data.id;
       this.member_countClicks = true;
-      postD(this.url.getCircleMemberInterface, this.circlePersonnel).then(
+      postD(CircleGetCircleMemberApi(), this.circlePersonnel).then(
         (res) => {
           this.circlePersonnelTab = res.list;
         }
@@ -508,7 +507,7 @@ export default {
       this.detilPersonne.id = data.id.toString();
     },
     personneDetilYes() {
-      postD(this.url.delCircleMemberInterface, this.detilPersonne).then(
+      postD(CircleDelCircleMemberApi(), this.detilPersonne).then(
         (res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
@@ -558,7 +557,7 @@ export default {
           this.ids.push(v.id);
         });
         this.selectDelValue.id = this.ids.toString();
-        postD(this.url.selectDelInterface, this.selectDelValue).then((res) => {
+        postD(CircleSelectDelApi(), this.selectDelValue).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
             this.circleValue();
@@ -590,7 +589,7 @@ export default {
       }
       if (delRowS === "confirm") {
         this.delRowValue.id = data.id;
-        postD(this.url.delInterface, this.delRowValue).then((res) => {
+        postD(CircleDelApi(), this.delRowValue).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
             this.circleValue();
@@ -610,7 +609,7 @@ export default {
     circleStatys(data) {
       this.statusModelRadio.id = data.id.toString();
       this.statusModelRadio.status = data.status.toString();
-      postD(this.url.setCircleStatInterface, this.statusModelRadio).then(
+      postD(CircleSetCircleStatApi(), this.statusModelRadio).then(
         (res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
@@ -630,7 +629,7 @@ export default {
     forum_countClick(data) {
       this.forum_countId.id = data.id;
       this.forum_countInput = true;
-      postD(this.url.getCircleForumInterface, this.forum_countId).then(
+      postD(CircleGetCircleForumApi(), this.forum_countId).then(
         (res) => {
           this.forum_countTab = res.list;
           this.forum_countId.totalResult = res.count;
@@ -641,7 +640,7 @@ export default {
     handlePageChangeFroum_count({ currentPage, pageSize }) {
       this.forum_countId.offset = currentPage;
       this.forum_countId.limit = pageSize;
-      postD(this.url.getCircleForumInterface, this.forum_countId).then(
+      postD(CircleGetCircleForumApi(), this.forum_countId).then(
         (res) => {
           this.forum_countTab = res.list;
           this.forum_countId.totalResult = res.count;
@@ -652,7 +651,7 @@ export default {
     forumDetails(data) {
       this.forumDetailsDialog = true;
       this.forum_countdetails.id = data.id;
-      postD(this.url.showForumInterface, this.forum_countdetails).then(
+      postD(CircleShowForumApi(), this.forum_countdetails).then(
         (res) => {
           this.forumDetailsValue = res.data;
         }
@@ -674,11 +673,11 @@ export default {
       }
       if (forumDles === "confirm") {
         this.forum_countdel.id = data.id;
-        postD(this.url.delCircleForumInterface, this.forum_countdel).then(
+        postD(CircleDelCircleForumApi(), this.forum_countdel).then(
           (res) => {
             if (res.code == "200") {
               this.$message.success("状态修改成功");
-              postD(this.url.getCircleForumInterface, this.forum_countId).then(
+              postD(CircleGetCircleForumApi(), this.forum_countId).then(
                 (res) => {
                   this.forum_countTab = res.list;
                   this.forum_countId.totalResult = res.count;
@@ -701,7 +700,7 @@ export default {
     forumStatus(data) {
       this.forumStatusRadio.id = data.id;
       this.forumStatusRadio.status = data.status;
-      postD(this.url.setForumStatInterface, this.forumStatusRadio).then(
+      postD(CircleSetForumStatApi(), this.forumStatusRadio).then(
         (res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
@@ -725,7 +724,7 @@ export default {
       this.tableData = param1;
     },
     forum_countInputKeywordSeach() {
-      postD(this.url.getCircleForumInterface, this.forum_countInputInput).then(
+      postD(CircleGetCircleForumApi(), this.forum_countInputInput).then(
         (res) => {
           this.tableData = res.list;
         }

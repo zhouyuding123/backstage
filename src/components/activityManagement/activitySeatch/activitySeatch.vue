@@ -120,13 +120,11 @@
 <script>
 import { postD } from "../../../api/index.js";
 import { timestampToTime } from "../../../assets/js/time.js";
+import {ActivityListActivityApi} from "@/urls/activityUrl.js";
 export default {
   inject: ["activityListValue"],
   data() {
     return {
-      url: {
-        listActivityInterface: "Activity/listActivity",
-      },
       search: {
         keyword: null,
         start_time: null,
@@ -214,8 +212,7 @@ export default {
       this.search.end_time = timestampToTime(this.vipGetTime[1] / 1000);
     },
     submitSearch() {
-      console.log(this.search);
-      postD(this.url.listActivityInterface, this.search).then((res) => {
+      postD(ActivityListActivityApi(), this.search).then((res) => {
         this.tableDatas = res.list;
         this.$emit("activitySeatch", this.tableDatas);
       });

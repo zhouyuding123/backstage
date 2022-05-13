@@ -1,10 +1,13 @@
 <template>
   <div class="backColor">
-    <activity-seatch v-show="seatchShow" @activitySeatch="costPlannedAmountChange" />
+    <activity-seatch
+      v-show="seatchShow"
+      @activitySeatch="costPlannedAmountChange"
+    />
     <div class="firstColor">
       <add-activity />
       <div style="padding-left: 20px">
-        <el-button type="danger">批量删除</el-button>
+        <el-button type="danger" @click="activityDels">批量删除</el-button>
       </div>
       <div class="contentRight">
         <el-button type="info" ref="btn1" @click="showCont($event)"
@@ -23,6 +26,8 @@
         row-id="id"
         :row-style="tableRowStyle"
         :header-row-style="tableStyle"
+        @checkbox-change="checkboxChangeEvent"
+        @checkbox-all="checkboxChangeEvent"
       >
         <vxe-column
           align="center"
@@ -50,13 +55,13 @@
         <vxe-column
           field="nickname"
           title="昵称"
-          width="120"
+          width="110"
           align="center"
         ></vxe-column>
         <vxe-column
           field="title"
           title="标题"
-          width="250"
+          width="240"
           align="center"
         ></vxe-column>
         <vxe-column width="50" align="center">
@@ -161,7 +166,6 @@
             ></el-switch>
           </template>
         </vxe-column>
-
         <vxe-column
           field="browse"
           title="浏览量"
@@ -184,7 +188,10 @@
         ></vxe-column>
         <vxe-column title="操作" align="center">
           <template v-slot="scoped">
-            <activity-detil :detialFort="scoped.row" />
+            <div class="postDyex">
+              <activity-detil :detialFort="scoped.row" class="postDyexer" />
+              <activity-del :delFunction="scoped.row" class="postDyexer" />
+            </div>
           </template>
         </vxe-column>
       </vxe-table>
@@ -200,17 +207,19 @@
           'Sizes',
           'Total',
         ]"
-        @page-change="handlePageChange"
+        @page-change="handlePageChangeActivity"
       ></vxe-pager>
     </div>
   </div>
 </template>
 
 <script>
+import activityDel from "./activitySeatch/activityDel.vue";
 import activityDetil from "./activitySeatch/activityDetil.vue";
 import activitySeatch from "./activitySeatch/activitySeatch.vue";
 import addActivity from "./activitySeatch/addActivity.vue";
 import { postD } from "../../api/index.js";
+import {ActivityListActivityApi,ActivitySelectDelApi} from "@/urls/activityUrl.js"
 import {
   styleModify,
   styleModifytwo,
@@ -226,13 +235,11 @@ export default {
     activitySeatch,
     activityDetil,
     addActivity,
+    activityDel,
   },
   data() {
     return {
       imagesValue: "",
-      url: {
-        listActivityInterface: "Activity/listActivity",
-      },
       allAlign: null,
       tableData: [],
       // 分页
@@ -242,6 +249,13 @@ export default {
         totalResult: 0,
       },
       seatchShow: false,
+      // 批量删除
+      ids: [],
+      //选中时将对象保存到arrs中
+      arrs: [],
+      activityDelsValues: {
+        id: "",
+      },
     };
   },
   created() {
@@ -255,7 +269,7 @@ export default {
       return styleModifytwo();
     },
     activityListValue() {
-      postD(this.url.listActivityInterface).then((res) => {
+      postD(ActivityListActivityApi()).then((res) => {
         this.tableData = res.list;
         this.imagesValue = imgUrl();
         this.page1.totalResult = res.count;
@@ -279,9 +293,9 @@ export default {
     },
     filterIs_voto(val) {
       if (val === 0) {
-        return "非投票";
-      } else if (val === 1) {
         return "投票";
+      } else if (val === 1) {
+        return "非投票";
       }
     },
     filterStatus(val) {
@@ -296,10 +310,12 @@ export default {
       }
     },
     // 分页
-    handlePageChange({ currentPage, pageSize }) {
+    handlePageChangeActivity({ currentPage, pageSize }) {
       this.page1.offset = currentPage;
       this.page1.limit = pageSize;
-      this.activityListValue();
+      postD(ActivityListActivityApi(), this.page1).then((res) => {
+        this.tableData = res.list;
+      });
     },
     showCont() {
       this.seatchShow = !this.seatchShow;
@@ -307,6 +323,46 @@ export default {
     },
     async costPlannedAmountChange(param1) {
       this.tableData = param1;
+    },
+    // 批量删除
+    checkboxChangeEvent(data) {
+      this.arrs = data.records;
+    },
+    async activityDels() {
+      const activityDelsValuesId = await this.$confirm(
+        "此操作将永久删除管理, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => err);
+      if (activityDelsValuesId !== "confirm") {
+        return this.$message.info("取消删除");
+      }
+      if (activityDelsValuesId === "confirm") {
+        this.arrs.forEach((v) => {
+          this.ids.push(v.id);
+        });
+        this.activityDelsValues.id = this.ids.toString();
+        postD(ActivitySelectDelApi(), this.activityDelsValues).then(
+          (res) => {
+            if (res.code == "200") {
+              this.$message.success("状态修改成功");
+              this.activityListValue();
+            } else if (res.code == "-200") {
+              this.$message.error("参数错误，或暂无数据");
+            } else if (res.code == "-201") {
+              this.$message.error("未登陆");
+            } else if (res.code == "-203") {
+              this.$message.error("对不起，你没有此操作权限");
+            } else {
+              this.$message.error("注册失败，账号已存在");
+            }
+          }
+        );
+      }
     },
   },
 };

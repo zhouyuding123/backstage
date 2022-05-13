@@ -112,15 +112,15 @@
 <script>
 import { imgUrl } from "../../assets/js/modifyStyle.js";
 import { postD } from "../../api/index.js";
+import {
+  ComplaintGetListApi,
+  ComplaintDelApi,
+  ComplaintSelectDelApi,
+} from "@/urls/complaintUrl.js";
 export default {
   data() {
     return {
       imagesValue: "",
-      url: {
-        getListInterface: "Complaint/getList",
-        selectDelInterface: "Complaint/selectDel",
-        delInterface: "Complaint/del",
-      },
       show: false,
       input: "",
       tableData: [],
@@ -153,7 +153,7 @@ export default {
     },
     // 获取投诉列表数据
     getListValue() {
-      postD(this.url.getListInterface).then((res) => {
+      postD(ComplaintGetListApi()).then((res) => {
         this.tableData = res.list;
         this.imagesValue = imgUrl();
       });
@@ -180,7 +180,7 @@ export default {
           this.ids.push(v.id);
         });
         this.idL.id = this.ids.toString();
-        postD(this.url.selectDelInterface, this.idL).then((res) => {
+        postD(ComplaintSelectDelApi(), this.idL).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
           } else if (res.code == "-200") {
@@ -211,7 +211,7 @@ export default {
       }
       if (complaintRemoveRows === "confirm") {
         this.complaintRemoveRowList.id = data.id;
-        postD(this.url.delInterface, this.complaintRemoveRowList).then(
+        postD(ComplaintDelApi(), this.complaintRemoveRowList).then(
           (res) => {
             if (res.code == "200") {
               this.$message.success("状态修改成功");

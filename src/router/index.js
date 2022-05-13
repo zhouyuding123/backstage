@@ -179,6 +179,14 @@ const routes = [
         , meta: {
           title: "活动列表"
         }
+      },
+      {
+        path: "/product_type/getList",
+        name: "product_type",
+        component: () => import("../components/product_typeManagement/product_typeList.vue")
+        , meta: {
+          title: "商品类别列表"
+        }
       }
     ]
   },

@@ -1,6 +1,6 @@
 <template>
   <el-container class="layout-container-demo" style="height: 100%">
-    <el-aside :width="isCollapse ? '50px' : '170px'">
+    <el-aside :width="isCollapse ? '55px' : '170px'">
       <el-scrollbar>
         <div>
           <div class="logStyle">
@@ -218,10 +218,11 @@ export default {
   font-weight: bold;
   padding-top: 15px;
   padding-bottom: 10px;
+  padding-left: 3px;
   color: white;
   font-family: Manrope3-Bold, Manrope3;
   img {
-    width: 120px;
+    width: 125px;
     height: 40px;
   }
 }
@@ -236,6 +237,7 @@ export default {
   .textLitle {
     color: #cfb8ff;
     line-height: 0px;
+    padding-left: 5px;
   }
   .el-icon {
     width: 30px;

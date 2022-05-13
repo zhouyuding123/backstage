@@ -48,7 +48,7 @@
               </el-option>
             </el-select></div
         ></el-col>
-         <el-col :span="1"
+        <el-col :span="1"
           ><div>
             <div class="divText">账号类型:</div>
           </div></el-col
@@ -84,14 +84,12 @@
 
 <script>
 import { postD } from "../../../api/index.js";
+import { DemandIndexApi } from "@/urls/demandUrl.js";
 export default {
   inject: ["demandIndexValue"],
   data() {
     return {
       tableDatas: [],
-      url: {
-        demandIndexInterface: "Demand/index",
-      },
       search: {
         keyword: null,
         style: null,
@@ -122,8 +120,8 @@ export default {
           label: "已完成",
         },
       ],
-      typeOptions:[
-          {
+      typeOptions: [
+        {
           value: "1",
           label: "用户端",
         },
@@ -155,7 +153,7 @@ export default {
           value: "8",
           label: "代工厂端",
         },
-      ]
+      ],
     };
   },
   methods: {
@@ -163,13 +161,13 @@ export default {
       this.demandIndexValue();
     },
     submitReset() {
-      this.search.keyword = "";
-      this.search.style = "";
-      this.search.status = "";
-      this.search.type = "";
+      this.search.keyword = null;
+      this.search.style = null;
+      this.search.status = null;
+      this.search.type = null;
     },
     submitSearch() {
-      postD(this.url.demandIndexInterface, this.search).then((res) => {
+      postD(DemandIndexApi(), this.search).then((res) => {
         this.tableDatas = res.data;
         this.$emit("demandSeatchValue", this.tableDatas);
       });

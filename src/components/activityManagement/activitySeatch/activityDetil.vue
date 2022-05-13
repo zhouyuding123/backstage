@@ -92,65 +92,129 @@
             {{ filterIs_voto(ActivityDetailsValue.is_voto) }}
           </div>
         </el-descriptions-item>
-
-        <el-descriptions-item label="item">
+        <el-descriptions-item label="item" align="center">
           <div v-for="(item, index) in votoValue" :key="index">
             <div v-if="item.is_img == 0">投票项:{{ item.item }}</div>
-            <li v-if="item.is_img == 1" style="width:50px" class="itemImgBody">
-              <el-image
-                :src="imagesValue + item.item"
-                :preview-src-list="[imagesValue + item.item]"
-                style="width: 40px; height: 40px"
-                class="itemImg"
-              />
-            </li>
+            <div v-if="item.is_img == 1" class="imageser">
+              <div style="width: 50px">
+                <el-image
+                  :src="imagesValue + item.item"
+                  :preview-src-list="[imagesValue + item.item]"
+                  style="width: 40px; height: 40px"
+                />
+              </div>
+            </div>
           </div>
         </el-descriptions-item>
+
+        <div v-if="ActivityDetailsValue.is_voto == 1">
+          <el-descriptions-item label="展示时间" align="center">
+            {{ voto_configValue.exh_time }}
+          </el-descriptions-item>
+          <el-descriptions-item label="投票开始时间" align="center">
+            {{ voto_configValue.voto_start_time }}
+          </el-descriptions-item>
+          <el-descriptions-item label="投票结束时间" align="center">
+            {{ voto_configValue.voto_end_time }}
+          </el-descriptions-item>
+          <el-descriptions-item label="投票方式" align="center">
+            <div
+              :class="{
+                green: voto_configValue.method == 1,
+                red: voto_configValue.method == 0,
+                orange: voto_configValue.method == 2,
+                blueqing: voto_configValue.method == 3,
+                blue: voto_configValue.method == 4,
+              }"
+            >
+              {{ filterMethod(voto_configValue.method) }}
+            </div>
+          </el-descriptions-item>
+          <el-descriptions-item label="投票方式" align="center">
+            <div
+              :class="{
+                green: voto_configValue.repeat == 1,
+                red: voto_configValue.repeat == 0,
+                orange: voto_configValue.repeat == 2,
+              }"
+            >
+              {{ filterRepeat(voto_configValue.repeat) }}
+            </div>
+          </el-descriptions-item>
+          <el-descriptions-item label="重复的次数" align="center">
+            {{ voto_configValue.repeat_count }}
+          </el-descriptions-item>
+
+          <el-descriptions-item label="地区限制" align="center">
+            <div
+              :class="{
+                green: voto_configValue.is_detail == 1,
+                red: voto_configValue.is_detail == 0,
+              }"
+            >
+              {{ filterIs_detail(voto_configValue.is_detail) }}
+            </div>
+          </el-descriptions-item>
+          <el-descriptions-item label="省" align="center">
+            {{ voto_configValue.province }}
+          </el-descriptions-item>
+          <el-descriptions-item label="市" align="center">
+            {{ voto_configValue.area }}
+          </el-descriptions-item>
+          <el-descriptions-item label="区" align="center">
+            {{ voto_configValue.area }}
+          </el-descriptions-item>
+          <el-descriptions-item label="参赛人员称谓" align="center">
+            {{ voto_configValue.call }}
+          </el-descriptions-item>
+          <el-descriptions-item label="投票单位" align="center">
+            {{ voto_configValue.unit }}
+          </el-descriptions-item>
+          <el-descriptions-item label="投票按钮文字" align="center">
+            {{ voto_configValue.button_writ }}
+          </el-descriptions-item>
+        </div>
       </el-descriptions>
 
-      <span>
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false"
-          >确 定</el-button
-        >
-      </span>
+      <div class="elFoot">
+        <span>
+          <el-button @click="dialogVisible = false">返 回</el-button>
+        </span>
+      </div>
     </el-dialog>
   </div>
 </template>
 <script>
 import { imgUrl } from "../../../assets/js/modifyStyle.js";
 import { postD } from "../../../api/index.js";
+import { ActivityShowActiyityApi } from "@/urls/activityUrl.js";
 export default {
   inject: ["activityListValue"],
   props: ["detialFort"],
   data() {
     return {
       imagesValue: "",
-      imagesValue: "",
       dialogVisible: false,
-      url: {
-        showActiyityInterface: "Activity/showActiyity",
-      },
       ActivityDetailsId: {
         id: "",
       },
       ActivityDetailsValue: [],
       detial: "",
       votoValue: "",
+      voto_configValue: "",
     };
   },
   methods: {
     detailsValue() {
       this.dialogVisible = true;
       this.ActivityDetailsId.id = this.detialFort.id;
-      postD(this.url.showActiyityInterface, this.ActivityDetailsId).then(
-        (res) => {
-          this.ActivityDetailsValue = res.data;
-          this.imagesValue = imgUrl();
-          this.detial = res.data.prize;
-          this.votoValue = res.data.voto;
-        }
-      );
+      postD(ActivityShowActiyityApi(), this.ActivityDetailsId).then((res) => {
+        this.ActivityDetailsValue = res.data;
+        this.imagesValue = imgUrl();
+        this.detial = res.data.prize;
+        this.votoValue = res.data.voto;
+        this.voto_configValue = res.data.voto_config;
+      });
     },
     filterCategory(val) {
       if (val === 1) {
@@ -173,6 +237,45 @@ export default {
         return "是";
       }
     },
+    filterMethod(val) {
+      if (val === 0) {
+        return "单选";
+      } else if (val === 1) {
+        return "最多选两项";
+      } else if (val === 2) {
+        return "最多选三项";
+      } else if (val === 3) {
+        return "最多选四项";
+      } else if (val === 4) {
+        return "最多选五项";
+      }
+    },
+    filterRepeat(val) {
+      if (val === 0) {
+        return "不允重复";
+      } else if (val === 1) {
+        return "每天限制次数";
+      } else if (val === 2) {
+        return "总共限制次数";
+      }
+    },
+    filterIs_detail(val) {
+      if (val === 0) {
+        return "不限制";
+      } else if (val === 1) {
+        return "限制";
+      }
+    },
   },
 };
 </script>
+
+<style lang="less" scoped>
+.imageser {
+  display: inline;
+  float: left;
+}
+.elFoot {
+  padding-top: 15px;
+}
+</style>

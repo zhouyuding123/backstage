@@ -107,6 +107,7 @@
 
 <script>
 import { postD } from "../../../api/index.js";
+import { CircleListForumApi } from "@/urls/circleUrl.js";
 export default {
   inject: ["listForumValue"],
   data() {
@@ -141,22 +142,19 @@ export default {
           label: "全国",
         },
       ],
-      url: {
-        ListForumInterface: "Circle/listForum",
-      },
     };
   },
   methods: {
     submitReset() {
-      this.search.keyword = "";
-      this.search.is_circle_forum = "";
-      this.search.style = "";
-      this.search.city = "";
-      this.search.lat = "";
-      this.search.lng = "";
+      this.search.keyword = null;
+      this.search.is_circle_forum = null;
+      this.search.style = null;
+      this.search.city = null;
+      this.search.lat = null;
+      this.search.lng = null;
     },
     submitSearch() {
-      postD(this.url.ListForumInterface, this.search).then((res) => {
+      postD(CircleListForumApi, this.search).then((res) => {
         this.tableDatas = res.list;
         this.$emit("change", this.tableDatas);
       });
