@@ -3,7 +3,12 @@
     <el-button type="primary" @click="addDialogVisible = true"
       >添加管理</el-button
     >
-    <el-dialog title="添加" v-model="addDialogVisible" width="50%" :destroy-on-close="true">
+    <el-dialog
+      title="添加"
+      v-model="addDialogVisible"
+      width="50%"
+      :destroy-on-close="true"
+    >
       <!-- 内容 -->
       <el-form
         :model="addForm"
@@ -41,7 +46,7 @@
         <el-form-item label="url" prop="url">
           <el-input v-model="addForm.url"></el-input>
         </el-form-item>
-        
+
         <el-form-item label="sort" prop="sort">
           <el-input v-model="addForm.sort"></el-input>
         </el-form-item>
@@ -60,24 +65,19 @@
         <el-button type="primary" @click="addUser">确 定</el-button>
       </span>
     </el-dialog>
-    
   </div>
 </template>
 
 <script>
 import { postD } from "../../../api/index.js";
 import iconList from "./iconList.vue";
+import { AuthAdminRuleApi, AuthRuleAddApi } from "@/urls/authUrl.js";
 export default {
   components: { iconList },
-  inject: ["userList", "leftNavigationList","reload"],
+  inject: ["userList", "leftNavigationList", "reload"],
   data() {
     return {
       ltitle: "",
-      url: {
-        addInterface: "Auth/ruleAdd",
-        pathParameters: "Auth/adminRule",
-      },
-
       // 添加按钮打开关闭
       addDialogVisible: false,
       //  添加表单的数据
@@ -129,7 +129,7 @@ export default {
   },
   methods: {
     ltitleValue() {
-      postD(this.url.pathParameters).then((res) => {
+      postD(AuthAdminRuleApi()).then((res) => {
         this.ltitle = res.list;
       });
     },
@@ -137,18 +137,18 @@ export default {
       this.$refs.addFormRef.validate((valid) => {
         if (!valid) return;
         // 发请求
-        postD(this.url.addInterface, this.addForm).then((res) => {
+        postD(AuthRuleAddApi(), this.addForm).then((res) => {
           if (res.code == "200") {
-          this.$message.success("状态修改成功");
-        } else if (res.code == "-200") {
-          this.$message.error("参数错误，或暂无数据");
-        } else if (res.code == "-201") {
-          this.$message.error("未登陆");
-        } else if (res.code == "-203") {
-          this.$message.error("对不起，你没有此操作权限");
-        } else {
-          this.$message.error("注册失败，账号已存在");
-        }
+            this.$message.success("状态修改成功");
+          } else if (res.code == "-200") {
+            this.$message.error("参数错误，或暂无数据");
+          } else if (res.code == "-201") {
+            this.$message.error("未登陆");
+          } else if (res.code == "-203") {
+            this.$message.error("对不起，你没有此操作权限");
+          } else {
+            this.$message.error("注册失败，账号已存在");
+          }
           this.addDialogVisible = false;
           this.userList();
           this.leftNavigationList();
@@ -163,7 +163,7 @@ export default {
       this.addForm.type = va;
     },
     insert(value) {
-      this.addForm.icon = value
+      this.addForm.icon = value;
     },
   },
 };

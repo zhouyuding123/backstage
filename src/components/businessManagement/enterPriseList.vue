@@ -277,6 +277,14 @@
 import { postD } from "../../api/index.js";
 import enterPriseListSeatch from "./enterPriseList/enterPriseListSeatch.vue";
 import { imgUrl } from "../../assets/js/modifyStyle.js";
+import {
+  CompanyIndexApi,
+  companyAuthCompanyApi,
+  companyEditStatApi,
+  CompanyDelApi,
+  CompanySelectDelApi,
+  companySetAuthApi,
+} from "@/urls/companyUrl.js";
 export default {
   provide() {
     return {
@@ -289,10 +297,6 @@ export default {
       imagesValue: "",
       seatchShow: false,
       url: {
-        CompanyInterface: "Company/index",
-        selectDelInterface: "Company/selectDel",
-        editStatInterface: "company/editStat",
-        delInterface: "Company/del",
         setAuthInterface: "company/setAuth",
         authCompanyInterface: "company/authCompany",
       },
@@ -351,7 +355,7 @@ export default {
   },
   methods: {
     enterprise() {
-      postD(this.url.CompanyInterface).then((res) => {
+      postD(CompanyIndexApi()).then((res) => {
         this.tableData = res.data;
         this.imagesValue = imgUrl();
       });
@@ -378,7 +382,7 @@ export default {
           this.ids.push(v.id);
         });
         this.idsL.id = this.ids.toString();
-        postD(this.url.selectDelInterface, this.idsL).then((res) => {
+        postD(CompanySelectDelApi(), this.idsL).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
           } else if (res.code == "-200") {
@@ -398,7 +402,7 @@ export default {
     editStatChange(data) {
       this.companyStatus.id = data.id;
       this.companyStatus.status = data.status;
-      postD(this.url.editStatInterface, this.companyStatus).then((res) => {
+      postD(companyEditStatApi(), this.companyStatus).then((res) => {
         if (res.code == "200") {
           this.$message.success("状态修改成功");
         } else if (res.code == "-200") {
@@ -428,7 +432,7 @@ export default {
       }
       if (companyRemoveRows === "confirm") {
         this.companyRemove.id = data.id;
-        postD(this.url.delInterface, this.companyRemove).then((res) => {
+        postD(CompanyDelApi(), this.companyRemove).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
           } else if (res.code == "-200") {
@@ -451,7 +455,7 @@ export default {
     },
     // 提交审核
     SetAuthadd() {
-      postD(this.url.setAuthInterface, this.SetAuthRadio).then((res) => {
+      postD(companySetAuthApi(), this.SetAuthRadio).then((res) => {
         if (res.code == "200") {
           this.$message.success("状态修改成功");
         } else if (res.code == "-200") {
@@ -481,7 +485,7 @@ export default {
     companyDetails(data) {
       this.companyDetailsId.id = data.id;
       this.companyDetailser = true;
-      postD(this.url.authCompanyInterface, this.companyDetailsId).then(
+      postD(companyAuthCompanyApi(), this.companyDetailsId).then(
         (res) => {
           this.authCompanyValue = res.data;
         }

@@ -323,6 +323,14 @@
 import { postD } from "@/api";
 import choiceIcon from "./iconchoice/choiceIcon.vue";
 import { imgUrl } from "../../assets/js/modifyStyle.js";
+import {
+  company_ruleListRuleApi,
+  company_ruleRuleAddApi,
+  company_ruleRuleSelectDelApi,
+  company_ruleRuleDelApi,
+  company_ruleRuleEditApi,
+  company_ruleRuleShowApi,
+} from "@/urls/company_ruleUrl.js";
 export default {
   components: { choiceIcon },
   inject: ["reload"],
@@ -331,14 +339,6 @@ export default {
       imagesValue: "",
       allAlign: null,
       tableData: [],
-      url: {
-        listRuleInterface: "company_rule/listRule",
-        ruleAddInterface: "company_rule/ruleAdd",
-        ruleSelectDelInterface: "company_rule/ruleSelectDel",
-        ruleDelInterface: "company_rule/ruleDel",
-        ruleEditInterface: "company_rule/ruleEdit",
-        authCompanyInterface: "company_rule/ruleShow",
-      },
       addaddEnterpriseShow: false,
       //表单数据
       EnterpriseruleForm: {
@@ -493,7 +493,7 @@ export default {
     },
     // 请求列表数据
     listRuleValue() {
-      postD(this.url.listRuleInterface).then((res) => {
+      postD(company_ruleListRuleApi()).then((res) => {
         this.tableData = res.list;
         this.imagesValue = imgUrl();
       });
@@ -501,7 +501,7 @@ export default {
     // 父级选择数据
     addEnterprise() {
       this.addaddEnterpriseShow = true;
-      postD(this.url.listRuleInterface).then((res) => {
+      postD(company_ruleListRuleApi()).then((res) => {
         this.ltitle = res.list;
       });
     },
@@ -520,7 +520,7 @@ export default {
     addEnterpriseValue() {
       this.$refs.EnterpriseruleFormRef.validate((valid) => {
         if (!valid) return;
-        postD(this.url.ruleAddInterface, this.EnterpriseruleForm).then(
+        postD(company_ruleRuleAddApi(), this.EnterpriseruleForm).then(
           (res) => {
             if (res.code == "200") {
               this.$message.success("状态修改成功");
@@ -561,7 +561,7 @@ export default {
           this.ids.push(v.id);
         });
         this.removecompanys.id = this.ids.toString();
-        postD(this.url.ruleSelectDelInterface, this.removecompanys).then(
+        postD(company_ruleRuleSelectDelApi(), this.removecompanys).then(
           (res) => {
             if (res.code == "200") {
               this.$message.success("状态修改成功");
@@ -595,7 +595,7 @@ export default {
       }
       if (oneCompanyList === "confirm") {
         this.oneCompanyvalue.id = data.id;
-        postD(this.url.ruleDelInterface, this.oneCompanyvalue).then((res) => {
+        postD(company_ruleRuleDelApi(), this.oneCompanyvalue).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
             this.listRuleValue();
@@ -615,7 +615,7 @@ export default {
     userStateChaged(data) {
       this.loginFrom.id = data.id;
       this.loginFrom.status = data.status;
-      postD(this.url.ruleEditInterface, this.loginFrom).then((res) => {
+      postD(company_ruleRuleEditApi(), this.loginFrom).then((res) => {
         if (res.code == "200") {
           this.$message.success("状态修改成功");
         } else if (res.code == "-200") {
@@ -633,7 +633,7 @@ export default {
     userAuthChaged(data) {
       this.loginFroms.id = data.id;
       this.loginFroms.auth_open = data.auth_open;
-      postD(this.url.ruleEditInterface, this.loginFroms).then((res) => {
+      postD(company_ruleRuleEditApi(), this.loginFroms).then((res) => {
         if (res.code == "200") {
           this.$message.success("状态修改成功");
         } else if (res.code == "-200") {
@@ -653,7 +653,7 @@ export default {
       this.editEnterprise = data;
       this.editEnterprise.type = data.type;
       this.editEnterprise.auth_open = data.auth_open;
-      postD(this.url.listRuleInterface).then((res) => {
+      postD(company_ruleListRuleApi()).then((res) => {
         this.ltitle = res.list;
       });
     },
@@ -663,7 +663,7 @@ export default {
     editDialogVisibleUser() {
       this.$refs.editEnterpriseref.validate((valid) => {
         if (!valid) return;
-        postD(this.url.ruleEditInterface, this.editEnterprise).then((res) => {
+        postD(company_ruleRuleEditApi(), this.editEnterprise).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
             this.editDialogVisible = false;
@@ -683,7 +683,7 @@ export default {
     detailsValue(data) {
       this.detailsVisible = true;
       this.detailsVisiblesId.id = data.id.toString();
-      postD(this.url.authCompanyInterface, this.detailsVisiblesId).then(
+      postD(company_ruleRuleShowApi(), this.detailsVisiblesId).then(
         (res) => {
           this.designerDetailsValue = res.data;
         }

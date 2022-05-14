@@ -247,6 +247,14 @@
 <script>
 import { postD } from "../../api/index.js";
 import { imgUrl } from "../../assets/js/modifyStyle.js";
+import {
+  AuthAdminListApi,
+  AuthAdminAddApi,
+  AuthAdminSelectDelApi,
+  AuthAdminEditApi,
+  AuthAdminDelApi,
+  AuthAdminGroupApi,
+} from "@/urls/authUrl.js";
 export default {
   data() {
     return {
@@ -279,15 +287,6 @@ export default {
       //选中时将对象保存到arrs中
       arrs: [],
       show: false,
-      url: {
-        adminListInterface: "Auth/adminList",
-        adminAddInterface: "Auth/adminAdd",
-        adminSelectDelInterface: "Auth/adminSelectDel",
-        adminEditInterface: "Auth/adminEdit",
-        adminDelInterface: "Auth/adminDel",
-        // 下拉框
-        adminGroupInterface: "Auth/adminGroup",
-      },
       // 删除按钮
       adminListremoveRowFrom: {
         id: "",
@@ -379,7 +378,7 @@ export default {
   },
   methods: {
     tableDataValue() {
-      postD(this.url.adminListInterface).then((res) => {
+      postD(AuthAdminListApi()).then((res) => {
         this.tableData = res.list;
         this.imagesValue = imgUrl();
       });
@@ -388,7 +387,7 @@ export default {
     addUserList() {
       this.$refs.addListRef.validate((valid) => {
         if (!valid) return;
-        postD(this.url.adminAddInterface, this.addList).then((res) => {
+        postD(AuthAdminAddApi(), this.addList).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
           } else if (res.code == "-200") {
@@ -407,7 +406,7 @@ export default {
     },
     // 下拉框
     addListAdd() {
-      postD(this.url.adminGroupInterface).then((res) => {
+      postD(AuthAdminGroupApi()).then((res) => {
         this.group = res.list;
       });
     },
@@ -435,7 +434,7 @@ export default {
       if (deleteUsers === "confirm") {
         this.arrs.forEach((v) => {
           this.ids.id = v.id;
-          postD(this.url.adminSelectDelInterface, this.ids).then((res) => {
+          postD(AuthAdminSelectDelApi(), this.ids).then((res) => {
             if (res.code == "200") {
               this.$message.success("状态修改成功");
             } else if (res.code == "-200") {
@@ -460,23 +459,21 @@ export default {
     adminListinfo() {
       this.$refs.adminListeditFromref.validate((v) => {
         if (!v) return;
-        postD(this.url.adminEditInterface, this.adminListeditFrom).then(
-          (res) => {
-            if (res.code == "200") {
-              this.$message.success("状态修改成功");
-              this.adminListeditAddmodify = false;
-              this.tableDataValue();
-            } else if (res.code == "-200") {
-              this.$message.error("参数错误，或暂无数据");
-            } else if (res.code == "-201") {
-              this.$message.error("未登陆");
-            } else if (res.code == "-203") {
-              this.$message.error("对不起，你没有此操作权限");
-            } else {
-              this.$message.error("注册失败，账号已存在");
-            }
+        postD(AuthAdminEditApi(), this.adminListeditFrom).then((res) => {
+          if (res.code == "200") {
+            this.$message.success("状态修改成功");
+            this.adminListeditAddmodify = false;
+            this.tableDataValue();
+          } else if (res.code == "-200") {
+            this.$message.error("参数错误，或暂无数据");
+          } else if (res.code == "-201") {
+            this.$message.error("未登陆");
+          } else if (res.code == "-203") {
+            this.$message.error("对不起，你没有此操作权限");
+          } else {
+            this.$message.error("注册失败，账号已存在");
           }
-        );
+        });
       });
     },
     async adminListremoveRow(id) {
@@ -494,22 +491,20 @@ export default {
       }
       if (removeadminList === "confirm") {
         this.adminListremoveRowFrom.id = id.id;
-        postD(this.url.adminDelInterface, this.adminListremoveRowFrom).then(
-          (res) => {
-            if (res.code == "200") {
-              this.$message.success("状态修改成功");
-            } else if (res.code == "-200") {
-              this.$message.error("参数错误，或暂无数据");
-            } else if (res.code == "-201") {
-              this.$message.error("未登陆");
-            } else if (res.code == "-203") {
-              this.$message.error("对不起，你没有此操作权限");
-            } else {
-              this.$message.error("注册失败，账号已存在");
-            }
-            this.tableDataValue();
+        postD(AuthAdminDelApi(), this.adminListremoveRowFrom).then((res) => {
+          if (res.code == "200") {
+            this.$message.success("状态修改成功");
+          } else if (res.code == "-200") {
+            this.$message.error("参数错误，或暂无数据");
+          } else if (res.code == "-201") {
+            this.$message.error("未登陆");
+          } else if (res.code == "-203") {
+            this.$message.error("对不起，你没有此操作权限");
+          } else {
+            this.$message.error("注册失败，账号已存在");
           }
-        );
+          this.tableDataValue();
+        });
       }
     },
     handleAvatarSuccess(res, file) {

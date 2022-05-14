@@ -81,6 +81,7 @@
 
 <script>
 import { postD } from "../../../api/index.js";
+import { UsersIndexApi } from "@/urls/usersUrl.js";
 export default {
   data() {
     return {
@@ -137,7 +138,7 @@ export default {
       this.search.vip_end_time = "";
     },
     submitSearch() {
-      postD(this.url.indexInterface, this.search).then((res) => {
+      postD(UsersIndexApi(), this.search).then((res) => {
         this.tableDatas = res.data;
         this.$emit("mernberSeatch", this.tableDatas);
       });

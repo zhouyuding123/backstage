@@ -99,6 +99,12 @@
 <script>
 import { postD } from "../../api/index.js";
 import mernberSeatch from "./merberSeatch/mernberSeatch.vue";
+import {
+  UsersIndexApi,
+  UsersEditStatApi,
+  UsersSelectDelApi,
+  UsersDelApi,
+} from "@/urls/usersUrl.js";
 export default {
   components: {
     mernberSeatch,
@@ -107,12 +113,6 @@ export default {
     return {
       tableData: [],
       allAlign: null,
-      url: {
-        indexInterface: "Users/index",
-        editStatInterface: "Users/editStat",
-        selectDelInterface: "Users/selectDel",
-        delInterface: "Users/del",
-      },
       //   分页
       page1: {
         offset: 1,
@@ -145,7 +145,7 @@ export default {
   methods: {
     // 初始会员列表
     indexValue() {
-      postD(this.url.indexInterface).then((res) => {
+      postD(UsersIndexApi()).then((res) => {
         this.tableData = res.data;
         this.page1.totalResult = res.count;
       });
@@ -159,7 +159,7 @@ export default {
     vipUserAuthChaged(status) {
       this.VipStatus.id = status.id;
       this.VipStatus.status = status.status;
-      postD(this.url.editStatInterface, this.VipStatus).then((res) => {
+      postD(UsersEditStatApi(), this.VipStatus).then((res) => {
         if (res.code == "200") {
           this.$message.success("状态修改成功");
         } else if (res.code == "-200") {
@@ -200,7 +200,7 @@ export default {
         this.arrs.forEach((v) => {
           this.ids.id = v.id;
         });
-        postD(this.url.selectDelInterface, this.ids).then((res) => {
+        postD(UsersSelectDelApi(), this.ids).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
           } else if (res.code == "-200") {
@@ -231,7 +231,7 @@ export default {
       }
       if (vipRemoveRows === "confirm") {
         this.vipRemoveRowList.id = ider.id;
-        postD(this.url.delInterface, this.vipRemoveRowList).then((res) => {
+        postD(UsersDelApi(), this.vipRemoveRowList).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
           } else if (res.code == "-200") {

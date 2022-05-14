@@ -24,13 +24,10 @@
 </template>
 <script>
 import { postD } from "../../api/index.js";
+import { SensitiveSetDataApi, SensitiveGetDataApi } from "@/urls/sensitiveUrl";
 export default {
   data() {
     return {
-      url: {
-        setDataInterface: "Sensitive/setData",
-        getDataInterface:"Sensitive/getData"
-      },
       ruleForm: {
         content: "",
       },
@@ -51,31 +48,30 @@ export default {
     };
   },
   created() {
-    this.readGetData()
+    this.readGetData();
   },
   methods: {
-    readGetData(){
-      postD(this.url.getDataInterface)
-      .then((res)=>{
-        this.ruleForm.content = res.data.content
-      })
+    readGetData() {
+      postD(SensitiveGetDataApi()).then((res) => {
+        this.ruleForm.content = res.data.content;
+      });
     },
     submitForm() {
       this.$refs.ruleForm.validate(() => {
-        postD(this.url.setDataInterface, this.ruleForm).then((res) => {
+        postD(SensitiveSetDataApi(), this.ruleForm).then((res) => {
           if (res.code == "200") {
-          this.$message.success("状态修改成功");
-        } else if (res.code == "-200") {
-          this.$message.error("参数错误，或暂无数据");
-        } else if (res.code == "-201") {
-          this.$message.error("未登陆");
-        } else if (res.code == "-203") {
-          this.$message.error("对不起，你没有此操作权限");
-        } else {
-          this.$message.error("注册失败，账号已存在");
-        }
+            this.$message.success("状态修改成功");
+          } else if (res.code == "-200") {
+            this.$message.error("参数错误，或暂无数据");
+          } else if (res.code == "-201") {
+            this.$message.error("未登陆");
+          } else if (res.code == "-203") {
+            this.$message.error("对不起，你没有此操作权限");
+          } else {
+            this.$message.error("注册失败，账号已存在");
+          }
           this.ruleForm.content = "";
-          this.readGetData()
+          this.readGetData();
         });
       });
     },

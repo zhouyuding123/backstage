@@ -86,20 +86,18 @@
 
 <script>
 import { postD } from "../../../api/index.js";
+import { CompanyIndexApi } from "@/urls/companyUrl.js";
 export default {
   inject: ["enterprise"],
   data() {
     return {
       tableDatas: [],
-      url: {
-        CompanyInterface: "Company/index",
-      },
       search: {
         keyword: null,
         is_vip: null,
         vip_start_time: null,
         vip_end_time: null,
-        auth:null
+        auth: null,
       },
       is_vipOptions: [
         {
@@ -112,7 +110,7 @@ export default {
         },
       ],
       authOptions: [
-          {
+        {
           value: "0",
           label: "待认证",
         },
@@ -150,7 +148,7 @@ export default {
       this.search.vip_end_time = this.vipGetTime[1].getTime() / 1000;
     },
     submitSearch() {
-      postD(this.url.CompanyInterface,this.search).then((res) => {
+      postD(CompanyIndexApi(), this.search).then((res) => {
         this.tableDatas = res.data;
         this.$emit("enterProseListSeatch", this.tableDatas);
       });

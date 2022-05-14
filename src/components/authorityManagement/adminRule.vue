@@ -216,6 +216,12 @@
 import { postD } from "../../api/index";
 import ruleAdd from "./adminRuleAssembly/ruleAdd.vue";
 import iconList from "./adminRuleAssembly/iconList.vue";
+import {
+  AuthRuleEditApi,
+  AuthRuleDelApi,
+  AuthAdminRuleApi,
+  AuthRuleSelectDelApi,
+} from "@/urls/authUrl.js";
 export default {
   inject: ["leftNavigationList"],
   provide() {
@@ -234,13 +240,6 @@ export default {
       //选中时将对象保存到arrs中
       arrs: [],
       tableData1: [],
-      url: {
-        getHomePageHeadMessage: "Auth/ruleEdit",
-        deleteIInterface: "Auth/ruleDel",
-        ruleEditInterface: "Auth/ruleEdit",
-        pathParameters: "Auth/adminRule",
-        ruleSelectDel: "Auth/ruleSelectDel",
-      },
       loginFrom: {
         id: "",
         status: "",
@@ -297,9 +296,10 @@ export default {
     userStateChaged(userinfo) {
       this.loginFrom.id = userinfo.id;
       this.loginFrom.status = userinfo.status;
-      postD(this.url.getHomePageHeadMessage, this.loginFrom).then((res) => {
+      postD(AuthRuleEditApi(), this.loginFrom).then((res) => {
         if (res.code == "200") {
           this.$message.success("状态修改成功");
+          this.leftNavigationList()
         } else if (res.code == "-200") {
           this.$message.error("参数错误，或暂无数据");
         } else if (res.code == "-201") {
@@ -315,7 +315,7 @@ export default {
     userAuthChaged(userinfor) {
       this.loginFroms.id = userinfor.id;
       this.loginFroms.auth_open = userinfor.auth_open;
-      postD(this.url.getHomePageHeadMessage, this.loginFroms).then((res) => {
+      postD(AuthRuleEditApi(), this.loginFroms).then((res) => {
         if (res.code == "200") {
           this.$message.success("状态修改成功");
         } else if (res.code == "-200") {
@@ -346,7 +346,7 @@ export default {
       }
       if (removeValue === "confirm") {
         this.removeRowFrom.id = userinfors.id;
-        postD(this.url.deleteIInterface, this.removeRowFrom).then((res) => {
+        postD(AuthRuleDelApi(), this.removeRowFrom).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
           } else if (res.code == "-200") {
@@ -364,7 +364,7 @@ export default {
       }
     },
     editltitleValue() {
-      postD(this.url.pathParameters).then((res) => {
+      postD(AuthAdminRuleApi()).then((res) => {
         this.ltitle = res.list;
       });
     },
@@ -381,7 +381,7 @@ export default {
     editInfo() {
       this.$refs.editFromref.validate((valid) => {
         if (!valid) return;
-        postD(this.url.ruleEditInterface, this.editFrom).then((res) => {
+        postD(AuthRuleEditApi(), this.editFrom).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
           } else if (res.code == "-200") {
@@ -423,7 +423,7 @@ export default {
           this.ids.push(v.id);
         });
         this.idsL.id = this.ids.toString();
-        postD(this.url.ruleSelectDel, this.idsL).then((res) => {
+        postD(AuthRuleSelectDelApi(), this.idsL).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
           } else if (res.code == "-200") {
