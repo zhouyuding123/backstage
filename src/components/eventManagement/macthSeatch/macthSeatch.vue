@@ -134,12 +134,12 @@ export default {
       this.MacthValue();
     },
     submitReset() {
-      this.search.keyword = "";
-      this.search.sign_time = "";
-      this.search.exh_time = "";
-      this.search.is_open = "";
-      this.search.status = "";
-      this.vipGetTime = "";
+      this.search.keyword = null;
+      this.search.sign_time = null;
+      this.search.exh_time = null;
+      this.search.is_open = null;
+      this.search.status = null;
+      this.vipGetTime = null;
     },
     getTime(date) {
       this.vipGetTime = date;

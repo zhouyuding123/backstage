@@ -18,7 +18,7 @@
       </div>
       <div class="contentRight">
         <el-button type="info" plain @click="showCont($event)" ref="btn1"
-          >查询</el-button
+          ><span class="iconfont icon-sousuo"></span></el-button
         >
       </div>
     </div>
@@ -120,14 +120,15 @@ export default {
         totalResult: 0,
       },
       // 搜索展示开启关闭
-      seatchShow: false,
+      seatchShow: true,
       // 状态改变
       VipStatus: {
         id: "",
         status: "",
       },
       //批量删除选中的数组
-      ids: {
+      ids: [],
+      selectDelValue: {
         id: "",
       },
       //批量删除选中时将对象保存到arrs中
@@ -153,7 +154,9 @@ export default {
     handlePageChange({ currentPage, pageSize }) {
       this.page1.offset = currentPage;
       this.page1.limit = pageSize;
-      this.indexValue();
+      postD(UsersIndexApi(), this.page1).then((res) => {
+        this.tableData = res.data;
+      });
     },
     // 状态
     vipUserAuthChaged(status) {
@@ -198,9 +201,10 @@ export default {
       }
       if (vipBatchDeletes === "confirm") {
         this.arrs.forEach((v) => {
-          this.ids.id = v.id;
+          this.ids.push(v.id);
         });
-        postD(UsersSelectDelApi(), this.ids).then((res) => {
+        this.selectDelValue.id = this.ids.toString();
+        postD(UsersSelectDelApi(), this.selectDelValue).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
           } else if (res.code == "-200") {

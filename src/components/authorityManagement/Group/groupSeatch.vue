@@ -51,7 +51,7 @@ export default {
       this.groupVaule();
     },
     submitReset() {
-      this.search.keyword = "";
+      this.search.keyword = null;
     },
     submitSearch() {
       postD(this.url.adminGroupInterface, this.search).then((res) => {

@@ -13,3 +13,9 @@ export const ActivityListActivityApi = () => {
 export const ActivitySelectDelApi = () => {
     return "Activity/selectDel"
 }
+export const activityStateApi = () => {
+    return "activity/state"
+}
+export const activitySetStatusApi = () => {
+    return "activity/setStatus"
+}

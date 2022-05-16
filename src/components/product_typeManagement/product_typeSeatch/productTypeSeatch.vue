@@ -48,7 +48,7 @@ export default {
       this.productValue();
     },
     submitReset() {
-      this.search.keyword = "";
+      this.search.keyword = null;
     },
     submitSearch() {
       postD(product_typeGetListApi(), this.search).then((res) => {

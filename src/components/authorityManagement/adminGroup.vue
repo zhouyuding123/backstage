@@ -10,7 +10,7 @@
       </div>
       <div class="contentRight">
         <el-button type="info" plain ref="btn1" @click="showCont($event)"
-          >查询</el-button
+          ><span class="iconfont icon-sousuo"></span></el-button
         >
       </div>
     </div>
@@ -191,7 +191,7 @@
         ref="adminGroupEditFromref"
         label-width="70px"
       >
-        <el-form-item label="用户名" prop="title">
+        <el-form-item label="组别名称" prop="title">
           <el-input v-model="adminGroupEditFrom.title"></el-input>
         </el-form-item>
         <el-form-item label="状态" prop="status">
@@ -250,7 +250,7 @@ export default {
   },
   data() {
     return {
-      seatchShow: false,
+      seatchShow: true,
       removeRowFrom: {
         id: "",
       },
@@ -304,11 +304,13 @@ export default {
         label: "ltitle",
       },
       //选中的数组 批量删除
-      ids: {
-        id: "",
-      },
+      // 批量删除
+      ids: [],
       //选中时将对象保存到arrs中
       arrs: [],
+      BatchDeletedContent: {
+        id: "",
+      },
       // 搜索
       abb: "",
       pushId: [],
@@ -333,7 +335,6 @@ export default {
       postD(AuthAdminGroupApi(), this.page1).then((res) => {
         this.tableData = res.list;
         this.page1.totalResult = res.count;
-        this.loading = false;
       });
     },
     //添加权限
@@ -418,21 +419,22 @@ export default {
       }
       if (deleteUsers === "confirm") {
         this.arrs.forEach((v) => {
-          this.ids.id = v.id;
-          postD(AuthGroupSelectDelApi(), this.ids).then((res) => {
-            if (res.code == "200") {
-              this.$message.success("状态修改成功");
-            } else if (res.code == "-200") {
-              this.$message.error("参数错误，或暂无数据");
-            } else if (res.code == "-201") {
-              this.$message.error("未登陆");
-            } else if (res.code == "-203") {
-              this.$message.error("对不起，你没有此操作权限");
-            } else {
-              this.$message.error("注册失败，账号已存在");
-            }
+          this.ids.push(v.id);
+        });
+        this.BatchDeletedContent.id = this.ids.toString();
+        postD(AuthGroupSelectDelApi(), this.BatchDeletedContent).then((res) => {
+          if (res.code == "200") {
+            this.$message.success("状态修改成功");
             this.groupVaule();
-          });
+          } else if (res.code == "-200") {
+            this.$message.error("参数错误，或暂无数据");
+          } else if (res.code == "-201") {
+            this.$message.error("未登陆");
+          } else if (res.code == "-203") {
+            this.$message.error("对不起，你没有此操作权限");
+          } else {
+            this.$message.error("注册失败，账号已存在");
+          }
         });
       }
     },
@@ -503,7 +505,9 @@ export default {
     handlePageChange({ currentPage, pageSize }) {
       this.page1.offset = currentPage;
       this.page1.limit = pageSize;
-      this.groupVaule();
+      postD(AuthAdminGroupApi(), this.page1).then((res) => {
+        this.tableData = res.list;
+      });
     },
     tableRowStyle() {
       return "background: #FFFFFF;box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);border-radius: 10px 10px 10px 10px;opacity: 1;";

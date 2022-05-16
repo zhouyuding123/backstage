@@ -11,7 +11,7 @@
       </div>
       <div class="contentRight">
         <el-button type="info" ref="btn1" @click="showCont($event)"
-          >查询</el-button
+          ><span class="iconfont icon-sousuo"></span></el-button
         >
       </div>
     </div>
@@ -84,7 +84,6 @@
         >
           <template v-slot="scoped">
             <div
-              class="clickHeader"
               :class="{
                 green: scoped.row.category === 1,
                 yellow: scoped.row.category == 3,
@@ -104,7 +103,6 @@
         >
           <template v-slot="scoped">
             <div
-              class="clickHeader"
               :class="{
                 green: scoped.row.style === 1,
                 yellow: scoped.row.style == 2,
@@ -114,7 +112,6 @@
             </div>
           </template>
         </vxe-column>
-
         <vxe-column
           field="is_voto"
           title="投票"
@@ -124,7 +121,6 @@
         >
           <template v-slot="scoped">
             <div
-              class="clickHeader"
               :class="{
                 green: scoped.row.is_voto === 1,
                 yellow: scoped.row.is_voto == 2,
@@ -141,8 +137,9 @@
           show-overflow="ellipsis"
         >
           <template v-slot="scoped">
-            <div>
+            <div @click="companySetStatus(scoped.row)">
               <div
+                class="clickHeader"
                 :class="{
                   green: scoped.row.status === 1,
                   yellow: scoped.row.status == 0,
@@ -210,6 +207,115 @@
         @page-change="handlePageChangeActivity"
       ></vxe-pager>
     </div>
+    <el-dialog title="提示" v-model="SetStatus" width="50%">
+      <el-descriptions direction="vertical" :column="5" border>
+        <el-descriptions-item label="用户名" align="center">{{
+          setDetilValue.username
+        }}</el-descriptions-item>
+        <el-descriptions-item label="昵称" align="center">{{
+          setDetilValue.nickname
+        }}</el-descriptions-item>
+        <el-descriptions-item label="头像" align="center">
+          <el-image
+            :src="imagesValue + setDetilValue.headimage"
+            :preview-src-list="[imagesValue + setDetilValue.headimage]"
+            style="width: 40px; height: 40px"
+            class="stylecss"
+          />
+        </el-descriptions-item>
+        <el-descriptions-item label="活动类型" align="center">
+          <div
+            :class="{
+              green: setDetilValue.category === 1,
+              yellow: setDetilValue.category == 2,
+            }"
+          >
+            {{ filterCategory(setDetilValue.category) }}
+          </div>
+        </el-descriptions-item>
+        <el-descriptions-item label="活动标题" align="center">{{
+          setDetilValue.title
+        }}</el-descriptions-item>
+        <el-descriptions-item label="开始时间" align="center">{{
+          setDetilValue.start_time
+        }}</el-descriptions-item>
+        <el-descriptions-item label="结束时间" align="center">{{
+          setDetilValue.end_time
+        }}</el-descriptions-item>
+        <el-descriptions-item label="活动内容" align="center">{{
+          setDetilValue.content
+        }}</el-descriptions-item>
+        <el-descriptions-item label="具体规则" align="center">{{
+          setDetilValue.rule
+        }}</el-descriptions-item>
+        <el-descriptions-item label="海报" align="center">
+          <el-image
+            :src="imagesValue + setDetilValue.poster"
+            :preview-src-list="[imagesValue + setDetilValue.poster]"
+            style="width: 40px; height: 40px"
+            class="stylecss"
+          />
+        </el-descriptions-item>
+        <el-descriptions-item label="封面" align="center">
+          <el-image
+            :src="imagesValue + setDetilValue.thumb"
+            :preview-src-list="[imagesValue + setDetilValue.thumb]"
+            style="width: 40px; height: 40px"
+            class="stylecss"
+          />
+        </el-descriptions-item>
+        <el-descriptions-item label="奖项" align="center">
+          <div v-for="(item, index) in detial" :key="index">
+            奖项:{{ item.name }}个数: {{ item.amount }}奖品:{{ item.item }}
+          </div>
+        </el-descriptions-item>
+        <el-descriptions-item label="开关" align="center">
+          <div
+            :class="{
+              green: setDetilValue.is_open === 1,
+              red: setDetilValue.is_open == 0,
+            }"
+          >
+            {{ filterIs_open(setDetilValue.is_open) }}
+          </div>
+        </el-descriptions-item>
+        <el-descriptions-item label="单用户的抽奖次数限制" align="center">
+          {{ setDetilValue.luck_count }}
+        </el-descriptions-item>
+        <el-descriptions-item label="单次抽奖消耗积分" align="center">
+          {{ setDetilValue.integral }}
+        </el-descriptions-item>
+        <el-descriptions-item label="浏览量" align="center">
+          {{ setDetilValue.browse }}
+        </el-descriptions-item>
+        <el-descriptions-item label="是否投票活动" align="center">
+          <div
+            :class="{
+              green: setDetilValue.is_voto === 1,
+              red: setDetilValue.is_voto == 2,
+            }"
+          >
+            {{ filterIs_voto(setDetilValue.is_voto) }}
+          </div>
+        </el-descriptions-item>
+      </el-descriptions>
+      <div style="padding-top: 15px">请选择</div>
+      <el-radio-group
+        v-model="SetStatusRadio.status"
+        class="SetStatusRadioStyle"
+      >
+        <el-radio :label="0">等待平台审核</el-radio>
+        <el-radio :label="1">平台通过，进行中</el-radio>
+        <el-radio :label="2">驳回</el-radio>
+        <el-radio :label="3">结束</el-radio>
+      </el-radio-group>
+      <div style="padding-top: 15px">
+        <span class="dialog-footer">
+          <el-button @click="SetStatus = false">取 消</el-button>
+          <el-button type="primary" @click="SetStatusValue">确 定</el-button>
+        </span>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -219,7 +325,12 @@ import activityDetil from "./activitySeatch/activityDetil.vue";
 import activitySeatch from "./activitySeatch/activitySeatch.vue";
 import addActivity from "./activitySeatch/addActivity.vue";
 import { postD } from "../../api/index.js";
-import {ActivityListActivityApi,ActivitySelectDelApi} from "@/urls/activityUrl.js"
+import {
+  ActivityListActivityApi,
+  ActivitySelectDelApi,
+  activityStateApi,
+  activitySetStatusApi,
+} from "@/urls/activityUrl.js";
 import {
   styleModify,
   styleModifytwo,
@@ -239,6 +350,11 @@ export default {
   },
   data() {
     return {
+      SetStatusRadio: {
+        id: "",
+        status: "",
+      },
+      SetStatus: false,
       imagesValue: "",
       allAlign: null,
       tableData: [],
@@ -248,7 +364,7 @@ export default {
         limit: 10,
         totalResult: 0,
       },
-      seatchShow: false,
+      seatchShow: true,
       // 批量删除
       ids: [],
       //选中时将对象保存到arrs中
@@ -256,6 +372,15 @@ export default {
       activityDelsValues: {
         id: "",
       },
+      // 状态
+      companyIsopen: {
+        id: "",
+        is_open: "",
+      },
+      setDetilValue: [],
+      detial: "",
+      votoValue: "",
+      voto_configValue: "",
     };
   },
   created() {
@@ -346,22 +471,115 @@ export default {
           this.ids.push(v.id);
         });
         this.activityDelsValues.id = this.ids.toString();
-        postD(ActivitySelectDelApi(), this.activityDelsValues).then(
-          (res) => {
-            if (res.code == "200") {
-              this.$message.success("状态修改成功");
-              this.activityListValue();
-            } else if (res.code == "-200") {
-              this.$message.error("参数错误，或暂无数据");
-            } else if (res.code == "-201") {
-              this.$message.error("未登陆");
-            } else if (res.code == "-203") {
-              this.$message.error("对不起，你没有此操作权限");
-            } else {
-              this.$message.error("注册失败，账号已存在");
-            }
+        postD(ActivitySelectDelApi(), this.activityDelsValues).then((res) => {
+          if (res.code == "200") {
+            this.$message.success("状态修改成功");
+            this.activityListValue();
+          } else if (res.code == "-200") {
+            this.$message.error("参数错误，或暂无数据");
+          } else if (res.code == "-201") {
+            this.$message.error("未登陆");
+          } else if (res.code == "-203") {
+            this.$message.error("对不起，你没有此操作权限");
+          } else {
+            this.$message.error("注册失败，账号已存在");
           }
-        );
+        });
+      }
+    },
+    companySetStatus(data) {
+      console.log(data);
+      this.SetStatus = true;
+      this.SetStatusRadio.id = data.id;
+      this.SetStatusRadio.status = data.status;
+      this.setDetilValue = data;
+      this.detial = data.prize;
+      this.votoValue = data.voto;
+      this.voto_configValue = data.voto_config;
+    },
+    is_openChaged(data) {
+      this.companyIsopen.id = data.id;
+      this.companyIsopen.is_open = data.is_open;
+      console.log(this.companyIsopen);
+      postD(activityStateApi(), this.companyIsopen).then((res) => {
+        if (res.code == "200") {
+          this.$message.success("状态修改成功");
+        } else if (res.code == "-200") {
+          this.$message.error("参数错误，或暂无数据");
+        } else if (res.code == "-201") {
+          this.$message.error("未登陆");
+        } else if (res.code == "-203") {
+          this.$message.error("对不起，你没有此操作权限");
+        } else {
+          this.$message.error("注册失败，账号已存在");
+        }
+      });
+    },
+    SetStatusValue() {
+      postD(activitySetStatusApi(), this.SetStatusRadio).then((res) => {
+        if (res.code == "200") {
+          this.$message.success("状态修改成功");
+          this.SetStatus = false;
+          this.activityListValue();
+        } else if (res.code == "-200") {
+          this.$message.error("参数错误，或暂无数据");
+        } else if (res.code == "-201") {
+          this.$message.error("未登陆");
+        } else if (res.code == "-203") {
+          this.$message.error("对不起，你没有此操作权限");
+        } else {
+          this.$message.error("注册失败，账号已存在");
+        }
+      });
+    },
+    filterCategory(val) {
+      if (val === 1) {
+        return "普通活动";
+      } else if (val === 2) {
+        return "评选活动";
+      }
+    },
+    filterIs_open(val) {
+      if (val === 0) {
+        return "关闭";
+      } else if (val === 1) {
+        return "开启";
+      }
+    },
+    filterIs_voto(val) {
+      if (val === 0) {
+        return "不是";
+      } else if (val === 1) {
+        return "是";
+      }
+    },
+    filterMethod(val) {
+      if (val === 0) {
+        return "单选";
+      } else if (val === 1) {
+        return "最多选两项";
+      } else if (val === 2) {
+        return "最多选三项";
+      } else if (val === 3) {
+        return "最多选四项";
+      } else if (val === 4) {
+        return "最多选五项";
+      }
+    },
+    filterRepeat(val) {
+      if (val === 0) {
+        return "不允重复";
+      } else if (val === 1) {
+        return "每天限制次数";
+      } else if (val === 2) {
+        return "总共限制次数";
+      }
+    },
+    filterIs_detail(val) {
+      if (val === 0) {
+        return "不限制";
+      } else if (val === 1) {
+        return "限制";
       }
     },
   },
@@ -393,5 +611,8 @@ export default {
   .el-input__prefix {
     display: none;
   }
+}
+.SetStatusRadioStyle {
+  padding-top: 15px;
 }
 </style>

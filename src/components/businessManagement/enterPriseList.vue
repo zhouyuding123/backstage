@@ -12,7 +12,7 @@
       </div>
       <div class="contentRight">
         <el-button type="info" plain ref="btn1" @click="showCont($event)"
-          >查询</el-button
+          ><span class="iconfont icon-sousuo"></span></el-button
         >
       </div>
     </div>
@@ -133,17 +133,6 @@
                 {{ filterStatus(scoped.row.auth) }}
               </div>
             </div>
-            <el-dialog title="提示" v-model="SetAuth" width="50%">
-              <el-radio-group v-model="SetAuthRadio.auth">
-                <el-radio :label="1">已认证待审核</el-radio>
-                <el-radio :label="2">审核通过</el-radio>
-                <el-radio :label="3">审核不通过</el-radio>
-              </el-radio-group>
-              <span class="dialog-footer">
-                <el-button @click="SetAuth = false">取 消</el-button>
-                <el-button type="primary" @click="SetAuthadd">确 定</el-button>
-              </span>
-            </el-dialog>
           </template>
         </vxe-column>
         <vxe-column title="操作" align="center">
@@ -170,7 +159,7 @@
       width="50%"
       :destroy-on-close="true"
     >
-      <el-descriptions direction="vertical" :column="3" border>
+      <el-descriptions direction="vertical" :column="4" border>
         <el-descriptions-item label="账号">{{
           authCompanyValue.username
         }}</el-descriptions-item>
@@ -215,6 +204,9 @@
         }}</el-descriptions-item>
         <el-descriptions-item label="身份证号码">{{
           authCompanyValue.card_no
+        }}</el-descriptions-item>
+        <el-descriptions-item label="企业标签">{{
+          authCompanyValue.label
         }}</el-descriptions-item>
         <el-descriptions-item label="身份证正面照片">
           <el-image
@@ -270,6 +262,118 @@
         </span>
       </div>
     </el-dialog>
+    <el-dialog title="审核状态" v-model="SetAuth" width="50%">
+              <el-descriptions direction="vertical" :column="3" border>
+                <el-descriptions-item label="账号">{{
+                  SetAuthValue.username
+                }}</el-descriptions-item>
+                <el-descriptions-item label="id">{{
+                  SetAuthValue.id
+                }}</el-descriptions-item>
+                <el-descriptions-item label="企业名称">{{
+                  SetAuthValue.nickname
+                }}</el-descriptions-item>
+                <el-descriptions-item label="企业电话">{{
+                  SetAuthValue.tel
+                }}</el-descriptions-item>
+                <el-descriptions-item label="头像">
+                  <el-image
+                    class="heaimageStyle"
+                    :src="imagesValue + SetAuthValue.headimage"
+                    alt=""
+                    :preview-src-list="[
+                      imagesValue + SetAuthValue.headimage,
+                    ]"
+                    style="width: 30px; height: 30px"
+                  />
+                </el-descriptions-item>
+                <el-descriptions-item label="企业描述">{{
+                  SetAuthValue.description
+                }}</el-descriptions-item>
+                <el-descriptions-item label="省">{{
+                  SetAuthValue.province
+                }}</el-descriptions-item>
+                <el-descriptions-item label="市">{{
+                  SetAuthValue.city
+                }}</el-descriptions-item>
+                <el-descriptions-item label="区">{{
+                  SetAuthValue.area
+                }}</el-descriptions-item>
+                <el-descriptions-item label="详细地址">{{
+                  SetAuthValue.detail
+                }}</el-descriptions-item>
+                <el-descriptions-item label="负责人">{{
+                  SetAuthValue.name
+                }}</el-descriptions-item>
+                <el-descriptions-item label="负责人电话">{{
+                  SetAuthValue.tel_f
+                }}</el-descriptions-item>
+                <el-descriptions-item label="身份证号码">{{
+                  SetAuthValue.card_no
+                }}</el-descriptions-item>
+                <el-descriptions-item label="身份证正面照片">
+                  <el-image
+                    class="heaimageStyle"
+                    :src="imagesValue + SetAuthValue.card_z"
+                    alt=""
+                    :preview-src-list="[imagesValue + SetAuthValue.card_z]"
+                    style="width: 30px; height: 30px"
+                  />
+                </el-descriptions-item>
+                <el-descriptions-item label="身份证反面照片">
+                  <el-image
+                    class="heaimageStyle"
+                    :src="imagesValue + SetAuthValue.card_f"
+                    alt=""
+                    :preview-src-list="[imagesValue + SetAuthValue.card_f]"
+                    style="width: 30px; height: 30px"
+                  />
+                </el-descriptions-item>
+                <el-descriptions-item label="店铺照片">
+                  <el-image
+                    class="heaimageStyle"
+                    :src="imagesValue + SetAuthValue.shop_img"
+                    alt=""
+                    :preview-src-list="[
+                      imagesValue + SetAuthValue.shop_img,
+                    ]"
+                    style="width: 30px; height: 30px"
+                  />
+                </el-descriptions-item>
+                <el-descriptions-item label="营业执照">
+                  <el-image
+                    class="heaimageStyle"
+                    :src="imagesValue + SetAuthValue.license"
+                    alt=""
+                    :preview-src-list="[imagesValue + SetAuthValue.license]"
+                    style="width: 30px; height: 30px"
+                  />
+                </el-descriptions-item>
+                <el-descriptions-item label="账号认证状态">
+                  <div
+                    :class="{
+                      green: SetAuthValue.auth === 2,
+                      yellow: SetAuthValue.auth == 1,
+                      red: SetAuthValue.auth === 3,
+                    }"
+                  >
+                    {{ filterStatus(SetAuthValue.auth) }}
+                  </div>
+                </el-descriptions-item>
+              </el-descriptions>
+              <div style="padding-top: 15px;">请审核</div>
+              <el-radio-group v-model="SetAuthRadio.auth" style="padding-top: 15px;">
+                <el-radio :label="1">已认证待审核</el-radio>
+                <el-radio :label="2">审核通过</el-radio>
+                <el-radio :label="3">审核不通过</el-radio>
+              </el-radio-group>
+              <div style="padding-top: 15px;">
+                <span class="dialog-footer">
+                <el-button @click="SetAuth = false">取 消</el-button>
+                <el-button type="primary" @click="SetAuthadd">确 定</el-button>
+              </span>
+              </div>
+            </el-dialog>
   </div>
 </template>
 
@@ -295,7 +399,7 @@ export default {
   data() {
     return {
       imagesValue: "",
-      seatchShow: false,
+      seatchShow: true,
       url: {
         setAuthInterface: "company/setAuth",
         authCompanyInterface: "company/authCompany",
@@ -348,6 +452,10 @@ export default {
         license: "",
         auth: "",
       },
+      SetAuthDetails:{
+        id:""
+      },
+      SetAuthValue: [],
     };
   },
   created() {
@@ -452,6 +560,10 @@ export default {
       this.SetAuth = true;
       this.SetAuthRadio.id = data.id;
       this.SetAuthRadio.auth = data.auth;
+      this.SetAuthDetails.id =data.id
+      postD(companyAuthCompanyApi(),this.SetAuthDetails).then(res=> {
+        this.SetAuthValue = res.data;
+      })
     },
     // 提交审核
     SetAuthadd() {
@@ -485,11 +597,9 @@ export default {
     companyDetails(data) {
       this.companyDetailsId.id = data.id;
       this.companyDetailser = true;
-      postD(companyAuthCompanyApi(), this.companyDetailsId).then(
-        (res) => {
-          this.authCompanyValue = res.data;
-        }
-      );
+      postD(companyAuthCompanyApi(), this.companyDetailsId).then((res) => {
+        this.authCompanyValue = res.data;
+      });
     },
     tableRowStyle() {
       return "background: #FFFFFF;box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);border-radius: 10px 10px 10px 10px;opacity: 1;";

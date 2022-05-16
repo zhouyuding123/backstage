@@ -131,11 +131,11 @@ export default {
     },
     // 重置
     submitReset() {
-      this.search.keyword = "";
-      this.search.sex = "";
-      this.search.is_vip = "";
-      this.search.vip_start_time = "";
-      this.search.vip_end_time = "";
+      this.search.keyword = null;
+      this.search.sex = null;
+      this.search.is_vip = null;
+      this.search.vip_start_time = null;
+      this.search.vip_end_time = null;
     },
     submitSearch() {
       postD(UsersIndexApi(), this.search).then((res) => {

@@ -72,7 +72,7 @@
             <div class="divText">活动类型:</div>
           </div></el-col
         >
-        <el-col :span="3"
+        <el-col :span="5"
           ><div>
             <el-select v-model="search.style" placeholder="请选择">
               <el-option
@@ -198,13 +198,13 @@ export default {
       this.activityListValue();
     },
     submitReset() {
-      this.search.keyword = "";
-      this.search.vipGetTime = "";
-      this.search.status = "";
-      this.search.start_time = "";
-      this.search.end_time = "";
-      this.search.category = "";
-      this.search.style = "";
+      this.search.keyword = null;
+      this.search.vipGetTime = null;
+      this.search.status = null;
+      this.search.start_time = null;
+      this.search.end_time = null;
+      this.search.category = null;
+      this.search.style = null;
     },
     getTime(date) {
       this.vipGetTime = date;

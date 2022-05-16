@@ -12,7 +12,7 @@
       </div>
       <div class="contentRight">
         <el-button type="info" plain ref="btn1" @click="showCont($event)"
-          >查询</el-button
+          ><span class="iconfont icon-sousuo"></span></el-button
         >
       </div>
     </div>
@@ -307,7 +307,7 @@ export default {
         card_f: "",
       },
       designerDialog: false,
-      seatchShow: false,
+      seatchShow: true,
     };
   },
   created() {

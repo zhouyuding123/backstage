@@ -29,7 +29,7 @@
         <el-col :span="1"
           ><div>
             <el-button type="info" plain @click="showCont($event)" ref="btn1"
-              >查询</el-button
+              ><span class="iconfont icon-sousuo"></span></el-button
             >
           </div></el-col
         >
@@ -73,7 +73,26 @@
           width="150"
           align="center"
         ></vxe-column>
-        <vxe-column field="content" title="内容" align="center"></vxe-column>
+        <vxe-column
+          field="content"
+          title="内容"
+          align="center"
+          show-overflow="title"
+        >
+          <template v-slot="scoped">
+            <div @click="contentValue(scoped.row)" class="clickHeader">...</div>
+            <el-dialog title="提示" v-model="dialogContentValue" width="30%">
+              <span>{{ scoped.row.content }}</span>
+              <div style="padding-top: 50px">
+                <span>
+                  <el-button type="primary" @click="dialogContentValue = false"
+                    >返 回</el-button
+                  >
+                </span>
+              </div>
+            </el-dialog>
+          </template>
+        </vxe-column>
         <vxe-column
           field="from"
           title="联系人"
@@ -121,13 +140,13 @@ export default {
   data() {
     return {
       imagesValue: "",
-      show: false,
+      show: true,
       input: "",
       tableData: [],
       allAlign: null,
       // 批量删除
       ids: [],
-      idL: {
+      BatchDeletedContent: {
         id: "",
       },
       //批量删除选中时将对象保存到arrs中
@@ -136,6 +155,7 @@ export default {
       complaintRemoveRowList: {
         id: "",
       },
+      dialogContentValue: false,
     };
   },
   created() {
@@ -179,7 +199,7 @@ export default {
         this.arrs.forEach((v) => {
           this.ids.push(v.id);
         });
-        this.idL.id = this.ids.toString();
+        this.BatchDeletedContent.id = this.ids.toString();
         postD(ComplaintSelectDelApi(), this.idL).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
@@ -211,22 +231,20 @@ export default {
       }
       if (complaintRemoveRows === "confirm") {
         this.complaintRemoveRowList.id = data.id;
-        postD(ComplaintDelApi(), this.complaintRemoveRowList).then(
-          (res) => {
-            if (res.code == "200") {
-              this.$message.success("状态修改成功");
-            } else if (res.code == "-200") {
-              this.$message.error("参数错误，或暂无数据");
-            } else if (res.code == "-201") {
-              this.$message.error("未登陆");
-            } else if (res.code == "-203") {
-              this.$message.error("对不起，你没有此操作权限");
-            } else {
-              this.$message.error("注册失败，账号已存在");
-            }
-            this.getListValue();
+        postD(ComplaintDelApi(), this.complaintRemoveRowList).then((res) => {
+          if (res.code == "200") {
+            this.$message.success("状态修改成功");
+          } else if (res.code == "-200") {
+            this.$message.error("参数错误，或暂无数据");
+          } else if (res.code == "-201") {
+            this.$message.error("未登陆");
+          } else if (res.code == "-203") {
+            this.$message.error("对不起，你没有此操作权限");
+          } else {
+            this.$message.error("注册失败，账号已存在");
           }
-        );
+          this.getListValue();
+        });
       }
     },
     tableRowStyle() {
@@ -234,6 +252,9 @@ export default {
     },
     tableStyle() {
       return "box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);border-radius: 10px 10px 10px 10px;opacity: 1;";
+    },
+    contentValue(data) {
+      this.dialogContentValue = true;
     },
   },
 };

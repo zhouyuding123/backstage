@@ -11,7 +11,7 @@
       </div>
       <div class="contentRight">
         <el-button type="info" ref="btn1" @click="showCont($event)"
-          >查询</el-button
+          ><span class="iconfont icon-sousuo"></span></el-button
         >
       </div>
     </div>
@@ -37,11 +37,13 @@
         ></vxe-column>
         <vxe-column field="id" title="id" align="center"></vxe-column>
         <vxe-column field="title" title="标题" align="center"></vxe-column>
-        <vxe-column
-          field="description"
-          title="描述"
-          align="center"
-        ></vxe-column>
+        <vxe-column field="description" title="描述" align="center">
+          <template v-slot="scoped">
+            <div class="clickHeader" @click="descriptionContent(scoped.row)">
+              ...
+            </div>
+          </template>
+        </vxe-column>
         <vxe-column field="sort" title="分类" align="center"></vxe-column>
         <vxe-column field="status" title="展示" align="center">
           <template v-slot="scoped">
@@ -84,6 +86,16 @@
         @page-change="handlePageChange"
       ></vxe-pager>
     </div>
+    <el-dialog title="提示" v-model="dialogdescriptionContent" width="30%">
+      <span>{{ dialogdescriptionContentValue.description }}</span>
+      <div style="padding-top: 30px">
+        <span>
+          <el-button type="primary" @click="dialogdescriptionContent = false"
+            >返回</el-button
+          >
+        </span>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -126,13 +138,15 @@ export default {
         limit: 10,
         totalResult: 0,
       },
-      seatchShow: false,
+      seatchShow: true,
       ids: [],
       //选中时将对象保存到arrs中
       arrs: [],
       productDelsValues: {
         id: "",
       },
+      dialogdescriptionContent: false,
+      dialogdescriptionContentValue: [],
     };
   },
   created() {
@@ -222,6 +236,10 @@ export default {
           this.$message.error("注册失败，账号已存在");
         }
       });
+    },
+    descriptionContent(data) {
+      this.dialogdescriptionContent = true;
+      this.dialogdescriptionContentValue = data;
     },
   },
 };

@@ -52,8 +52,18 @@
           align="center"
         ></vxe-column>
         <vxe-column field="group" title="所属组别" align="center"></vxe-column>
+        <vxe-column field="status" title="管理员账号状态" align="center">
+          <template v-slot="scoped">
+            <el-switch
+              v-model="scoped.row.status"
+              active-color="#13ce66"
+              @change="statusChaged(scoped.row)"
+              :active-value="1"
+              :inactive-value="0"
+            ></el-switch>
+          </template>
+        </vxe-column>
         <vxe-column field="loginip" title="登录ip" align="center"></vxe-column>
-
         <vxe-column
           field="create_time"
           title="登陆时间"
@@ -280,12 +290,14 @@ export default {
           },
         ],
       },
-      //选中的数组
-      ids: {
-        id: "",
-      },
+      //选中的数组 批量删除
+      // 批量删除
+      ids: [],
       //选中时将对象保存到arrs中
       arrs: [],
+      BatchDeletedContent: {
+        id: "",
+      },
       show: false,
       // 删除按钮
       adminListremoveRowFrom: {
@@ -370,6 +382,11 @@ export default {
           },
         ],
       },
+      statusSwitch: {
+        id:"",
+        status:"",
+        group_id:""
+      }
     };
   },
   created() {
@@ -433,8 +450,10 @@ export default {
       }
       if (deleteUsers === "confirm") {
         this.arrs.forEach((v) => {
-          this.ids.id = v.id;
-          postD(AuthAdminSelectDelApi(), this.ids).then((res) => {
+          this.ids.push(v.id)
+        });
+        this.BatchDeletedContent.id = this.ids.toString();
+        postD(AuthAdminSelectDelApi(), this.BatchDeletedContent).then((res) => {
             if (res.code == "200") {
               this.$message.success("状态修改成功");
             } else if (res.code == "-200") {
@@ -448,7 +467,6 @@ export default {
             }
             this.tableDataValue();
           });
-        });
       }
     },
     adminListEditAddmodify(id) {
@@ -544,6 +562,25 @@ export default {
     },
     tableStyle() {
       return "box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.05);border-radius: 10px 10px 10px 10px;opacity: 1;";
+    },
+    // 状态开关
+    statusChaged(data) {
+      this.statusSwitch.id = data.id;
+      this.statusSwitch.status = data.status;
+      this.statusSwitch.group_id = data.group_id;
+      postD(AuthAdminEditApi(),this.statusSwitch).then((res) => {
+        if (res.code == "200") {
+          this.$message.success("状态修改成功");
+        } else if (res.code == "-200") {
+          this.$message.error("参数错误，或暂无数据");
+        } else if (res.code == "-201") {
+          this.$message.error("未登陆");
+        } else if (res.code == "-203") {
+          this.$message.error("对不起，你没有此操作权限");
+        } else {
+          this.$message.error("注册失败，账号已存在");
+        }
+      });
     },
   },
 };

@@ -99,7 +99,7 @@
     </div>
     <div class="contentRight">
       <el-button type="info" plain @click="showCont($event)" ref="btn1"
-        >查询</el-button
+        ><span class="iconfont icon-sousuo"></span></el-button
       >
     </div>
   </div>
@@ -112,7 +112,7 @@ export default {
   inject: ["listForumValue"],
   data() {
     return {
-      seatchShow: false,
+      seatchShow: true,
       tableDatas: [],
       search: {
         keyword: null,

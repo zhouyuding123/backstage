@@ -10,7 +10,7 @@
       </div>
       <div class="contentRight">
         <el-button type="info" plain ref="btn1" @click="showCont($event)"
-          >查询</el-button
+          ><span class="iconfont icon-sousuo"></span></el-button
         >
       </div>
     </div>
@@ -66,8 +66,9 @@
           show-overflow="ellipsis"
         >
           <template v-slot="scoped">
-            <div>
+            <div @click="companySetStatus(scoped.row)">
               <div
+                class="clickHeader"
                 :class="{
                   green: scoped.row.status === 1,
                   yellow: scoped.row.status == 0,
@@ -334,6 +335,77 @@
         <el-button type="primary" @click="dialogEditMatchs">确 定</el-button>
       </span>
     </el-dialog>
+    <el-dialog title="审核" v-model="SetStatus" width="50%">
+      <el-descriptions direction="vertical" :column="5" border>
+        <el-descriptions-item label="用户名" align="center">{{
+          setDetilValue.username
+        }}</el-descriptions-item>
+        <el-descriptions-item label="昵称" align="center">{{
+          setDetilValue.nickname
+        }}</el-descriptions-item>
+        <el-descriptions-item label="头像" align="center">
+          <el-image
+            :src="imagesValue + setDetilValue.headimage"
+            :preview-src-list="[imagesValue + setDetilValue.headimage]"
+            style="width: 40px; height: 40px"
+          />
+        </el-descriptions-item>
+        <el-descriptions-item label="赛事主题" align="center">{{
+          setDetilValue.title
+        }}</el-descriptions-item>
+        <el-descriptions-item label="征集类别" align="center">{{
+          setDetilValue.category
+        }}</el-descriptions-item>
+        <el-descriptions-item label="赛事简介" align="center">{{
+          setDetilValue.description
+        }}</el-descriptions-item>
+        <el-descriptions-item label="赛事机构" align="center">{{
+          setDetilValue.mechanism
+        }}</el-descriptions-item>
+        <el-descriptions-item label="海报" align="center">
+          <el-image
+            :src="imagesValue + setDetilValue.poster"
+            :preview-src-list="[imagesValue + setDetilValue.poster]"
+            style="width: 40px; height: 40px"
+          />
+        </el-descriptions-item>
+
+        <el-descriptions-item label="报名时间" align="center">{{
+          setDetilValue.sign_time
+        }}</el-descriptions-item>
+        <el-descriptions-item label="展示时间" align="center">{{
+          setDetilValue.exh_time
+        }}</el-descriptions-item>
+
+        <el-descriptions-item label="奖项" align="center">
+          <div v-for="(item, index) in detial" :key="index">
+            奖项:{{ item.name }}个数: {{ item.amount }}奖品:{{ item.item }}
+          </div>
+        </el-descriptions-item>
+        <el-descriptions-item label="详情（平台发布）" align="center">{{
+          setDetilValue.content
+        }}</el-descriptions-item>
+        <el-descriptions-item label="浏览量" align="center">{{
+          setDetilValue.browse
+        }}</el-descriptions-item>
+        <el-descriptions-item label="创建时间" align="center">{{
+          setDetilValue.create_time
+        }}</el-descriptions-item>
+      </el-descriptions>
+      <div style="padding-top: 15px;">请选择</div>
+      <el-radio-group v-model="SetStatusRadio.status" class="SetStatusRadioStyle">
+        <el-radio :label="0">等待平台审核</el-radio>
+        <el-radio :label="1">平台通过，进行中</el-radio>
+        <el-radio :label="2">驳回</el-radio>
+        <el-radio :label="3">结束</el-radio>
+      </el-radio-group>
+      <div style="padding-top: 15px;">
+        <span >
+        <el-button @click="SetStatus = false">取 消</el-button>
+        <el-button type="primary" @click="SetStatusValue">确 定</el-button>
+      </span>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -368,7 +440,7 @@ export default {
   data() {
     return {
       imagesValue: "",
-      seatchShow: false,
+      seatchShow: true,
       allAlign: null,
       tableData: [],
       listMacth: {
@@ -478,6 +550,13 @@ export default {
           },
         ],
       },
+      // 审核
+      SetStatusRadio: {
+        id: "",
+        status: "",
+      },
+      SetStatus: false,
+      setDetilValue:[]
     };
   },
   created() {
@@ -702,6 +781,29 @@ export default {
         return "结束";
       }
     },
+    companySetStatus(data) {
+      this.SetStatus = true;
+      this.SetStatusRadio.id = data.id;
+      this.SetStatusRadio.status = data.status;
+      this.setDetilValue = data
+    },
+    SetStatusValue() {
+      postD(matchEditMatchApi(), this.SetStatusRadio).then((res) => {
+        if (res.code == "200") {
+          this.$message.success("状态修改成功");
+          this.SetStatus = false;
+          this.MacthValue();
+        } else if (res.code == "-200") {
+          this.$message.error("参数错误，或暂无数据");
+        } else if (res.code == "-201") {
+          this.$message.error("未登陆");
+        } else if (res.code == "-203") {
+          this.$message.error("对不起，你没有此操作权限");
+        } else {
+          this.$message.error("注册失败，账号已存在");
+        }
+      });
+    },
   },
 };
 </script>
@@ -748,5 +850,8 @@ export default {
       display: flex;
     }
   }
+}
+.SetStatusRadioStyle {
+  padding-top: 15px;
 }
 </style>

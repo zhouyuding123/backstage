@@ -14,16 +14,8 @@
         :header-row-style="tableStyle"
       >
         <vxe-column align="center" type="checkbox" width="50"></vxe-column>
-        <vxe-column
-          field="username"
-          title="username"
-          align="center"
-        ></vxe-column>
-        <vxe-column
-          field="nickname"
-          title="nickname"
-          align="center"
-        ></vxe-column>
+        <vxe-column field="username" title="用户名" align="center"></vxe-column>
+        <vxe-column field="nickname" title="昵称" align="center"></vxe-column>
         <vxe-column
           field="circle"
           title="圈子"
@@ -42,6 +34,11 @@
           align="center"
           show-overflow="tooltip"
         >
+          <template v-slot="scoped">
+            <div class="clickHeader" @click="contentContent(scoped.row)">
+              ...
+            </div>
+          </template>
         </vxe-column>
         <vxe-column title="可见" align="center" width="80">
           <template v-slot="scoped">
@@ -298,6 +295,16 @@
         <el-button @click="forumDetailsShow = false">返回</el-button>
       </span>
     </el-dialog>
+    <el-dialog title="提示" v-model="dialogContent" width="30%">
+      <span>{{ dialogContentValue.content }}</span>
+      <div style="padding-top: 30px">
+        <span>
+          <el-button type="primary" @click="dialogContent = false"
+            >返 回</el-button
+          >
+        </span>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -308,6 +315,7 @@ import {
   CircleListForumApi,
   CircleShowForumApi,
   CircleSetForumStatApi,
+  CircleDelCircleForumApi,
 } from "@/urls/circleUrl.js";
 export default {
   provide() {
@@ -347,6 +355,12 @@ export default {
       votoCount: [],
       votoCountnum: "",
       votoImages: [],
+      // 单个删除
+      forumdelRemove: {
+        id: "",
+      },
+      dialogContent: false,
+      dialogContentValue: [],
     };
   },
   created() {
@@ -369,7 +383,9 @@ export default {
     handlePageChange({ currentPage, pageSize }) {
       this.page1.offset = currentPage;
       this.page1.limit = pageSize;
-      this.listForumValue();
+      postD(CircleListForumApi(), this.page1).then((res) => {
+        this.tableData = res.list;
+      });
     },
     // 同城
     filterStyle(val) {
@@ -457,6 +473,41 @@ export default {
     // 事件处理函数
     async costPlannedAmountChange(param1) {
       this.tableData = param1;
+    },
+    async forumDle(data) {
+      const forumdel = await this.$confirm(
+        "此操作将永久删除管理, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => err);
+      if (forumdel !== "confirm") {
+        return this.$message.info("取消删除");
+      }
+      if (forumdel === "confirm") {
+        this.forumdelRemove.id = data.id;
+        postD(CircleDelCircleForumApi(), this.forumdelRemove).then((res) => {
+          if (res.code == "200") {
+            this.$message.success("状态修改成功");
+            this.listForumValue();
+          } else if (res.code == "-200") {
+            this.$message.error("参数错误，或暂无数据");
+          } else if (res.code == "-201") {
+            this.$message.error("未登陆");
+          } else if (res.code == "-203") {
+            this.$message.error("对不起，你没有此操作权限");
+          } else {
+            this.$message.error("注册失败，账号已存在");
+          }
+        });
+      }
+    },
+    contentContent(data) {
+      this.dialogContentValue = data;
+      this.dialogContent = true;
     },
   },
 };

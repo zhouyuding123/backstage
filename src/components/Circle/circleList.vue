@@ -10,7 +10,7 @@
       </div>
       <div class="contentRight">
         <el-button type="info" plain ref="btn1" @click="showCont($event)"
-          >查询</el-button
+          ><span class="iconfont icon-sousuo"></span></el-button
         >
       </div>
     </div>
@@ -52,12 +52,13 @@
           width="250"
           align="center"
         ></vxe-column>
-        <vxe-column
-          field="description"
-          title="简介"
-          width="250"
-          align="center"
-        ></vxe-column>
+        <vxe-column field="description" title="简介" width="250" align="center">
+          <template v-slot="scoped">
+            <div @click="descriptionContent(scoped.row)" class="clickHeader">
+              ...
+            </div>
+          </template>
+        </vxe-column>
         <vxe-column width="60" align="center">
           <template v-slot="scoped">
             <el-image
@@ -353,6 +354,16 @@
         </span>
       </div>
     </el-dialog>
+    <el-dialog title="提示" v-model="dialogDescriptionContent" width="30%">
+      <span>{{ descriptionValue.description }}</span>
+      <div style="padding-top: 15px">
+        <span>
+          <el-button type="primary" @click="dialogDescriptionContent = false"
+            >返 回</el-button
+          >
+        </span>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -384,7 +395,7 @@ export default {
   data() {
     return {
       imagesValue: "",
-      seatchShow: false,
+      seatchShow: true,
       tableData: [],
       allAlign: null,
       // 打开人员
@@ -417,12 +428,6 @@ export default {
         limit: 10,
         totalResult: 0,
       },
-      // 论坛分页
-      page2: {
-        offset: 1,
-        limit: 10,
-        totalResult: 0,
-      },
       //选中的数组  批量删除 选中时将对象保存到arrs中
       ids: [],
       arrs: [],
@@ -442,7 +447,6 @@ export default {
         id: "",
         status: "",
       },
-
       // 论坛
       forum_countInput: false,
       forum_countId: {
@@ -462,6 +466,8 @@ export default {
       forum_countdel: {
         id: "",
       },
+      dialogDescriptionContent: false,
+      descriptionValue: [],
     };
   },
   created() {
@@ -485,11 +491,9 @@ export default {
     member_countClick(data) {
       this.circlePersonnel.id = data.id;
       this.member_countClicks = true;
-      postD(CircleGetCircleMemberApi(), this.circlePersonnel).then(
-        (res) => {
-          this.circlePersonnelTab = res.list;
-        }
-      );
+      postD(CircleGetCircleMemberApi(), this.circlePersonnel).then((res) => {
+        this.circlePersonnelTab = res.list;
+      });
     },
     // 圈子成员搜索
     keywordSeach(data) {
@@ -507,33 +511,33 @@ export default {
       this.detilPersonne.id = data.id.toString();
     },
     personneDetilYes() {
-      postD(CircleDelCircleMemberApi(), this.detilPersonne).then(
-        (res) => {
-          if (res.code == "200") {
-            this.$message.success("状态修改成功");
-            postD(this.url.getCircleMemberInterface, this.circlePersonnel).then(
-              (res) => {
-                this.circlePersonnelTab = res.list;
-              }
-            );
-          } else if (res.code == "-200") {
-            this.$message.error("参数错误，或暂无数据");
-          } else if (res.code == "-201") {
-            this.$message.error("未登陆");
-          } else if (res.code == "-203") {
-            this.$message.error("对不起，你没有此操作权限");
-          } else {
-            this.$message.error("注册失败，账号已存在");
-          }
+      postD(CircleDelCircleMemberApi(), this.detilPersonne).then((res) => {
+        if (res.code == "200") {
+          this.$message.success("状态修改成功");
+          postD(this.url.getCircleMemberInterface, this.circlePersonnel).then(
+            (res) => {
+              this.circlePersonnelTab = res.list;
+            }
+          );
+        } else if (res.code == "-200") {
+          this.$message.error("参数错误，或暂无数据");
+        } else if (res.code == "-201") {
+          this.$message.error("未登陆");
+        } else if (res.code == "-203") {
+          this.$message.error("对不起，你没有此操作权限");
+        } else {
+          this.$message.error("注册失败，账号已存在");
         }
-      );
+      });
       this.personneDetils = false;
     },
     // 分页
     handlePageChange({ currentPage, pageSize }) {
       this.page1.offset = currentPage;
       this.page1.limit = pageSize;
-      this.circleValue();
+      postD(CircleGetListApi(), this.page1).then((res) => {
+        this.tableData = res.list;
+      });
     },
     // 批量删除
     checkboxChangeEventer(data) {
@@ -609,53 +613,45 @@ export default {
     circleStatys(data) {
       this.statusModelRadio.id = data.id.toString();
       this.statusModelRadio.status = data.status.toString();
-      postD(CircleSetCircleStatApi(), this.statusModelRadio).then(
-        (res) => {
-          if (res.code == "200") {
-            this.$message.success("状态修改成功");
-          } else if (res.code == "-200") {
-            this.$message.error("参数错误，或暂无数据");
-          } else if (res.code == "-201") {
-            this.$message.error("未登陆");
-          } else if (res.code == "-203") {
-            this.$message.error("对不起，你没有此操作权限");
-          } else {
-            this.$message.error("注册失败，账号已存在");
-          }
+      postD(CircleSetCircleStatApi(), this.statusModelRadio).then((res) => {
+        if (res.code == "200") {
+          this.$message.success("状态修改成功");
+        } else if (res.code == "-200") {
+          this.$message.error("参数错误，或暂无数据");
+        } else if (res.code == "-201") {
+          this.$message.error("未登陆");
+        } else if (res.code == "-203") {
+          this.$message.error("对不起，你没有此操作权限");
+        } else {
+          this.$message.error("注册失败，账号已存在");
         }
-      );
+      });
     },
     // 论坛
     forum_countClick(data) {
       this.forum_countId.id = data.id;
       this.forum_countInput = true;
-      postD(CircleGetCircleForumApi(), this.forum_countId).then(
-        (res) => {
-          this.forum_countTab = res.list;
-          this.forum_countId.totalResult = res.count;
-        }
-      );
+      postD(CircleGetCircleForumApi(), this.forum_countId).then((res) => {
+        this.forum_countTab = res.list;
+        this.forum_countId.totalResult = res.count;
+      });
     },
     // 论坛分页
     handlePageChangeFroum_count({ currentPage, pageSize }) {
       this.forum_countId.offset = currentPage;
       this.forum_countId.limit = pageSize;
-      postD(CircleGetCircleForumApi(), this.forum_countId).then(
-        (res) => {
-          this.forum_countTab = res.list;
-          this.forum_countId.totalResult = res.count;
-        }
-      );
+      postD(CircleGetCircleForumApi(), this.forum_countId).then((res) => {
+        this.forum_countTab = res.list;
+        this.forum_countId.totalResult = res.count;
+      });
     },
     // 论坛详情
     forumDetails(data) {
       this.forumDetailsDialog = true;
       this.forum_countdetails.id = data.id;
-      postD(CircleShowForumApi(), this.forum_countdetails).then(
-        (res) => {
-          this.forumDetailsValue = res.data;
-        }
-      );
+      postD(CircleShowForumApi(), this.forum_countdetails).then((res) => {
+        this.forumDetailsValue = res.data;
+      });
     },
     // 论坛删除
     async forumDle(data) {
@@ -673,37 +669,13 @@ export default {
       }
       if (forumDles === "confirm") {
         this.forum_countdel.id = data.id;
-        postD(CircleDelCircleForumApi(), this.forum_countdel).then(
-          (res) => {
-            if (res.code == "200") {
-              this.$message.success("状态修改成功");
-              postD(CircleGetCircleForumApi(), this.forum_countId).then(
-                (res) => {
-                  this.forum_countTab = res.list;
-                  this.forum_countId.totalResult = res.count;
-                }
-              );
-            } else if (res.code == "-200") {
-              this.$message.error("参数错误，或暂无数据");
-            } else if (res.code == "-201") {
-              this.$message.error("未登陆");
-            } else if (res.code == "-203") {
-              this.$message.error("对不起，你没有此操作权限");
-            } else {
-              this.$message.error("注册失败，账号已存在");
-            }
-          }
-        );
-      }
-    },
-    // 论坛审核
-    forumStatus(data) {
-      this.forumStatusRadio.id = data.id;
-      this.forumStatusRadio.status = data.status;
-      postD(CircleSetForumStatApi(), this.forumStatusRadio).then(
-        (res) => {
+        postD(CircleDelCircleForumApi(), this.forum_countdel).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
+            postD(CircleGetCircleForumApi(), this.forum_countId).then((res) => {
+              this.forum_countTab = res.list;
+              this.forum_countId.totalResult = res.count;
+            });
           } else if (res.code == "-200") {
             this.$message.error("参数错误，或暂无数据");
           } else if (res.code == "-201") {
@@ -713,8 +685,26 @@ export default {
           } else {
             this.$message.error("注册失败，账号已存在");
           }
+        });
+      }
+    },
+    // 论坛审核
+    forumStatus(data) {
+      this.forumStatusRadio.id = data.id;
+      this.forumStatusRadio.status = data.status;
+      postD(CircleSetForumStatApi(), this.forumStatusRadio).then((res) => {
+        if (res.code == "200") {
+          this.$message.success("状态修改成功");
+        } else if (res.code == "-200") {
+          this.$message.error("参数错误，或暂无数据");
+        } else if (res.code == "-201") {
+          this.$message.error("未登陆");
+        } else if (res.code == "-203") {
+          this.$message.error("对不起，你没有此操作权限");
+        } else {
+          this.$message.error("注册失败，账号已存在");
         }
-      );
+      });
     },
     showCont() {
       this.seatchShow = !this.seatchShow;
@@ -729,6 +719,10 @@ export default {
           this.tableData = res.list;
         }
       );
+    },
+    descriptionContent(data) {
+      this.dialogDescriptionContent = true;
+      this.descriptionValue = data;
     },
   },
 };

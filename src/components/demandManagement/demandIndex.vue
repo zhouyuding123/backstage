@@ -22,7 +22,7 @@
         <el-col :span="1">
           <div class="contentRight">
             <el-button type="info" plain ref="btn1" @click="showCont($event)"
-              >查询</el-button
+              ><span class="iconfont icon-sousuo"></span></el-button
             >
           </div>
         </el-col>
@@ -154,7 +154,7 @@ export default {
       allAlign: null,
       // 批量删除
       ids: [],
-      idL: {
+      BatchDeletedContent: {
         id: "",
       },
       //批量删除选中时将对象保存到arrs中
@@ -169,7 +169,7 @@ export default {
         limit: 10,
         totalResult: 0,
       },
-      seatchShow: false,
+      seatchShow: true,
     };
   },
   created() {
@@ -190,7 +190,9 @@ export default {
     handlePageChange({ currentPage, pageSize }) {
       this.page1.offset = currentPage;
       this.page1.limit = pageSize;
-      this.demandIndexValue();
+      postD(DemandIndexApi(),this.page1).then((res) => {
+        this.tableData = res.data;
+      });
     },
     // 批量删除
     checkboxChangeEvent(data) {
@@ -213,7 +215,8 @@ export default {
         this.arrs.forEach((v) => {
           this.ids.push(v.id);
         });
-        postD(DemandSelectDelApi(), this.idl).then((res) => {
+        this.BatchDeletedContent.id = this.ids.toString();
+        postD(DemandSelectDelApi(), this.BatchDeletedContent).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
           } else if (res.code == "-200") {

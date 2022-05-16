@@ -136,11 +136,11 @@ export default {
       this.enterprise();
     },
     submitReset() {
-      this.search.keyword = "";
-      this.search.is_vip = "";
-      this.search.vip_start_time = "";
-      this.search.vip_end_time = "";
-      this.search.auth = "";
+      this.search.keyword = null;
+      this.search.is_vip = null;
+      this.search.vip_start_time = null;
+      this.search.vip_end_time = null;
+      this.search.auth = null;
     },
     getTime(date) {
       this.vipGetTime = date;
