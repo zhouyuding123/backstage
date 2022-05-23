@@ -115,7 +115,7 @@ export default {
       seatchShow: true,
       tableDatas: [],
       search: {
-        keyword: null,
+        keyword: "",
         is_circle_forum: null,
         style: null,
         city: null,
@@ -146,7 +146,7 @@ export default {
   },
   methods: {
     submitReset() {
-      this.search.keyword = null;
+      this.search.keyword = "";
       this.search.is_circle_forum = null;
       this.search.style = null;
       this.search.city = null;
@@ -154,9 +154,9 @@ export default {
       this.search.lng = null;
     },
     submitSearch() {
-      postD(CircleListForumApi, this.search).then((res) => {
+      postD(CircleListForumApi(), this.search).then((res) => {
         this.tableDatas = res.list;
-        this.$emit("change", this.tableDatas);
+        this.$emit("changeser", this.tableDatas);
       });
     },
     Refresh() {

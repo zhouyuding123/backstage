@@ -21,7 +21,6 @@ const routes = [
       {
         path: "/home",
         redirect: "/pageHome",
-
       },
       {
         path: "/pageHome",

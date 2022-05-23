@@ -1,6 +1,6 @@
 <template>
   <div class="backColor">
-    <forum-seatch @change="costPlannedAmountChange" />
+    <forum-seatch @changeser="costPlannedAmountChange" />
     <div class="twons">
       <vxe-table
         round
@@ -102,7 +102,7 @@
           <template v-slot="forum">
             <el-row>
               &nbsp;&nbsp;&nbsp;&nbsp;
-              <el-button type="primary" @click="forumDetails(forum.row)"
+              <el-button type="primary" @click="forumDetailsValues(forum.row)"
                 >详情</el-button
               >
               <el-button type="danger" @click="forumDle(forum.row)"
@@ -256,7 +256,7 @@
               </div>
               <div>
                 <div class="DetailPhoper">
-                  <p>{{ votoCountnum }}人参与</p>
+                  <p>几人参与</p>
                 </div>
                 <div v-if="imagesShows">
                   <div
@@ -429,7 +429,7 @@ export default {
       });
     },
     // 详情
-    forumDetails(data) {
+    forumDetailsValues(data) {
       this.forumDetailsShow = true;
       this.forumDetailsId.id = data.id;
       postD(CircleShowForumApi(), this.forumDetailsId).then((res) => {
@@ -663,11 +663,11 @@ export default {
   top: -30px;
   color: #eeeeee;
 }
-/deep/.el-radio__input.is-checked .el-radio__inner {
-  border-color: greenyellow;
-  background-color: greenyellow;
+.el-checkbox {
+  border-color: #00B567;
+  background-color: #00B567;
 }
-/deep/.el-radio__inner:hover {
-  border-color: greenyellow;
+/deep/.el-checkbox__inner:hover {
+  border-color: #00B567;
 }
 </style>
