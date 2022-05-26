@@ -440,6 +440,7 @@ export default {
       this.page1.limit = pageSize;
       postD(ActivityListActivityApi(), this.page1).then((res) => {
         this.tableData = res.list;
+        this.page1.totalResult= res.count
       });
     },
     showCont() {
@@ -488,7 +489,6 @@ export default {
       }
     },
     companySetStatus(data) {
-      console.log(data);
       this.SetStatus = true;
       this.SetStatusRadio.id = data.id;
       this.SetStatusRadio.status = data.status;

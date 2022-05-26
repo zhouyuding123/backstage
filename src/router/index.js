@@ -186,6 +186,22 @@ const routes = [
         , meta: {
           title: "商品类别列表"
         }
+      },
+      {
+        path: "/Brand/getList",
+        name: "Brand",
+        component: () => import("../components/brand/brandList.vue")
+        , meta: {
+          title: "品牌列表"
+        }
+      },
+      {
+        path: "/Business/index",
+        name: "Business",
+        component: () => import("../components/Business/BusinessList.vue")
+        , meta: {
+          title: "门店列表"
+        }
       }
     ]
   },
@@ -195,15 +211,15 @@ const routes = [
     component: () => import("../views/About.vue"),
   },
   {
-    path:"/404",
-    name:"/404",
+    path: "/404",
+    name: "/404",
     component: () => import("../views/404.vue"),
   },
   {
-    path:"/:pathMatch(.*)",
-    redirect:"/404"
+    path: "/:pathMatch(.*)",
+    redirect: "/404"
   }
-  
+
 ];
 
 const router = createRouter({
