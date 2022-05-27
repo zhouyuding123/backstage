@@ -582,5 +582,4 @@ export default {
 .it_votoStyle {
   width: 100%;
 }
-
 </style>
