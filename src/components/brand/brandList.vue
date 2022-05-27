@@ -2,7 +2,6 @@
   <div class="backColor">
     <brand-seatch v-show="seatchShow" @brandsSeatch="costPlannedAmountChange" />
     <div class="firstColor">
-      <add-activity />
       <div>
         <el-button type="danger" @click="brandDels">批量删除</el-button>
       </div>
@@ -112,7 +111,8 @@
         <vxe-column title="操作" align="center"> 
             <template v-slot="scoped">
                 <div class="postDyex">
-                    <brand-del :delBrand="scoped.row" />
+                    <brand-del :delBrand="scoped.row" class="postDyexer" />
+                    <brand-details :detailsBrand="scoped.row" class="postDyexer" />
                 </div>
             </template>
         </vxe-column>
@@ -200,6 +200,7 @@
 <script>
 import brandDel from "./brandSeatch/brandDel.vue"
 import brandSeatch from "./brandSeatch/brandSeatch.vue";
+import brandDetails from "./brandSeatch/brandDetails.vue"
 import {
   BrandGetListApi,
   BrandSetExaApi,
@@ -219,7 +220,8 @@ export default {
   },
   components: {
     brandSeatch,
-    brandDel
+    brandDel,
+    brandDetails
   },
   data() {
     return {

@@ -14,3 +14,7 @@ export const BrandSelectDelApi = () => {
 export const brandDelApi = () => {
     return "brand/del"
 }
+// 详情
+export const BrandShowApi = () => {
+    return "Brand/show"
+}
