@@ -108,9 +108,6 @@
         </el-descriptions-item>
 
         <div v-if="ActivityDetailsValue.is_voto == 1">
-          <el-descriptions-item label="展示时间" align="center">
-            {{ voto_configValue.exh_time }}
-          </el-descriptions-item>
           <el-descriptions-item label="投票开始时间" align="center">
             {{ voto_configValue.voto_start_time }}
           </el-descriptions-item>
