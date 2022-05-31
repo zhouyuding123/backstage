@@ -11,38 +11,13 @@
         :model="addMacthValue"
         :rules="addMacthValueRules"
         ref="addMacthValueRef"
-        label-width="100px"
+        label-width="110px"
       >
         <el-form-item label="赛事主题" prop="title">
           <el-input v-model="addMacthValue.title"></el-input>
         </el-form-item>
-        <el-form-item label="征集类别" prop="category">
-          <el-input v-model="addMacthValue.category"></el-input>
-        </el-form-item>
-        <el-form-item label="赛事简介" prop="description">
+        <el-form-item label="赛事介绍" prop="description">
           <el-input v-model="addMacthValue.description"></el-input>
-        </el-form-item>
-        <el-form-item label="赛事机构" prop="mechanism">
-          <el-input v-model="addMacthValue.mechanism"></el-input>
-        </el-form-item>
-
-        <el-form-item label="报名时间" prop="sign_time">
-          <el-date-picker
-            v-model="sign_timeTime"
-            type="datetime"
-            placeholder="选择报名时间"
-            @change="getTime"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="展示时间" prop="exh_time">
-          <el-date-picker
-            v-model="exh_timeTime"
-            type="datetime"
-            placeholder="选择展示时间"
-            @change="gitTime"
-          >
-          </el-date-picker>
         </el-form-item>
         <el-form-item label="海报" prop="poster">
           <el-upload
@@ -80,12 +55,75 @@
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
-        <!-- 后期改 -->
-        <el-form-item label="赛事详情内容" prop="content" style="width: 100%">
-          <el-input type="textarea" v-model="addMacthValue.content"></el-input>
+        <el-form-item label="报名开始时间" prop="sign_start_time">
+          <el-date-picker
+            v-model="addMacthValue.sign_start_time"
+            type="datetime"
+            placeholder="选择报名开始时间"
+            @change="getTime"
+          >
+          </el-date-picker>
         </el-form-item>
+        <el-form-item label="报名结束时间" prop="sign_end_time">
+          <el-date-picker
+            v-model="addMacthValue.sign_end_time"
+            type="datetime"
+            placeholder="选择报名结束时间"
+            @change="gitTime"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="评选开始时间" prop="voto_start_time">
+          <el-date-picker
+            v-model="addMacthValue.voto_start_time"
+            type="datetime"
+            placeholder="选择评选开始时间"
+            @change="gatTime"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="评选结束时间" prop="voto_end_time">
+          <el-date-picker
+            v-model="addMacthValue.voto_end_time"
+            type="datetime"
+            placeholder="选择评选结束时间"
+            @change="gutTime"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="公示开始时间" prop="exh_start_time">
+          <el-date-picker
+            v-model="addMacthValue.exh_start_time"
+            type="datetime"
+            placeholder="选择公示开始时间"
+            @change="gltTime"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="公示结束时间" prop="exh_end_time">
+          <el-date-picker
+            v-model="addMacthValue.exh_end_time"
+            type="datetime"
+            placeholder="选择公示结束时间"
+            @change="gctTime"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="评选规则" prop="rule">
+          <el-input v-model="addMacthValue.rule"></el-input>
+        </el-form-item>
+        <el-form-item label="设计说明" prop="explain">
+          <el-input v-model="addMacthValue.explain"></el-input>
+        </el-form-item>
+        <el-form-item label="参赛须知" prop="entry_info">
+          <el-input v-model="addMacthValue.entry_info"></el-input>
+        </el-form-item>
+        <el-form-item label="获奖通知" prop="notice">
+          <el-input v-model="addMacthValue.notice"></el-input>
+        </el-form-item>
+
         <div v-for="(item, index) in addMacthValue.prize" :key="index">
-          <el-form-item label="活动奖品" prop="prize" style="width: 100%">
+          <el-form-item label="奖励" prop="prize" style="width: 100%">
             <p>奖项名称:</p>
             <el-input v-model="item.name" style="width: 15%"></el-input>
             <p>数量:</p>
@@ -96,6 +134,20 @@
               <img src="../../../assets/lovig/jiahao.png" alt="" />
             </p>
             <p class="addInput" v-else @click="delInputHandle(index)">
+              <img src="../../../assets/lovig/jianhao.png" alt="" />
+            </p>
+          </el-form-item>
+        </div>
+        <div v-for="(item, index) in addMacthValue.standard" :key="index">
+          <el-form-item label="评选标准" prop="standard" style="width: 100%">
+            <p>评选规则:</p>
+            <el-input v-model="item.title" style="width: 25%"></el-input>
+            <p>评选规则的描述:</p>
+            <el-input v-model="item.description" style="width: 25%"></el-input>
+            <p class="addInput" @click="addStandard" v-if="index === 0">
+              <img src="../../../assets/lovig/jiahao.png" alt="" />
+            </p>
+            <p class="addInput" v-else @click="delStandard(index)">
               <img src="../../../assets/lovig/jianhao.png" alt="" />
             </p>
           </el-form-item>
@@ -121,11 +173,15 @@ export default {
       addMacthShow: false,
       addMacthValue: {
         title: "",
-        category: "",
-        poster: "",
         description: "",
-        mechanism: "",
         thumb: "",
+        poster: "",
+        sign_start_time: "",
+        sign_end_time: "",
+        voto_start_time: "",
+        voto_end_time: "",
+        exh_start_time: "",
+        exh_end_time: "",
         prize: [
           {
             name: "",
@@ -133,9 +189,16 @@ export default {
             item: "",
           },
         ],
-        sign_time: "",
-        exh_time: "",
-        content: "",
+        standard: [
+          {
+            title: "",
+            description: "",
+          },
+        ],
+        rule: "",
+        explain: "",
+        entry_info: "",
+        notice: "",
       },
       addMacthValueRules: {
         title: [
@@ -166,13 +229,6 @@ export default {
             tirgger: "blur",
           },
         ],
-        mechanism: [
-          {
-            required: true,
-            message: "请输入赛事机构",
-            tirgger: "blur",
-          },
-        ],
         thumb: [
           {
             required: true,
@@ -180,24 +236,78 @@ export default {
             tirgger: "blur",
           },
         ],
-        sign_time: [
+        sign_start_time: [
           {
             required: true,
-            message: "请输入报名时间",
+            message: "请输入报名开始时间",
             tirgger: "blur",
           },
         ],
-        exh_time: [
+        sign_end_time: [
           {
             required: true,
-            message: "请输入展示时间",
+            message: "请输入报名结束时间",
             tirgger: "blur",
           },
         ],
+        voto_start_time: [
+          {
+            required: true,
+            message: "请输入评选开始时间",
+            tirgger: "blur",
+          },
+        ],
+        voto_end_time: [
+          {
+            required: true,
+            message: "请输入评选结束时间",
+            tirgger: "blur",
+          },
+        ],
+        exh_start_time: [
+          {
+            required: true,
+            message: "请输入公示开始时间",
+            tirgger: "blur",
+          },
+        ],
+        exh_end_time: [
+          {
+            required: true,
+            message: "请输入公示结束时间",
+            tirgger: "blur",
+          },
+        ],
+        rule: [
+          {
+            required: true,
+            message: "请输入评选规则",
+            tirgger: "blur",
+          },
+        ],
+        explain: [
+          {
+            required: true,
+            message: "请输入设计说明",
+            tirgger: "blur",
+          },
+        ],
+        entry_info: [
+          {
+            required: true,
+            message: "请输入参赛须知",
+            tirgger: "blur",
+          },
+        ],
+        notice: [
+          {
+            required: true,
+            message: "请输入公示获奖通知",
+            tirgger: "blur",
+          },
+        ],
+
       },
-      // 时间
-      sign_timeTime: "",
-      exh_timeTime: "",
       imageUrl: "",
       fileType: "images",
       // 封面图
@@ -214,6 +324,12 @@ export default {
     delInputHandle(index) {
       this.addMacthValue.prize.splice(index, 1);
     },
+    addStandard() {
+      this.addMacthValue.standard.push({title:"",description:""})
+    },
+    delStandard(index) {
+      this.addMacthValue.standard.splice(index, 1);
+    },
     handleAvatarSuccessthumb(res, file) {
       this.imageUrlthumb = URL.createObjectURL(file.raw);
       this.addMacthValue.thumb = res.url;
@@ -224,12 +340,34 @@ export default {
       this.addMacthValue.poster = res.url;
     },
     getTime(date) {
-      this.sign_timeTime = date;
-      this.addMacthValue.sign_time = timestampToTime(this.sign_timeTime / 1000);
+      this.addMacthValue.sign_start_time = timestampToTime(
+        date/1000
+      );
     },
     gitTime(date) {
-      this.exh_timeTime = date;
-      this.addMacthValue.exh_time = timestampToTime(this.exh_timeTime / 1000);
+      this.addMacthValue.sign_end_time = timestampToTime(
+        date / 1000
+      );
+    },
+    gatTime(date) {
+      this.addMacthValue.voto_start_time = timestampToTime(
+        date / 1000
+      );
+    },
+    gutTime(date) {
+      this.addMacthValue.voto_end_time = timestampToTime(
+        date / 1000
+      );
+    },
+    gltTime(date) {
+      this.addMacthValue.exh_start_time = timestampToTime(
+        date / 1000
+      );
+    },
+    gctTime(date) {
+      this.addMacthValue.exh_end_time = timestampToTime(
+        date / 1000
+      );
     },
     beforeAvatarUpload(file) {
       beforeAvatar(file);
@@ -241,21 +379,21 @@ export default {
     addEventContent() {
       this.$refs.addMacthValueRef.validate((valid) => {
         if (!valid) return;
-        postD(matchReleaseApi(), this.addMacthValue).then((res) => {
-          if (res.code == "200") {
-            this.$message.success("状态修改成功");
-            this.MacthValue();
-            this.addMacthShow = false;
-          } else if (res.code == "-200") {
-            this.$message.error("参数错误，或暂无数据");
-          } else if (res.code == "-201") {
-            this.$message.error("未登陆");
-          } else if (res.code == "-203") {
-            this.$message.error("对不起，你没有此操作权限");
-          } else {
-            this.$message.error("注册失败，账号已存在");
-          }
-        });
+          postD(matchReleaseApi(), this.addMacthValue).then((res) => {
+            if (res.code == "200") {
+              this.$message.success("状态修改成功");
+              this.MacthValue();
+              this.addMacthShow = false;
+            } else if (res.code == "-200") {
+              this.$message.error("参数错误，或暂无数据");
+            } else if (res.code == "-201") {
+              this.$message.error("未登陆");
+            } else if (res.code == "-203") {
+              this.$message.error("对不起，你没有此操作权限");
+            } else {
+              this.$message.error("注册失败，账号已存在");
+            }
+          });
       });
     },
   },

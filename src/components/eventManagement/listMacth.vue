@@ -10,8 +10,8 @@
       </div>
       <div class="contentRight">
         <el-button type="info" plain ref="btn1" @click="showCont($event)"
-          ><span class="iconfont icon-sousuo"></span></el-button
-        >
+          ><span class="iconfont icon-sousuo"></span
+        ></el-button>
       </div>
     </div>
     <div class="twons">
@@ -47,15 +47,15 @@
         </vxe-column>
         <vxe-column field="username" title="用户名" align="center"></vxe-column>
         <vxe-column field="nickname" title="昵称" align="center"></vxe-column>
-        <vxe-column field="title" title="赛事主题" align="center"></vxe-column>\
-        <vxe-column width="50" align="center">
+        <vxe-column field="title" title="赛事主题" align="center"></vxe-column>
+        <vxe-column width="50" align="center" title="海报">
           <template v-slot="scoped">
             <el-image
               :src="imagesValue + scoped.row.poster"
               alt=""
               :preview-src-list="[imagesValue + scoped.row.poster]"
               style="width: 40px; height: 40px"
-              class="imgStyles"
+              class="imgStyleser"
             />
           </template>
         </vxe-column>
@@ -93,31 +93,10 @@
           </template>
         </vxe-column>
         <vxe-column
-          field="sign_time"
-          title="报名时间"
-          align="center"
-          width="145"
-          show-overflow="title"
-        ></vxe-column>
-        <vxe-column
-          field="exh_time"
-          title="展示时间"
-          align="center"
-          width="145"
-          show-overflow="title"
-        ></vxe-column>
-        <vxe-column
           field="browse"
           title="浏览量"
           align="center"
           width="75"
-        ></vxe-column>
-        <vxe-column
-          field="create_time"
-          title="创建时间"
-          align="center"
-          width="145"
-          show-overflow="title"
         ></vxe-column>
         <vxe-column title="操作" align="center">
           <template v-slot="scoped">
@@ -158,6 +137,9 @@
     </div>
     <el-dialog title="详情" v-model="dialogShow" width="70%">
       <el-descriptions direction="vertical" :column="5" border>
+      <el-descriptions-item label="id" align="center">{{
+          detailsValues.id
+        }}</el-descriptions-item>
         <el-descriptions-item label="用户名" align="center">{{
           detailsValues.username
         }}</el-descriptions-item>
@@ -174,14 +156,8 @@
         <el-descriptions-item label="赛事主题" align="center">{{
           detailsValues.title
         }}</el-descriptions-item>
-        <el-descriptions-item label="征集类别" align="center">{{
-          detailsValues.category
-        }}</el-descriptions-item>
-        <el-descriptions-item label="赛事简介" align="center">{{
+        <el-descriptions-item label="赛事介绍" align="center">{{
           detailsValues.description
-        }}</el-descriptions-item>
-        <el-descriptions-item label="赛事机构" align="center">{{
-          detailsValues.mechanism
         }}</el-descriptions-item>
         <el-descriptions-item label="海报" align="center">
           <el-image
@@ -190,20 +166,51 @@
             style="width: 40px; height: 40px"
           />
         </el-descriptions-item>
+        <el-descriptions-item label="报名开始时间" align="center">{{
+          detailsValues.sign_start_time
+        }}</el-descriptions-item>
+        <el-descriptions-item label="报名结束时间" align="center">{{
+          detailsValues.sign_end_time
+        }}</el-descriptions-item>
+        <el-descriptions-item label="评选开始时间" align="center">{{
+          detailsValues.voto_start_time
+        }}</el-descriptions-item>
+        <el-descriptions-item label="评选结束时间" align="center">{{
+          detailsValues.voto_end_time
+        }}</el-descriptions-item>
+        <el-descriptions-item label="公示开始时间" align="center">{{
+          detailsValues.exh_start_time
+        }}</el-descriptions-item>
+        <el-descriptions-item label="公示结束时间" align="center">{{
+          detailsValues.exh_end_time
+        }}</el-descriptions-item>
 
-        <el-descriptions-item label="报名时间" align="center">{{
-          detailsValues.sign_time
+        <el-descriptions-item label="评选规则" align="center">{{
+          detailsValues.rule
         }}</el-descriptions-item>
-        <el-descriptions-item label="展示时间" align="center">{{
-          detailsValues.exh_time
+        <el-descriptions-item label="设计说明" align="center">{{
+          detailsValues.explain
         }}</el-descriptions-item>
+        <el-descriptions-item label="参赛须知" align="center">{{
+          detailsValues.entry_info
+        }}</el-descriptions-item>
+        <el-descriptions-item label="获奖通知" align="center">{{
+          detailsValues.notice
+        }}</el-descriptions-item>
+
+        
 
         <el-descriptions-item label="奖项" align="center">
           <div v-for="(item, index) in detial" :key="index">
             奖项:{{ item.name }}个数: {{ item.amount }}奖品:{{ item.item }}
           </div>
         </el-descriptions-item>
-        <el-descriptions-item label="创建时间" align="center">
+        <el-descriptions-item label="奖项" align="center">
+          <div v-for="(item, index) in standardDetial" :key="index">
+            评选规则:{{ item.title }}评选规则的描述: {{ item.description }}
+          </div>
+        </el-descriptions-item>
+        <el-descriptions-item label="平台审核" align="center">
           <div
             :class="{
               orange: detailsValues.status == 3,
@@ -245,34 +252,9 @@
         <el-form-item label="赛事主题" prop="title">
           <el-input v-model="editFrom.title"></el-input>
         </el-form-item>
-        <el-form-item label="征集类别" prop="category">
-          <el-input v-model="editFrom.category"></el-input>
-        </el-form-item>
         <el-form-item label="赛事简介" prop="description">
           <el-input v-model="editFrom.description"></el-input>
         </el-form-item>
-        <el-form-item label="赛事机构" prop="mechanism">
-          <el-input v-model="editFrom.mechanism"></el-input>
-        </el-form-item>
-        <el-form-item label="报名时间" prop="sign_time">
-          <el-date-picker
-            v-model="editFrom.exh_time"
-            type="datetime"
-            placeholder="选择报名时间"
-            @change="getTimes"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="展示时间" prop="exh_time">
-          <el-date-picker
-            v-model="editFrom.exh_time"
-            type="datetime"
-            placeholder="选择展示时间"
-            @change="gitTimes"
-          >
-          </el-date-picker>
-        </el-form-item>
-
         <el-form-item label="海报" prop="poster">
           <el-upload
             class="avatar-uploader"
@@ -309,12 +291,78 @@
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
-        <!-- 后期改 -->
-        <el-form-item label="赛事详情内容" prop="content" style="width: 70%">
-          <el-input type="textarea" v-model="editFrom.content"></el-input>
+        <el-form-item label="报名开始时间" prop="sign_start_time">
+          <el-date-picker
+            v-model="editFrom.sign_start_time"
+            type="datetime"
+            placeholder="选择报名开始时间"
+            @change="getTime"
+          >
+          </el-date-picker>
         </el-form-item>
+        <el-form-item label="报名结束时间" prop="sign_end_time">
+          <el-date-picker
+            v-model="editFrom.sign_end_time"
+            type="datetime"
+            placeholder="选择报名结束时间"
+            @change="gitTime"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="评选开始时间" prop="voto_start_time">
+          <el-date-picker
+            v-model="editFrom.voto_start_time"
+            type="datetime"
+            placeholder="选择评选开始时间"
+            @change="gatTime"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="评选结束时间" prop="voto_end_time">
+          <el-date-picker
+            v-model="editFrom.voto_end_time"
+            type="datetime"
+            placeholder="选择评选结束时间"
+            @change="gutTime"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="公示开始时间" prop="exh_start_time">
+          <el-date-picker
+            v-model="editFrom.exh_start_time"
+            type="datetime"
+            placeholder="选择公示开始时间"
+            @change="gltTime"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="公示结束时间" prop="exh_end_time">
+          <el-date-picker
+            v-model="editFrom.exh_end_time"
+            type="datetime"
+            placeholder="选择公示结束时间"
+            @change="gctTime"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="评选规则" prop="rule">
+          <el-input v-model="editFrom.rule"></el-input>
+        </el-form-item>
+        <el-form-item label="设计说明" prop="explain">
+          <el-input v-model="editFrom.explain"></el-input>
+        </el-form-item>
+        <el-form-item label="参赛须知" prop="entry_info">
+          <el-input v-model="editFrom.entry_info"></el-input>
+        </el-form-item>
+        <el-form-item label="获奖通知" prop="notice">
+          <el-input v-model="editFrom.notice"></el-input>
+        </el-form-item>
+
+
+        <!-- 后期改 -->
+
         <div v-for="(item, index) in editFrom.prize" :key="index">
-          <el-form-item label="活动奖品" prop="prize" style="width: 100%">
+          <el-form-item label="奖励" prop="prize" style="width: 100%">
             <p>奖项名称:</p>
             <el-input v-model="item.name" style="width: 15%"></el-input>
             <p>数量:</p>
@@ -325,6 +373,20 @@
               <img src="../../assets/lovig/jiahao.png" alt="" />
             </p>
             <p class="addInput" v-else @click="delInputHandle(index)">
+              <img src="../../assets/lovig/jianhao.png" alt="" />
+            </p>
+          </el-form-item>
+        </div>
+        <div v-for="(item, index) in editFrom.standard" :key="index">
+          <el-form-item label="评选标准" prop="standard" style="width: 100%">
+            <p>评选规则:</p>
+            <el-input v-model="item.title" style="width: 25%"></el-input>
+            <p>评选规则的描述:</p>
+            <el-input v-model="item.description" style="width: 25%"></el-input>
+            <p class="addInput" @click="addStandard" v-if="index === 0">
+              <img src="../../assets/lovig/jiahao.png" alt="" />
+            </p>
+            <p class="addInput" v-else @click="delStandard(index)">
               <img src="../../assets/lovig/jianhao.png" alt="" />
             </p>
           </el-form-item>
@@ -392,18 +454,21 @@
           setDetilValue.create_time
         }}</el-descriptions-item>
       </el-descriptions>
-      <div style="padding-top: 15px;">请选择</div>
-      <el-radio-group v-model="SetStatusRadio.status" class="SetStatusRadioStyle">
+      <div style="padding-top: 15px">请选择</div>
+      <el-radio-group
+        v-model="SetStatusRadio.status"
+        class="SetStatusRadioStyle"
+      >
         <el-radio :label="0">等待平台审核</el-radio>
         <el-radio :label="1">平台通过，进行中</el-radio>
         <el-radio :label="2">驳回</el-radio>
         <el-radio :label="3">结束</el-radio>
       </el-radio-group>
-      <div style="padding-top: 15px;">
-        <span >
-        <el-button @click="SetStatus = false">取 消</el-button>
-        <el-button type="primary" @click="SetStatusValue">确 定</el-button>
-      </span>
+      <div style="padding-top: 15px">
+        <span>
+          <el-button @click="SetStatus = false">取 消</el-button>
+          <el-button type="primary" @click="SetStatusValue">确 定</el-button>
+        </span>
       </div>
     </el-dialog>
   </div>
@@ -475,23 +540,39 @@ export default {
       },
       detailsValues: [],
       detial: "",
+      standardDetial:"",
       // 编辑
       dialogEditMatch: false,
       editFrom: {
+        id:"",
         title: "",
-        category: "",
         description: "",
-        mechanism: "",
-        poster: "",
-        sign_time: "",
-        exh_time: "",
-        prize: "",
-        content: "",
         thumb: "",
-        id: "",
+        poster: "",
+        sign_start_time: "",
+        sign_end_time: "",
+        voto_start_time: "",
+        voto_end_time: "",
+        exh_start_time: "",
+        exh_end_time: "",
+        prize: [
+          {
+            name: "",
+            amount: "",
+            item: "",
+          },
+        ],
+        standard: [
+          {
+            title: "",
+            description: "",
+          },
+        ],
+        rule: "",
+        explain: "",
+        entry_info: "",
+        notice: "",
       },
-      sign_timeTimes: "",
-      exh_timeTimes: "",
       editFromRules: {
         title: [
           {
@@ -556,7 +637,10 @@ export default {
         status: "",
       },
       SetStatus: false,
-      setDetilValue:[]
+      setDetilValue: [],
+      editFromDetil: {
+        id:""
+      }
     };
   },
   created() {
@@ -685,13 +769,41 @@ export default {
     delInputHandle(index) {
       this.editFrom.prize.splice(index, 1);
     },
-    getTimes(date) {
-      this.sign_timeTimes = date;
-      this.editFrom.sign_time = timestampToTime(this.sign_timeTimes / 1000);
+    addStandard() {
+      this.editFrom.standard.push({title:"",description:""})
     },
-    gitTimes(date) {
-      this.exh_timeTimes = date;
-      this.editFrom.exh_time = timestampToTime(this.exh_timeTimes / 1000);
+    delStandard(index) {
+      this.editFrom.standard.splice(index, 1);
+    },
+    getTime(date) {
+      this.editFrom.sign_start_time = timestampToTime(
+        date / 1000
+      );
+    },
+    gitTime(date) {
+      this.editFrom.sign_end_time = timestampToTime(
+        date / 1000
+      );
+    },
+    gatTime(date) {
+      this.editFrom.voto_start_time = timestampToTime(
+        date / 1000
+      );
+    },
+    gutTime(date) {
+      this.editFrom.voto_end_time = timestampToTime(
+        date / 1000
+      );
+    },
+    gltTime(date) {
+      this.editFrom.exh_start_time = timestampToTime(
+        date / 1000
+      );
+    },
+    gctTime(date) {
+      this.editFrom.exh_end_time = timestampToTime(
+        date / 1000
+      );
     },
     // 海报
     handleAvatarSuccess(res, file) {
@@ -726,24 +838,31 @@ export default {
       this.tableData = param1;
     },
     showEditAddmodify(data) {
-      this.editFrom.id = data.id;
+      this.editFromDetil.id = data.id;
       this.dialogEditMatch = true;
-      postD(matchShowMatchApi(), this.editFrom).then((res) => {
+      postD(matchShowMatchApi(), this.editFromDetil).then((res) => {
         this.editFrom.title = res.data.title;
-        this.editFrom.category = res.data.category;
         this.editFrom.description = res.data.description;
-        this.editFrom.mechanism = res.data.mechanism;
         this.editFrom.poster = res.data.poster;
-        this.editFrom.sign_time = res.data.sign_time;
-        this.editFrom.exh_time = res.data.exh_time;
         this.editFrom.prize = res.data.prize;
-        this.editFrom.content = res.data.content;
         this.editFrom.thumb = res.data.thumb;
+        this.editFrom.sign_start_time = res.data.sign_start_time;
+        this.editFrom.sign_end_time = res.data.sign_end_time;
+        this.editFrom.voto_start_time = res.data.voto_start_time;
+        this.editFrom.voto_end_time = res.data.voto_end_time;
+        this.editFrom.exh_start_time = res.data.exh_start_time;
+        this.editFrom.exh_end_time = res.data.exh_end_time;
+        this.editFrom.standard = res.data.standard;
+        this.editFrom.rule=res.data.rule;
+        this.editFrom.explain=res.data.explain;
+        this.editFrom.entry_info=res.data.entry_info;
+        this.editFrom.notice=res.data.notice;
       });
     },
     dialogEditMatchs() {
       this.$refs.editFromref.validate((valid) => {
         if (!valid) return;
+        this.editFrom.id = this.editFromDetil.id
         postD(matchEditMatchApi(), this.editFrom).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
@@ -768,6 +887,7 @@ export default {
       postD(matchShowMatchApi(), this.detailsId).then((res) => {
         this.detailsValues = res.data;
         this.detial = res.data.prize;
+        this.standardDetial = res.data.standard
       });
     },
     filterStatus(val) {
@@ -785,7 +905,7 @@ export default {
       this.SetStatus = true;
       this.SetStatusRadio.id = data.id;
       this.SetStatusRadio.status = data.status;
-      this.setDetilValue = data
+      this.setDetilValue = data;
     },
     SetStatusValue() {
       postD(matchEditMatchApi(), this.SetStatusRadio).then((res) => {
