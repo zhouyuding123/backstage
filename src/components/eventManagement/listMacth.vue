@@ -79,6 +79,7 @@
                 {{ filterStatus(scoped.row.status) }}
               </div>
             </div>
+            <div @click="Reject(scoped.row)" style="color:#79bbff;cursor: pointer;font-size: 12px;" v-if="scoped.row.status == 2">驳回原因</div>
           </template>
         </vxe-column>
         <vxe-column field="is_open" title="开关" align="center" width="70">
@@ -137,7 +138,7 @@
     </div>
     <el-dialog title="详情" v-model="dialogShow" width="70%">
       <el-descriptions direction="vertical" :column="5" border>
-      <el-descriptions-item label="id" align="center">{{
+        <el-descriptions-item label="id" align="center">{{
           detailsValues.id
         }}</el-descriptions-item>
         <el-descriptions-item label="用户名" align="center">{{
@@ -202,7 +203,7 @@
             奖项:{{ item.name }}个数: {{ item.amount }}奖品:{{ item.item }}
           </div>
         </el-descriptions-item>
-        <el-descriptions-item label="奖项" align="center">
+        <el-descriptions-item label="规则" align="center">
           <div v-for="(item, index) in standardDetial" :key="index">
             评选规则:{{ item.title }}评选规则的描述: {{ item.description }}
           </div>
@@ -229,10 +230,14 @@
           detailsValues.create_time
         }}</el-descriptions-item>
       </el-descriptions>
-      <div style="padding-top:15px"><span>
-        <el-button @click="dialogShow = false">取 消</el-button>
-        <el-button type="primary" @click="dialogShow = false">确 定</el-button>
-      </span></div>
+      <div style="padding-top: 15px">
+        <span>
+          <el-button @click="dialogShow = false">取 消</el-button>
+          <el-button type="primary" @click="dialogShow = false"
+            >确 定</el-button
+          >
+        </span>
+      </div>
     </el-dialog>
     <el-dialog
       title="修改"
@@ -355,7 +360,6 @@
           <el-input v-model="editFrom.notice"></el-input>
         </el-form-item>
 
-
         <!-- 后期改 -->
 
         <div v-for="(item, index) in editFrom.prize" :key="index">
@@ -412,14 +416,8 @@
         <el-descriptions-item label="赛事主题" align="center">{{
           setDetilValue.title
         }}</el-descriptions-item>
-        <el-descriptions-item label="征集类别" align="center">{{
-          setDetilValue.category
-        }}</el-descriptions-item>
-        <el-descriptions-item label="赛事简介" align="center">{{
+        <el-descriptions-item label="赛事介绍" align="center">{{
           setDetilValue.description
-        }}</el-descriptions-item>
-        <el-descriptions-item label="赛事机构" align="center">{{
-          setDetilValue.mechanism
         }}</el-descriptions-item>
         <el-descriptions-item label="海报" align="center">
           <el-image
@@ -428,17 +426,44 @@
             style="width: 40px; height: 40px"
           />
         </el-descriptions-item>
-
-        <el-descriptions-item label="报名时间" align="center">{{
-          setDetilValue.sign_time
+        <el-descriptions-item label="报名开始时间" align="center">{{
+          setDetilValue.sign_start_time
         }}</el-descriptions-item>
-        <el-descriptions-item label="展示时间" align="center">{{
-          setDetilValue.exh_time
+        <el-descriptions-item label="报名结束时间" align="center">{{
+          setDetilValue.sign_end_time
         }}</el-descriptions-item>
-
+        <el-descriptions-item label="评选开始时间" align="center">{{
+          setDetilValue.voto_start_time
+        }}</el-descriptions-item>
+        <el-descriptions-item label="评选结束时间" align="center">{{
+          setDetilValue.voto_end_time
+        }}</el-descriptions-item>
+        <el-descriptions-item label="公示开始时间" align="center">{{
+          setDetilValue.exh_start_time
+        }}</el-descriptions-item>
+        <el-descriptions-item label="公示结束时间" align="center">{{
+          setDetilValue.exh_end_time
+        }}</el-descriptions-item>
+        <el-descriptions-item label="评选规则" align="center">{{
+          setDetilValue.rule
+        }}</el-descriptions-item>
+        <el-descriptions-item label="设计说明" align="center">{{
+          setDetilValue.explain
+        }}</el-descriptions-item>
+        <el-descriptions-item label="参赛须知" align="center">{{
+          setDetilValue.entry_info
+        }}</el-descriptions-item>
+        <el-descriptions-item label="获奖通知" align="center">{{
+          setDetilValue.notice
+        }}</el-descriptions-item>
         <el-descriptions-item label="奖项" align="center">
           <div v-for="(item, index) in detial" :key="index">
             奖项:{{ item.name }}个数: {{ item.amount }}奖品:{{ item.item }}
+          </div>
+        </el-descriptions-item>
+        <el-descriptions-item label="规则" align="center">
+          <div v-for="(item, index) in standardDetial" :key="index">
+            评选规则:{{ item.title }}评选规则的描述: {{ item.description }}
           </div>
         </el-descriptions-item>
         <el-descriptions-item label="详情（平台发布）" align="center">{{
@@ -461,11 +486,26 @@
         <el-radio :label="2">驳回</el-radio>
         <el-radio :label="3">结束</el-radio>
       </el-radio-group>
+      <div v-if="SetStatusRadio.status == 2">
+        <el-input
+          v-model="SetStatusRadio.reason"
+          placeholder="请输入驳回原因"
+        ></el-input>
+        <!-- 驳回 -->
+      </div>
       <div style="padding-top: 15px">
         <span>
           <el-button @click="SetStatus = false">取 消</el-button>
           <el-button type="primary" @click="SetStatusValue">确 定</el-button>
         </span>
+      </div>
+    </el-dialog>
+    <el-dialog title="驳回原因" v-model="RejectShow" width="30%">
+      <span>{{RejectValue}}</span>
+      <div style="padding-top:15px">
+        <span>
+        <el-button @click="RejectShow = false">取 消</el-button>
+      </span>
       </div>
     </el-dialog>
   </div>
@@ -537,11 +577,11 @@ export default {
       },
       detailsValues: [],
       detial: "",
-      standardDetial:"",
+      standardDetial: "",
       // 编辑
       dialogEditMatch: false,
       editFrom: {
-        id:"",
+        id: "",
         title: "",
         description: "",
         thumb: "",
@@ -632,12 +672,19 @@ export default {
       SetStatusRadio: {
         id: "",
         status: "",
+        reason: "",
       },
+      // 审核
       SetStatus: false,
       setDetilValue: [],
-      editFromDetil: {
+      RejectShow: false,
+      RejectId:{
         id:""
-      }
+      },
+      RejectValue:"",
+      editFromDetil: {
+        id: "",
+      },
     };
   },
   created() {
@@ -767,40 +814,28 @@ export default {
       this.editFrom.prize.splice(index, 1);
     },
     addStandard() {
-      this.editFrom.standard.push({title:"",description:""})
+      this.editFrom.standard.push({ title: "", description: "" });
     },
     delStandard(index) {
       this.editFrom.standard.splice(index, 1);
     },
     getTime(date) {
-      this.editFrom.sign_start_time = timestampToTime(
-        date / 1000
-      );
+      this.editFrom.sign_start_time = timestampToTime(date / 1000);
     },
     gitTime(date) {
-      this.editFrom.sign_end_time = timestampToTime(
-        date / 1000
-      );
+      this.editFrom.sign_end_time = timestampToTime(date / 1000);
     },
     gatTime(date) {
-      this.editFrom.voto_start_time = timestampToTime(
-        date / 1000
-      );
+      this.editFrom.voto_start_time = timestampToTime(date / 1000);
     },
     gutTime(date) {
-      this.editFrom.voto_end_time = timestampToTime(
-        date / 1000
-      );
+      this.editFrom.voto_end_time = timestampToTime(date / 1000);
     },
     gltTime(date) {
-      this.editFrom.exh_start_time = timestampToTime(
-        date / 1000
-      );
+      this.editFrom.exh_start_time = timestampToTime(date / 1000);
     },
     gctTime(date) {
-      this.editFrom.exh_end_time = timestampToTime(
-        date / 1000
-      );
+      this.editFrom.exh_end_time = timestampToTime(date / 1000);
     },
     // 海报
     handleAvatarSuccess(res, file) {
@@ -850,16 +885,16 @@ export default {
         this.editFrom.exh_start_time = res.data.exh_start_time;
         this.editFrom.exh_end_time = res.data.exh_end_time;
         this.editFrom.standard = res.data.standard;
-        this.editFrom.rule=res.data.rule;
-        this.editFrom.explain=res.data.explain;
-        this.editFrom.entry_info=res.data.entry_info;
-        this.editFrom.notice=res.data.notice;
+        this.editFrom.rule = res.data.rule;
+        this.editFrom.explain = res.data.explain;
+        this.editFrom.entry_info = res.data.entry_info;
+        this.editFrom.notice = res.data.notice;
       });
     },
     dialogEditMatchs() {
       this.$refs.editFromref.validate((valid) => {
         if (!valid) return;
-        this.editFrom.id = this.editFromDetil.id
+        this.editFrom.id = this.editFromDetil.id;
         postD(matchEditMatchApi(), this.editFrom).then((res) => {
           if (res.code == "200") {
             this.$message.success("状态修改成功");
@@ -882,9 +917,10 @@ export default {
       this.detailsId.id = data.id;
       this.dialogShow = true;
       postD(matchShowMatchApi(), this.detailsId).then((res) => {
+        console.log(res);
         this.detailsValues = res.data;
         this.detial = res.data.prize;
-        this.standardDetial = res.data.standard
+        this.standardDetial = res.data.standard;
       });
     },
     filterStatus(val) {
@@ -902,7 +938,9 @@ export default {
       this.SetStatus = true;
       this.SetStatusRadio.id = data.id;
       this.SetStatusRadio.status = data.status;
-      this.setDetilValue = data;
+      postD(matchShowMatchApi(), this.SetStatusRadio).then((res) => {
+        this.setDetilValue = res.data;
+      });
     },
     SetStatusValue() {
       postD(matchEditMatchApi(), this.SetStatusRadio).then((res) => {
@@ -921,6 +959,13 @@ export default {
         }
       });
     },
+    Reject(data) {
+      this.RejectShow = true
+      this.RejectId.id = data.id;
+      postD(matchShowMatchApi(),this.RejectId).then(res=> {
+        this.RejectValue = res.data.reason
+      })
+    }
   },
 };
 </script>
