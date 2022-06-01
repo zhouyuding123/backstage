@@ -197,9 +197,6 @@
         <el-descriptions-item label="获奖通知" align="center">{{
           detailsValues.notice
         }}</el-descriptions-item>
-
-        
-
         <el-descriptions-item label="奖项" align="center">
           <div v-for="(item, index) in detial" :key="index">
             奖项:{{ item.name }}个数: {{ item.amount }}奖品:{{ item.item }}
@@ -232,10 +229,10 @@
           detailsValues.create_time
         }}</el-descriptions-item>
       </el-descriptions>
-      <span>
+      <div style="padding-top:15px"><span>
         <el-button @click="dialogShow = false">取 消</el-button>
         <el-button type="primary" @click="dialogShow = false">确 定</el-button>
-      </span>
+      </span></div>
     </el-dialog>
     <el-dialog
       title="修改"
