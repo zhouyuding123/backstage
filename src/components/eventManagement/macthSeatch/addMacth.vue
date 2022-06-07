@@ -208,13 +208,6 @@ export default {
             tirgger: "blur",
           },
         ],
-        category: [
-          {
-            required: true,
-            message: "请输入征集类别",
-            tirgger: "blur",
-          },
-        ],
         poster: [
           {
             required: true,
