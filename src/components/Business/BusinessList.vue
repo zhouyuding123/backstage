@@ -367,8 +367,6 @@ export default {
         return "审核通过";
       } else if (val == 3) {
         return "审核不通过";
-      } else {
-        return "待认证";
       }
     },
     companySetStatus(data) {

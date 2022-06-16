@@ -291,7 +291,7 @@ export default {
     },
     filterStatus(val) {
       if (val === 0) {
-        return "待审核";
+        return "等待平台审核";
       } else if (val === 1) {
         return "审核通过";
       } else if (val === 2) {

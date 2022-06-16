@@ -341,12 +341,12 @@ export default {
     },
     // 账号认证状态
     filterStyles(val) {
-      if (val === 0) {
-        return "待认证 ";
-      } else if (val === 1) {
+      if (val === 1) {
         return "已认证审核状态";
-      } else {
+      } else if( val===2 ){
         return "已审核通过";
+      } else if(val ===3) {
+        return "审核不通过"
       }
     },
     // 性别
