@@ -114,9 +114,9 @@ export default {
             tirgger: "blur",
           },
           {
-            min: 3,
+            min: 2,
             max: 30,
-            message: "长度在3-30个",
+            message: "长度在2-30个",
             tirgger: "blur",
           },
         ],

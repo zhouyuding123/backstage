@@ -202,6 +202,22 @@ const routes = [
         , meta: {
           title: "门店列表"
         }
+      },
+      {
+        path: "/Ad/listAdType",
+        name: "listAdType",
+        component: () => import("../components/category/categoryList.vue")
+        , meta: {
+          title: "类别列表"
+        }
+      },
+      {
+        path: "/Ad/getList",
+        name: "getList",
+        component: () => import("../components/advertisement/advertisementList.vue")
+        , meta: {
+          title: "类别列表"
+        }
       }
     ]
   },

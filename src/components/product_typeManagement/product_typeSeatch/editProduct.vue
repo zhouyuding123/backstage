@@ -11,7 +11,7 @@
         <el-form-item label="商品标题:" prop="title">
           <el-input v-model="editFrom.title"></el-input>
         </el-form-item>
-        <el-form-item label="商品描述:" prop="title">
+        <el-form-item label="商品描述:" prop="description">
           <el-input v-model="editFrom.description"></el-input>
         </el-form-item>
         <el-form-item label="排序:" prop="sort">
