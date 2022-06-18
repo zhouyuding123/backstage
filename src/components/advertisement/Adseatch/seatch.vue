@@ -14,6 +14,24 @@
               v-model="search.keyword"
             ></el-input></div
         ></el-col>
+        <el-col :span="1"
+          ><div>
+            <div class="divText">类别:</div>
+          </div></el-col
+        >
+        <el-col :span="3"
+          ><div style="text-align: left">
+            <el-select v-model="search.tid" placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.id"
+                :label="item.title"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select></div
+        ></el-col>
+
         <el-col :span="3"
           ><div>
             <el-button type="success" @click="submitSearch">搜索</el-button>
@@ -32,28 +50,40 @@
 
 <script>
 import { postD } from "../../../api/index.js";
-import { AdListAdTypeApi } from "@/urls/categoryUrl.js";
+import { AdGetListApi } from "@/urls/advertisementUrl.js";
+import {AdListAdTypeApi} from "@/urls/categoryUrl.js"
 export default {
-  inject: ["categoryListValue"],
+  inject: ["adListValue"],
   data() {
     return {
       search: {
         keyword: "",
+        tid:""
       },
       tableDatas: [],
+      options:[]
     };
   },
+  created() {
+    this.categoryListValue()
+  },
   methods: {
+    categoryListValue() {
+      postD(AdListAdTypeApi()).then((res) => {
+        this.options = res.list;
+      });
+    },
     Refresh() {
-      this.categoryListValue();
+      this.adListValue();
     },
     submitReset() {
       this.search.keyword = null;
+      this.search.tid = null;
     },
     submitSearch() {
-      postD(AdListAdTypeApi(), this.search).then((res) => {
+      postD(AdGetListApi(), this.search).then((res) => {
         this.tableDatas = res;
-        this.$emit("catSeatch", this.tableDatas);
+        this.$emit("SeatchAd", this.tableDatas);
       });
     },
   },

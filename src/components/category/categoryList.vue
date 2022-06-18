@@ -62,6 +62,20 @@
           </template>
         </vxe-column>
       </vxe-table>
+      <vxe-pager
+        :current-page="page1.offset"
+        :page-size="page1.limit"
+        :total="page1.totalResult"
+        :layouts="[
+          'PrevPage',
+          'JumpNumber',
+          'NextPage',
+          'FullJump',
+          'Sizes',
+          'Total',
+        ]"
+        @page-change="handlePageChangeActivity"
+      ></vxe-pager>
     </div>
   </div>
 </template>
@@ -96,6 +110,12 @@ export default {
       catDelsValues: {
         id: "",
       },
+      // 分页
+      page1: {
+        offset: 1,
+        limit: 10,
+        totalResult: 0,
+      },
     };
   },
   created() {
@@ -111,6 +131,7 @@ export default {
     categoryListValue() {
       postD(AdListAdTypeApi()).then((res) => {
         this.tableData = res.list;
+        this.page1.totalResult= res.count
       });
     },
     showCont() {
@@ -118,7 +139,8 @@ export default {
       this.$refs.btn1.$el.innerText;
     },
     async costPlannedAmountChange(param1) {
-      this.tableData = param1;
+      this.tableData = param1.list;
+      this.page1.totalResult= param1.count
     },
     // 批量删除
     checkboxChangeEvent(data) {
@@ -158,6 +180,15 @@ export default {
         }
       });
     },
+    // 分页
+    handlePageChangeActivity({ currentPage, pageSize }) {
+      this.page1.offset = currentPage;
+      this.page1.limit = pageSize;
+      postD(AdListAdTypeApi(), this.page1).then((res) => {
+        this.tableData = res.list;
+        this.page1.totalResult= res.count
+      });
+    },
   },
 };
 </script>
@@ -171,5 +202,11 @@ export default {
   border-radius: 3px 3px 3px 3px;
   opacity: 1;
   border: 1px solid #b5b2b2;
+}
+.vxe-column {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
 }
 </style>
