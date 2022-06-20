@@ -153,7 +153,18 @@ export default {
     leftNavigation() {
       postD(this.url.getHomePageHeadMessage)
         .then((res) => {
+          if (res.code == "200") {
           this.leftNavigationValue = res.list;
+        } else if (res.code == "-200") {
+          this.$message.error("参数错误，或暂无数据");
+        } else if (res.code == "-201") {
+          this.$message.error("重新登入");
+          this.$router.push("/about")
+        } else if (res.code == "-203") {
+          this.$message.error("对不起，你没有此操作权限");
+        } else {
+          this.$message.error("注册失败，账号已存在");
+        }
         })
         .catch((err) => {
           console.log(err);
