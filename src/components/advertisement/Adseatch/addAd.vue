@@ -44,6 +44,7 @@
             </div>
             <div v-if="addForm.style == 1">已选择图片</div>
             <div v-if="addForm.style == 2">已选择视频</div>
+            <div class="newStyle" @click="newValue()">重新选择广告类别</div>
           </el-form-item>
           <el-form-item
             label="上传图片:"
@@ -224,6 +225,10 @@ export default {
     beforeAvatarUpload(file) {
       beforeAvatar(file);
     },
+    newValue(){
+      this.addForm.thumb = "";
+      this.addForm.style = "";
+    },
     beforeUploadVideo(file) {
       var fileSize = file.size / 1024 / 1024 < 50; //控制大小  修改50的值即可
       if (
@@ -291,5 +296,13 @@ export default {
   width: 300px;
   height: 178px;
   display: block;
+}
+.newStyle {
+  width: 115px;
+  height: 30px;
+  background: red;
+  cursor: pointer;
+  color: white;
+  margin-left: 20px;
 }
 </style>

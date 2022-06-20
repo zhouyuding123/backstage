@@ -8,7 +8,7 @@ export const AdAddApi = () => {
 
 // 修改
 export const AdEditApi = () => {
-    return "Ad/add"
+    return "Ad/edit"
 }
 
 // 删除

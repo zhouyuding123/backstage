@@ -20,9 +20,9 @@
           <el-input v-model="editFrom.description"></el-input>
         </el-form-item>
         <el-form-item label="类别id:">
-          <el-select v-model="editFrom.tid" placeholder="请选择" :formatter="(row) => formatter(row, 'id', options)">
+          <el-select v-model="editFrom.tid" placeholder="请选择">
             <el-option
-              v-for="(item,key) in options"
+              v-for="(item, key) in options"
               :key="key"
               :label="item.title"
               :value="item.id"
@@ -36,13 +36,16 @@
         <el-form-item label="跳转链接:" prop="url">
           <el-input v-model="editFrom.url"></el-input>
         </el-form-item>
-        <el-form-item label="广告类别:" prop="style" @change="editImg">
-          <div id="rad" v-if="editFrom.style !== ''">
-            <el-radio v-model="editFrom.style" label="1">图片</el-radio>
-            <el-radio v-model="editFrom.style" label="2">视频</el-radio>
+        <el-form-item label="广告类别:" prop="style">
+          <div id="rad" >
+            <el-radio-group v-model="editFrom.style" v-if="editFrom.style ==''">
+              <el-radio v-model="editFrom.style" :label="1">图片</el-radio>
+              <el-radio v-model="editFrom.style" :label="2">视频</el-radio>
+            </el-radio-group>
           </div>
           <div v-if="editFrom.style == 1">已选择图片</div>
-          <div v-if="editFrom.style == 2">已选择视频</div>
+            <div v-if="editFrom.style == 2">已选择视频</div>
+            <div class="newStyle" @click="newValue()">重新选择广告类别</div>
         </el-form-item>
         <el-form-item label="上传图片:" prop="thumb" v-if="editFrom.style == 1">
           <el-upload
@@ -101,7 +104,7 @@
 
 <script>
 import { AdListAdTypeApi } from "@/urls/categoryUrl.js";
-import {AdEditApi} from "@/urls/advertisementUrl.js"
+import { AdEditApi } from "@/urls/advertisementUrl.js";
 import { imgUrl } from "@/assets/js/modifyStyle";
 import { postD } from "@/api";
 import { beforeAvatar } from "@/assets/js/modifyStyle.js";
@@ -110,6 +113,9 @@ export default {
   props: ["editFunction"],
   data() {
     return {
+      zxc: {
+        tid: "3",
+      },
       dialogVisible: false,
       imagesValue: "",
       editFrom: {
@@ -169,6 +175,7 @@ export default {
   },
   methods: {
     editShow() {
+      console.log(this.editFunction);
       this.dialogVisible = true;
       this.imagesValue = imgUrl();
       this.editFrom.id = this.editFunction.id;
@@ -178,37 +185,39 @@ export default {
       this.editFrom.style = this.editFunction.style;
       this.editFrom.url = this.editFunction.url;
       this.editFrom.thumb = this.editFunction.thumb;
-      postD(AdListAdTypeApi()).then((res) => {
+      this.editFrom.tid = this.editFunction.tid;
+
+      postD(AdListAdTypeApi(), this.zxc).then((res) => {
         this.options = res.list;
-        console.log(this.editFrom.tid);
       });
     },
     cz() {
       this.editShow();
     },
     addCategory() {
-        console.log(this.editFrom);
-    //   this.$refs.editFromRef.validate((valid) => {
-    //     if (!valid) return;
-    //     postD(AdEditApi(), this.editFrom).then((res) => {
-    //       if (res.code == "200") {
-    //         this.$message.success("添加成功");
-    //         this.adListValue();
-    //         this.dialogVisible = false;
-    //       } else if (res.code == "-200") {
-    //         this.$message.error("参数错误，或暂无数据");
-    //       } else if (res.code == "-201") {
-    //         this.$message.error("未登陆");
-    //       } else if (res.code == "-203") {
-    //         this.$message.error("对不起，你没有此操作权限");
-    //       } else {
-    //         this.$message.error("注册失败，账号已存在");
-    //       }
-    //     });
-    //   });
+      console.log(this.editFrom);
+      this.$refs.editFromRef.validate((valid) => {
+        if (!valid) return;
+        postD(AdEditApi(), this.editFrom).then((res) => {
+          if (res.code == "200") {
+            this.$message.success("添加成功");
+            this.adListValue();
+            this.dialogVisible = false;
+          } else if (res.code == "-200") {
+            this.$message.error("参数错误，或暂无数据");
+          } else if (res.code == "-201") {
+            this.$message.error("未登陆");
+          } else if (res.code == "-203") {
+            this.$message.error("对不起，你没有此操作权限");
+          } else {
+            this.$message.error("注册失败，账号已存在");
+          }
+        });
+      });
     },
-    editImg() {
+    newValue(){
       this.editFrom.thumb = "";
+      this.editFrom.style = "";
     },
     handleAvatarSuccess(res, file) {
       this.editFrom.thumb = URL.createObjectURL(file.raw);
@@ -258,4 +267,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.newStyle {
+  width: 115px;
+  height: 30px;
+  background: red;
+  cursor: pointer;
+  color: white;
+  margin-left: 20px;
+}
 </style>

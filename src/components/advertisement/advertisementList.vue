@@ -40,14 +40,14 @@
           </template>
         </vxe-column>
         <vxe-column
-          field="tid"
+          field="type"
           title="类别id"
           align="center"
           style="position: relative"
         >
           <template v-slot="scoped">
             <div class="cont">
-              {{ scoped.row.tid }}
+              {{ scoped.row.type }}
             </div>
           </template>
         </vxe-column>

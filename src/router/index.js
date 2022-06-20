@@ -156,6 +156,14 @@ const routes = [
         }
       },
       {
+        path: "/Circle/listTheme",
+        name: "listTheme",
+        component: () => import("../components/Circle/topicList.vue")
+        , meta: {
+          title: "话题管理"
+        }
+      },
+      {
         path: "/Designer/index",
         name: "Designer",
         component: () => import("../components/Designer/designerList.vue")
@@ -240,7 +248,7 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  
+
   routes,
 });
 router.beforeEach((to, from, next) => {

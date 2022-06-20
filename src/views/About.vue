@@ -1,5 +1,5 @@
 <template>
-  <div>欢迎</div>
+  <div>{{timer}}</div>
 </template>
 <script>
 export default {
@@ -11,7 +11,7 @@ export default {
   },
   methods: {
     get() {
-      this.$router.push("/home");
+      this.$router.push("/login");
     },
   },
   mounted() {

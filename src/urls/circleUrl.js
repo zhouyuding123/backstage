@@ -31,3 +31,21 @@ export const CircleSetCircleStatApi = () => {
 export const CircleSetForumStatApi = () => {
     return "Circle/setForumStat"
 }
+// 话题列表
+export const CircleListThemeApi = () => {
+    return "Circle/listTheme"
+}
+// 热门
+export const CircleSetThemeApi = () => {
+    return "Circle/setTheme"
+}
+// 添加话题
+export const circleAddThemeApi = () => {
+    return "circle/addTheme"
+}
+// 话题删除
+export const CircleDelThemeApi = () => {
+    return "Circle/delTheme"
+}
+
+
