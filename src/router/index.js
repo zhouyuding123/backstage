@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory  } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 
 const routes = [
   {
@@ -180,6 +180,14 @@ const routes = [
         }
       },
       {
+        path: "/match/worksList:id",
+        name: "worksList",
+        component: () => import("../components/eventManagement/worksList.vue")
+        , meta: {
+          title: "平台筛选"
+        }
+      },
+      {
         path: "/Activity/listActivity",
         name: "Activity",
         component: () => import("../components/activityManagement/Activity.vue")
@@ -247,7 +255,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHashHistory (),
+  history: createWebHashHistory(),
   routes,
 });
 router.beforeEach((to, from, next) => {

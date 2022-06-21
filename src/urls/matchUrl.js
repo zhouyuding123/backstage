@@ -28,3 +28,11 @@ export const matchEditAccessApi = () => {
 export const matchDelAccessApi = () => {
     return "match/delAccess"
 }
+// 平台作品列表
+export const matchWorksListApi = () => {
+    return "match/worksList"
+}
+// 作品筛选
+export const MatchScreenApi = () => {
+    return "Match/screen"
+}

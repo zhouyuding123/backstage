@@ -47,7 +47,7 @@
             />
           </template>
         </vxe-column>
-        <vxe-column field="username" title="用户名" align="center"></vxe-column>
+        <vxe-column field="username" width="100" title="用户名" align="center"></vxe-column>
         <vxe-column field="nickname" title="昵称" align="center"></vxe-column>
         <vxe-column field="title" title="赛事主题" align="center"></vxe-column>
         <vxe-column width="50" align="center" title="海报">
@@ -111,6 +111,11 @@
         <vxe-column title="操作" align="center">
           <template v-slot="scoped">
             <div class="postDyex">
+              <div class="postDyexer">
+                 <el-button @click="goWoks(scoped.row)"
+                  >作品筛选</el-button
+                >
+              </div>
               <div class="postDyexer">
                 <el-button type="success" @click="detailsValue(scoped.row)"
                   >详情</el-button
@@ -791,6 +796,9 @@ export default {
     this.MacthValue();
   },
   methods: {
+    goWoks(val) {
+      this.$router.push("/match/worksList" + val.id)
+    },
     // 冠名
     TitleList(value) {
       this.TitleShow = true;
