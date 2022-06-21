@@ -38,7 +38,7 @@
             <div class="divText">是否开启:</div>
           </div></el-col
         >
-        <el-col :span="3"
+        <el-col :span="2"
           ><div>
             <el-select v-model="search.is_open" placeholder="请选择">
               <el-option
@@ -55,7 +55,7 @@
             <div class="divText">平台审核:</div>
           </div></el-col
         >
-        <el-col :span="3"
+        <el-col :span="2"
           ><div>
             <el-select v-model="search.status" placeholder="请选择">
               <el-option
@@ -67,18 +67,31 @@
               </el-option>
             </el-select></div
         ></el-col>
-
-        <el-col :span="3"
+        <el-col :span="1"
           ><div>
+            <div class="divText">赛事选择:</div>
+          </div></el-col
+        >
+        <el-col :span="2"
+          ><div>
+            <el-select v-model="search.is_platform" placeholder="请选择">
+              <el-option
+                v-for="item in is_platformOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select></div
+        ></el-col>
+
+        <el-col :span="2"
+          ><div style="display:flex">
             <el-button type="success" @click="submitSearch">搜索</el-button>
             <el-button type="info" @click="submitReset">重置</el-button>
           </div></el-col
         >
-        <el-col :span="1"
-          ><div>
-            <el-button @click="Refresh">刷新</el-button>
-          </div></el-col
-        >
+
       </el-row>
     </div>
   </div>
@@ -97,6 +110,7 @@ export default {
         exh_time: null,
         is_open: null,
         status: null,
+        is_platform:null
       },
       vipGetTime: [],
       is_openOptions: [
@@ -127,12 +141,19 @@ export default {
           label: "结束",
         },
       ],
+      is_platformOptions:[
+        {
+          value: "1",
+          label: "平台赛事",
+        },
+        {
+          value: "2",
+          label: "企业赛事",
+        },
+      ]
     };
   },
   methods: {
-    Refresh() {
-      this.MacthValue();
-    },
     submitReset() {
       this.search.keyword = null;
       this.search.sign_time = null;
@@ -140,6 +161,7 @@ export default {
       this.search.is_open = null;
       this.search.status = null;
       this.vipGetTime = null;
+      this.search.is_platform = null;
     },
     getTime(date) {
       this.vipGetTime = date;
@@ -148,7 +170,7 @@ export default {
     },
     submitSearch() {
       postD(matchListMacthApi(), this.search).then((res) => {
-        this.tableDatas = res.list;
+        this.tableDatas = res;
         this.$emit("macthSeatch", this.tableDatas);
       });
     },

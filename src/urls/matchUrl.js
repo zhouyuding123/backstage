@@ -16,3 +16,15 @@ export const matchEditMatchApi = () => {
 export const MatchAdminSelectDelMatchApi = () => {
     return "Match/adminSelectDelMatch"
 }
+// 冠名
+export const matchAccessListApi = () => {
+    return "match/accessList"
+}
+// 冠名审核
+export const matchEditAccessApi = () => {
+    return "match/editAccess"
+}
+// 冠名删除
+export const matchDelAccessApi = () => {
+    return "match/delAccess"
+}

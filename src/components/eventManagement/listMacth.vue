@@ -8,7 +8,9 @@
       <div style="padding-left: 20px">
         <el-button type="danger" plain @click="macthDels">批量删除</el-button>
       </div>
+
       <div class="contentRight">
+        <el-button @click="Refresh">刷新</el-button>
         <el-button type="info" plain ref="btn1" @click="showCont($event)"
           ><span class="iconfont icon-sousuo"></span
         ></el-button>
@@ -79,7 +81,13 @@
                 {{ filterStatus(scoped.row.status) }}
               </div>
             </div>
-            <div @click="Reject(scoped.row)" style="color:#79bbff;cursor: pointer;font-size: 12px;" v-if="scoped.row.status == 2">驳回原因</div>
+            <div
+              @click="Reject(scoped.row)"
+              style="color: #79bbff; cursor: pointer; font-size: 12px"
+              v-if="scoped.row.status == 2"
+            >
+              驳回原因
+            </div>
           </template>
         </vxe-column>
         <vxe-column field="is_open" title="开关" align="center" width="70">
@@ -93,12 +101,13 @@
             ></el-switch>
           </template>
         </vxe-column>
-        <vxe-column
-          field="browse"
-          title="浏览量"
-          align="center"
-          width="75"
-        ></vxe-column>
+        <vxe-column title="冠名" align="center" width="75">
+          <template v-slot="scoped">
+            <el-button type="primary" @click="TitleList(scoped.row)"
+              >冠名列表</el-button
+            >
+          </template>
+        </vxe-column>
         <vxe-column title="操作" align="center">
           <template v-slot="scoped">
             <div class="postDyex">
@@ -501,12 +510,80 @@
       </div>
     </el-dialog>
     <el-dialog title="驳回原因" v-model="RejectShow" width="30%">
-      <span>{{RejectValue}}</span>
-      <div style="padding-top:15px">
+      <span>{{ RejectValue }}</span>
+      <div style="padding-top: 15px">
         <span>
-        <el-button @click="RejectShow = false">取 消</el-button>
-      </span>
+          <el-button @click="RejectShow = false">取 消</el-button>
+        </span>
       </div>
+    </el-dialog>
+    <!-- 冠名 -->
+    <el-dialog title="冠名列表" v-model="TitleShow" width="70%">
+      <div style="display: flex">
+        <el-button type="danger" plain @click="TitDels">批量删除</el-button>
+      </div>
+      <div>
+        <vxe-table
+          round
+          border="true"
+          ref="xTable1"
+          :align="allAlign"
+          :row-config="{ isHover: true }"
+          :data="TitleListValue"
+          row-id="id"
+          :row-style="tableRowStyle"
+          :header-row-style="tableStyle"
+          @checkbox-change="checkboxChangeEvent"
+          @checkbox-all="checkboxChangeEvent"
+        >
+          <vxe-column
+            align="center"
+            type="checkbox"
+            width="50"
+            class="linker"
+          ></vxe-column>
+          <vxe-column field="nickname" title="昵称" align="center"></vxe-column>
+          <vxe-column field="name" title="名字" align="center"></vxe-column>
+          <vxe-column field="price" title="金额" align="center"></vxe-column>
+          <vxe-column field="tel" title="电话" align="center"></vxe-column>
+          <vxe-column title="冠名审核(操作)" align="center">
+            <template v-slot="scoped">
+              <div @click="titStatus(scoped.row)">
+                <div class="clickHeader" style="color: red">
+                  {{ fulstatus(scoped.row.status) }}
+                </div>
+              </div>
+            </template>
+          </vxe-column>
+          <vxe-column title="操作" align="center">
+            <template v-slot="scoped">
+              <el-button type="danger" @click="oneTitledel(scoped.row)"
+                >删除</el-button
+              >
+            </template>
+          </vxe-column>
+        </vxe-table>
+      </div>
+      <span>
+        <el-button @click="TitleShow = false">返 回</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog title="冠名审核" v-model="TitleStShow" width="30%">
+      <span>此操作将审核状态通过</span>
+      <div>
+        <el-radio-group
+          v-model="titleStatus.status"
+          class="SetStatusRadioStyle"
+        >
+          <el-radio :label="0">待通过</el-radio>
+          <el-radio :label="1">已通过</el-radio>
+        </el-radio-group>
+      </div>
+      <span>
+        <el-button @click="TitleStShow = false">取 消</el-button>
+        <el-button type="primary" @click="TitleStShowover">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -528,6 +605,9 @@ import {
   matchListMacthApi,
   matchEditMatchApi,
   MatchAdminSelectDelMatchApi,
+  matchAccessListApi,
+  matchEditAccessApi,
+  matchDelAccessApi,
 } from "@/urls/matchUrl.js";
 export default {
   provide() {
@@ -565,6 +645,7 @@ export default {
         offset: 1,
         limit: 10,
         totalResult: 0,
+        is_platform: null,
       },
       fileType: "images",
       // x修改图片
@@ -678,11 +759,30 @@ export default {
       SetStatus: false,
       setDetilValue: [],
       RejectShow: false,
-      RejectId:{
-        id:""
+      RejectId: {
+        id: "",
       },
-      RejectValue:"",
+      RejectValue: "",
       editFromDetil: {
+        id: "",
+      },
+      // 冠名
+      TitleShow: false,
+      TitleListId: {
+        match_id: "",
+      },
+      TitleListValue: [],
+      TitleStShow: false,
+      titleStatus: {
+        access_id: "",
+        status: "",
+      },
+      // 单个删除
+      TitleDelOne: {
+        id: "",
+      },
+      // 批量
+      TitleDelsValues: {
         id: "",
       },
     };
@@ -691,6 +791,110 @@ export default {
     this.MacthValue();
   },
   methods: {
+    // 冠名
+    TitleList(value) {
+      this.TitleShow = true;
+      this.TitleListId.match_id = value.id;
+      postD(matchAccessListApi(), this.TitleListId).then((res) => {
+        this.TitleListValue = res.list;
+      });
+    },
+    titStatus(value) {
+      this.titleStatus.access_id = value.id;
+      this.titleStatus.status = value.status;
+      this.TitleStShow = true;
+    },
+    TitleStShowover() {
+      postD(matchEditAccessApi(), this.titleStatus).then((res) => {
+        if (res.code == "200") {
+          this.$message.success("审核通过");
+          this.TitleStShow = false;
+          postD(matchAccessListApi(), this.TitleListId).then((res) => {
+            this.TitleListValue = res.list;
+          });
+        } else if (res.code == "-200") {
+          this.$message.error("参数错误，或暂无数据");
+        } else if (res.code == "-201") {
+          this.$message.error("未登陆");
+        } else if (res.code == "-203") {
+          this.$message.error("对不起，你没有此操作权限");
+        } else {
+          this.$message.error("注册失败，账号已存在");
+        }
+      });
+    },
+    async oneTitledel(val) {
+      this.TitleDelOne.id = val.id.toString();
+      console.log(this.TitleDelOne);
+      const oneTitledelValue = await this.$confirm(
+        "此操作将永久删除, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => err);
+      if (oneTitledelValue !== "confirm") {
+        return this.$message.info("取消删除");
+      }
+      if (oneTitledelValue === "confirm") {
+        postD(matchDelAccessApi(), this.TitleDelOne).then((res) => {
+          if (res.code == "200") {
+            this.$message.success("删除成功");
+            postD(matchAccessListApi(), this.TitleListId).then((res) => {
+              this.TitleListValue = res.list;
+            });
+          } else if (res.code == "-200") {
+            this.$message.error("参数错误，或暂无数据");
+          } else if (res.code == "-201") {
+            this.$message.error("未登陆");
+          } else if (res.code == "-203") {
+            this.$message.error("对不起，你没有此操作权限");
+          } else {
+            this.$message.error("注册失败，账号已存在");
+          }
+        });
+      }
+    },
+    // 冠名批量
+    async TitDels() {
+      const TitleDelValues = await this.$confirm(
+        "此操作将永久删除管理, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => err);
+      if (TitleDelValues !== "confirm") {
+        return this.$message.info("取消删除");
+      }
+      if (TitleDelValues === "confirm") {
+        this.arrs.forEach((v) => {
+          this.ids.push(v.id);
+        });
+        this.TitleDelsValues.id = this.ids.toString();
+        postD(matchDelAccessApi(), this.TitleDelsValues).then((res) => {
+          if (res.code == "200") {
+            this.$message.success("状态修改成功");
+            postD(matchAccessListApi(), this.TitleListId).then((res) => {
+              this.TitleListValue = res.list;
+            });
+          } else if (res.code == "-200") {
+            this.$message.error("参数错误，或暂无数据");
+          } else if (res.code == "-201") {
+            this.$message.error("未登陆");
+          } else if (res.code == "-203") {
+            this.$message.error("对不起，你没有此操作权限");
+          } else {
+            this.$message.error("注册失败，账号已存在");
+          }
+        });
+      }
+    },
+
     MacthValue() {
       postD(matchListMacthApi()).then((res) => {
         this.tableData = res.list;
@@ -704,6 +908,7 @@ export default {
       this.page1.limit = pageSize;
       postD(matchListMacthApi(), this.page1).then((res) => {
         this.tableData = res.list;
+        this.page1.totalResult = res.count;
       });
     },
     filterStatus(val) {
@@ -867,7 +1072,9 @@ export default {
       this.$refs.btn1.$el.innerText;
     },
     async costPlannedAmountChange(param1) {
-      this.tableData = param1;
+      this.tableData = param1.list;
+      this.page1.totalResult = param1.count;
+      this.page1.is_platform = param1.list[0].is_platform;
     },
     showEditAddmodify(data) {
       this.editFromDetil.id = data.id;
@@ -960,18 +1167,31 @@ export default {
       });
     },
     Reject(data) {
-      this.RejectShow = true
+      this.RejectShow = true;
       this.RejectId.id = data.id;
-      postD(matchShowMatchApi(),this.RejectId).then(res=> {
-        this.RejectValue = res.data.reason
-      })
-    }
+      postD(matchShowMatchApi(), this.RejectId).then((res) => {
+        this.RejectValue = res.data.reason;
+      });
+    },
+    Refresh() {
+      this.page1.is_platform = null;
+      this.MacthValue();
+    },
+    // 冠名审核
+    fulstatus(val) {
+      if (val == 0) {
+        return "待通过";
+      } else if (val == 1) {
+        return "已通过";
+      }
+    },
   },
 };
 </script>
 <style lang="less" scoped>
 .contentRight {
-  padding-left: 86.5%;
+  padding-left: 82.8%;
+  display: flex;
 }
 .postDyex {
   display: flex;
