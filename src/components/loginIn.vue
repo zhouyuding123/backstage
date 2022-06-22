@@ -73,7 +73,7 @@
         </el-form-item>
         <!-- 按钮 -->
         <el-form-item class="btns" style="display: flex">
-          <el-button type="primary" @click="loginer">登入</el-button>
+          <el-button type="primary" @click="loginer" >登入</el-button>
           <el-button type="info" @click="reset">重置</el-button>
         </el-form-item>
       </el-form>
@@ -136,7 +136,6 @@ export default {
       this.$refs.loginRef.resetFields();
     },
     loginer() {
-
       this.$refs.loginRef.validate((valid) => {
         if (!valid) return;
         postD(this.url.getHomePageHeadMessage, this.loginFrom)

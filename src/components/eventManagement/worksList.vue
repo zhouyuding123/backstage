@@ -55,7 +55,6 @@
           </div>
         </div>
       </div>
-      
     </div>
     <div>
       <vxe-pager
@@ -153,11 +152,17 @@ export default {
 
 <style lang="less" scoped>
 .work_list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
   .work_list1 {
     width: 300px;
     height: 270px;
+    margin-left: 15px;
     background: #ffffff;
     border-radius: 6px 6px 6px 6px;
+    margin-top: 60px;
+
     .workimg {
       width: 300px;
       height: 200px;
