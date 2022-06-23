@@ -168,6 +168,10 @@ export default {
       height: 200px;
       background: #e8e8e8;
       border-radius: 6px 6px 0px 0px;
+      .el-image {
+        width: 300px;
+      height: 200px;
+      }
     }
   }
 }
