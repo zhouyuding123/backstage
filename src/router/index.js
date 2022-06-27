@@ -140,7 +140,7 @@ const routes = [
         }
       },
       {
-        path: "/Circle/list",
+        path: "/Circle/getList",
         name: "Circle",
         component: () => import("../components/Circle/circleList.vue")
         , meta: {

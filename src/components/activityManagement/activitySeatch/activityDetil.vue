@@ -106,8 +106,7 @@
             </div>
           </div>
         </el-descriptions-item>
-
-        <div v-if="ActivityDetailsValue.is_voto == 1">
+        <!-- <div v-if="ActivityDetailsValue.is_voto == 1">
           <el-descriptions-item label="投票开始时间" align="center">
             {{ voto_configValue.voto_start_time }}
           </el-descriptions-item>
@@ -170,7 +169,7 @@
           <el-descriptions-item label="投票按钮文字" align="center">
             {{ voto_configValue.button_writ }}
           </el-descriptions-item>
-        </div>
+        </div> -->
       </el-descriptions>
 
       <div class="elFoot">
