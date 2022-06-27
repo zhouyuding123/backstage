@@ -5,7 +5,6 @@
       @BusinessSeatcher="costPlannedAmountChange"
     />
     <div class="firstColor">
-      <add-activity />
       <div>
         <el-button type="danger" @click="businessDels">批量删除</el-button>
       </div>

@@ -439,6 +439,7 @@ export default {
       }
     },
     adminGroupEditaddList(id) {
+      console.log(id.rules);
       this.adminGroupEditFrom.id = id.id;
       this.adminGroupEditFrom.title = id.title;
       this.adminGroupEditFrom.status = id.status;

@@ -58,7 +58,7 @@
           title="排序"
           width="70"
         ></vxe-column>
-        <vxe-column field="status" title="菜单" width="80" align="center">
+        <vxe-column field="status" title="菜单显示" width="80" align="center">
           <template v-slot="scoped">
             <el-switch
               v-model="scoped.row.status"
@@ -69,7 +69,7 @@
             ></el-switch>
           </template>
         </vxe-column>
-        <vxe-column field="auth_open" title="状态" width="80" align="center">
+        <vxe-column field="auth_open" title="权限验证" width="80" align="center">
           <template v-slot="scoped">
             <el-switch
               v-model="scoped.row.auth_open"

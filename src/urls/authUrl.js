@@ -47,3 +47,8 @@ export const AuthAdminEditApi = () => {
 export const AuthAdminDelApi = () => {
     return "Auth/adminDel"
 }
+
+
+export const AuthGroupShowApi = () => {
+    return "Auth/groupShow"
+}

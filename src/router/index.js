@@ -116,8 +116,8 @@ const routes = [
         }
       },
       {
-        path: "/company_rule/listRule",
-        name: "company_rule",
+        path: "/CompanyRule/listRule",
+        name: "CompanyRule",
         component: () => import("../components/businessManagement/companyRule.vue")
         , meta: {
           title: "权限列表"
@@ -196,7 +196,7 @@ const routes = [
         }
       },
       {
-        path: "/product_type/getList",
+        path: "/productType/getList",
         name: "product_type",
         component: () => import("../components/product_typeManagement/product_typeList.vue")
         , meta: {

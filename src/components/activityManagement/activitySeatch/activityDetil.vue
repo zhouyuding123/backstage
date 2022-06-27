@@ -198,7 +198,7 @@ export default {
       ActivityDetailsValue: [],
       detial: "",
       votoValue: "",
-      voto_configValue: "",
+      voto_configValue: [],
     };
   },
   methods: {
