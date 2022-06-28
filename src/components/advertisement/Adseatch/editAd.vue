@@ -50,7 +50,7 @@
         <el-form-item label="上传图片:" prop="thumb" v-if="editFrom.style == 1">
           <el-upload
             class="avatar-uploader"
-            action="http://weisou.chengduziyi.com/admin/Uploads/uploadFile"
+            action="https://weisou.chengduziyi.com/admin/Uploads/uploadFile"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
@@ -68,7 +68,7 @@
         <el-form-item label="上传视频:" v-if="editFrom.style == 2">
           <el-upload
             class="avatar-uploader"
-            action="http://weisou.chengduziyi.com/admin/Uploads/uploadFile"
+            action="https://weisou.chengduziyi.com/admin/Uploads/uploadFile"
             :on-progress="uploadVideoProcess"
             :on-success="handleVideoSuccess"
             :before-upload="beforeUploadVideo"

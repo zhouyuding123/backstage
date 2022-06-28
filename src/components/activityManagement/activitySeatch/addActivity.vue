@@ -50,7 +50,7 @@
         <el-form-item label="活动海报:" prop="poster">
           <el-upload
             class="avatar-uploader"
-            action="http://weisou.chengduziyi.com/admin/Uploads/uploadFile"
+            action="https://weisou.chengduziyi.com/admin/Uploads/uploadFile"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
@@ -68,7 +68,7 @@
         <el-form-item label="活动封面图:" prop="thumb">
           <el-upload
             class="avatar-uploader"
-            action="http://weisou.chengduziyi.com/admin/Uploads/uploadFile"
+            action="https://weisou.chengduziyi.com/admin/Uploads/uploadFile"
             :show-file-list="false"
             :on-success="handleAvatarSuccessthumb"
             :before-upload="beforeAvatarUploadthumb"
@@ -240,7 +240,7 @@
               <p :v-model="(item.is_img = '1')"></p>
               <el-upload
                 class="avatar-uploader"
-                action="http://weisou.chengduziyi.com/admin/Uploads/uploadFile"
+                action="https://weisou.chengduziyi.com/admin/Uploads/uploadFile"
                 :show-file-list="false"
                 :on-success="handleAvatarSuccessvoto"
                 :before-upload="beforeAvatarUpload"

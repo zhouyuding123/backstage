@@ -175,7 +175,7 @@
           <el-form-item label="头像">
             <el-upload
               class="avatar-uploader"
-              action="http://weisou.chengduziyi.com/admin/Uploads/uploadFile"
+              action="https://weisou.chengduziyi.com/admin/Uploads/uploadFile"
               :show-file-list="false"
               :on-success="handleAvatarSuccess"
               :before-upload="beforeAvatarUpload"
@@ -230,7 +230,7 @@
         <el-form-item label="头像">
           <el-upload
             class="avatar-uploader"
-            action="http://weisou.chengduziyi.com/admin/Uploads/uploadFile"
+            action="https://weisou.chengduziyi.com/admin/Uploads/uploadFile"
             :show-file-list="false"
             :on-success="handleAvatarSuccesser"
             :before-upload="beforeAvatarUploader"
