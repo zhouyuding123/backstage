@@ -16,3 +16,13 @@ export const designerDelApi = () => {
 export const designerSetAuthApi = () => {
     return "designer/setAuth"
 }
+// 作品
+export const designer_worksGetListApi = () => {
+    return "designer_works/getList"
+}
+export const designer_worksEditApi = () => {
+    return "designer_works/edit"
+}
+export const designer_worksShowApi = () => {
+    return "designer_works/show"
+}

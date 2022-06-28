@@ -234,6 +234,14 @@ const routes = [
         , meta: {
           title: "类别列表"
         }
+      },
+      {
+        path: "/designerWorks/getList",
+        name: "designerWorks/getList",
+        component: () => import("../components/designerPieces/designerPieces.vue")
+        , meta: {
+          title: "作品列表"
+        }
       }
     ]
   },

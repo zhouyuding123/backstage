@@ -5,7 +5,7 @@ const _baseUrl = config.baseUrl.dev; // 使用到代
 _baseUrl;
 // axios 配置
 axios.defaults.timeout = 120000; // 设置接口响应时间
-axios.defaults.baseURL = "http://weisou.chengduziyi.com/admin/"; // 这是调用数据接口,公共接口url+调用接口名
+axios.defaults.baseURL = "https://weisou.chengduziyi.com/admin/"; // 这是调用数据接口,公共接口url+调用接口名
 // 增加token（先写了个固定的token，实际项目中应该是通过接口获取到token）
 axios.defaults.headers.common["token"] = localStorage.getItem("token")
 axios.defaults.headers.post["Content-Type"] =
