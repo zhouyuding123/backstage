@@ -175,7 +175,6 @@ export default {
   },
   methods: {
     editShow() {
-      console.log(this.editFunction);
       this.dialogVisible = true;
       this.imagesValue = imgUrl();
       this.editFrom.id = this.editFunction.id;
@@ -195,7 +194,6 @@ export default {
       this.editShow();
     },
     addCategory() {
-      console.log(this.editFrom);
       this.$refs.editFromRef.validate((valid) => {
         if (!valid) return;
         postD(AdEditApi(), this.editFrom).then((res) => {

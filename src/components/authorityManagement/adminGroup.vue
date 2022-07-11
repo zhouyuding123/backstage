@@ -333,6 +333,7 @@ export default {
     },
     groupVaule() {
       postD(AuthAdminGroupApi(), this.page1).then((res) => {
+        console.log(res);
         this.tableData = res.list;
         this.page1.totalResult = res.count;
       });

@@ -16,38 +16,80 @@
       </el-menu>
     </div>
     <div class="paddingStyle" v-if="this.flag == 1">
-    <div style="text-align: left;padding-bottom:15px;"><strong>vip收费标准:</strong></div>
+      <div style="text-align: left; padding-bottom: 15px">
+        <strong>vip收费标准:</strong>
+      </div>
       <el-form
         :model="systemListValue"
         :rules="systemrules"
         ref="systemruleForm"
-        label-width="130px"
+        label-width="180px"
         class="demo-ruleForm"
-        style="
-          width: 500px;
-        "
+        style="width: 500px"
       >
-        <el-form-item label="门店端vip收费标准" prop="vip_business_price">
-          <el-input v-model="systemListValue.vip_business_price"></el-input>
+        <div>门店</div>
+        <el-form-item label="门店端会员收费标准月度" style="padding-top: 20px">
+          <el-input
+            v-model="systemListValue.vip_business_price_month"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="门店折扣" prop="vip_business_dicount">
+        <el-form-item label="门店端会员收费标准季度">
+          <el-input
+            v-model="systemListValue.vip_business_price_quarter"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="门店端会员收费标准年度">
+          <el-input
+            v-model="systemListValue.vip_business_price_year"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="门店端会员折扣">
           <el-input v-model="systemListValue.vip_business_discount"></el-input>
         </el-form-item>
-        <el-form-item label="设计师vip收费的标准" prop="vip_designer_price">
-          <el-input v-model="systemListValue.vip_designer_price"></el-input>
+        <div>设计师</div>
+        <el-form-item
+          label="设计师端会员收费标准月度"
+          style="padding-top: 20px"
+        >
+          <el-input
+            v-model="systemListValue.vip_designer_price_month"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="设计师折扣" prop="vip_designer_dicount">
+        <el-form-item label="设计师端会员收费标准季度">
+          <el-input
+            v-model="systemListValue.vip_designer_price_quarter"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="设计师端会员收费标准年度">
+          <el-input
+            v-model="systemListValue.vip_designer_price_year"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="设计师端会员折扣">
           <el-input v-model="systemListValue.vip_designer_discount"></el-input>
         </el-form-item>
-        <el-form-item label="企业端vip、收费的标准" prop="vip_company_price">
-          <el-input v-model="systemListValue.vip_company_price"></el-input>
+        <div>企业</div>
+        <el-form-item label="企业端会员收费标准月度" style="padding-top: 20px">
+          <el-input
+            v-model="systemListValue.vip_company_price_month"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="企业折扣" prop="vip_company_dicount">
+        <el-form-item label="企业端会员收费标准季度">
+          <el-input
+            v-model="systemListValue.vip_company_price_quarter"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="企业端会员收费标准年度">
+          <el-input v-model="systemListValue.vip_company_price_year"></el-input>
+        </el-form-item>
+        <el-form-item label="企业端会员折扣">
           <el-input v-model="systemListValue.vip_company_discount"></el-input>
         </el-form-item>
-         <el-button type="primary" @click="submitsystem">提交</el-button>
+        <el-form-item label="用户赛事投票次数">
+          <el-input v-model="systemListValue.match_voto_count"></el-input>
+        </el-form-item>
+        <el-button type="primary" @click="submitsystem">提交</el-button>
       </el-form>
-     
     </div>
     <div class="paddingStyle" v-if="this.flag == 2">
       <div class="mgcpp">*每个敏感词用英文逗号隔开</div>
@@ -81,7 +123,8 @@ import { postD } from "@/api";
 import {
   SensitiveSetDataApi,
   SensitiveGetDataApi,
-  configGetDataApi,configSetDataApi
+  configGetDataApi,
+  configSetDataApi,
 } from "@/urls/sensitiveUrl";
 export default {
   data() {
@@ -107,7 +150,21 @@ export default {
         ],
       },
       //    系统
-      systemListValue: {},
+      systemListValue: {
+        match_voto_count: "",
+        vip_business_discount: "",
+        vip_business_price_month: "",
+        vip_business_price_quarter: "",
+        vip_business_price_year: "",
+        vip_company_discount: "",
+        vip_company_price_month: "",
+        vip_company_price_quarter: "",
+        vip_company_price_year: "",
+        vip_designer_discount: "",
+        vip_designer_price_month: "",
+        vip_designer_price_quarter: "",
+        vip_designer_price_year: "",
+      },
       systemrules: {},
     };
   },
@@ -144,26 +201,25 @@ export default {
             this.$message.error("注册失败，账号已存在");
           }
           this.ruleForm.content = "";
-          this.readGetData();
+          this.cjqzs();
         });
       });
     },
     // 系统配置
     systemList() {
       postD(configGetDataApi()).then((res) => {
-        console.log(res);
         this.systemListValue = res.data;
       });
     },
     // 修改系统配置
     submitsystem() {
-        postD(configSetDataApi()).then(res=> {
-            if(res.code == '200'){
-                this.$message.success("系统配置修改成功");
-                this.systemList()
-            }
-        })
-    }
+      postD(configSetDataApi(),this.systemListValue).then((res) => {
+        if (res.code == "200") {
+          this.$message.success("系统配置修改成功");
+          this.systemList();
+        }
+      });
+    },
   },
 };
 </script>

@@ -28,8 +28,8 @@ const routes = [
         component: () => import("../components/homePage/homePage.vue"),
       },
       {
-        path: "/System/system",
-        name: "Systemsystem",
+        path: "/config/getData",
+        name: "config/getData",
         component: () => import("../components/systemSettings/System.vue"),
         meta: {
           title: "系统设置"
@@ -232,7 +232,7 @@ const routes = [
         name: "getList",
         component: () => import("../components/advertisement/advertisementList.vue")
         , meta: {
-          title: "类别列表"
+          title: "广告列表"
         }
       },
       {
