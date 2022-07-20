@@ -32,6 +32,7 @@
           width="50"
           class="linker"
         ></vxe-column>
+        <vxe-column field="id" title="id" align="center"> </vxe-column>
         <vxe-column title="广告标题" align="center" style="position: relative">
           <template v-slot="scoped">
             <div class="cont">
@@ -108,9 +109,10 @@
         <vxe-column title="操作" align="center">
           <template v-slot="scoped">
             <div class="postDyex">
-              <edit-ad  :editFunction="scoped.row" class="postDyexer" />
-              <el-button type="danger" @click="adDel(scoped.row)">删除</el-button>
-
+              <edit-ad :editFunction="scoped.row" class="postDyexer" />
+              <el-button type="danger" @click="adDel(scoped.row)"
+                >删除</el-button
+              >
             </div>
           </template>
         </vxe-column>
@@ -134,10 +136,10 @@
 </template>
 
 <script>
-import { AdGetListApi,AdSelectDelApi } from "@/urls/advertisementUrl.js";
+import { AdGetListApi, AdSelectDelApi } from "@/urls/advertisementUrl.js";
 import seatch from "./Adseatch/seatch.vue";
 import addAd from "./Adseatch/addAd.vue";
-import editAd from "./Adseatch/editAd.vue"
+import editAd from "./Adseatch/editAd.vue";
 import {
   styleModify,
   styleModifytwo,
@@ -150,7 +152,7 @@ export default {
       adListValue: this.adListValue,
     };
   },
-  components: { seatch, addAd,editAd },
+  components: { seatch, addAd, editAd },
   data() {
     return {
       tableData: [],
@@ -211,7 +213,7 @@ export default {
     },
     async costPlannedAmountChange(param1) {
       this.tableData = param1.list;
-      this.page1.totalResult= param1.count
+      this.page1.totalResult = param1.count;
     },
     // 批量删除
     checkboxChangeEvent(data) {
@@ -235,20 +237,20 @@ export default {
           this.ids.push(v.id);
         });
         this.adDelsValues.id = this.ids.toString();
-        postD(AdSelectDelApi(),this.adDelsValues).then(res=> {
+        postD(AdSelectDelApi(), this.adDelsValues).then((res) => {
           if (res.code == "200") {
-          this.$message.success("删除成功");
-          this.adListValue();
-        } else if (res.code == "-200") {
-          this.$message.error("参数错误，或暂无数据");
-        } else if (res.code == "-201") {
-          this.$message.error("未登陆");
-        } else if (res.code == "-203") {
-          this.$message.error("对不起，你没有此操作权限");
-        } else {
-          this.$message.error("注册失败，账号已存在");
-        }
-        })
+            this.$message.success("删除成功");
+            this.adListValue();
+          } else if (res.code == "-200") {
+            this.$message.error("参数错误，或暂无数据");
+          } else if (res.code == "-201") {
+            this.$message.error("未登陆");
+          } else if (res.code == "-203") {
+            this.$message.error("对不起，你没有此操作权限");
+          } else {
+            this.$message.error("注册失败，账号已存在");
+          }
+        });
       }
     },
     async adDel(val) {

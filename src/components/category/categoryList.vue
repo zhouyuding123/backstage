@@ -32,6 +32,7 @@
           width="50"
           class="linker"
         ></vxe-column>
+        <vxe-column field="id" title="id" align="center"> </vxe-column>
         <vxe-column
           field="title"
           title="广告类别标题"
