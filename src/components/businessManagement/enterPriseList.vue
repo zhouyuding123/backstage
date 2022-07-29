@@ -152,6 +152,21 @@
           </template>
         </vxe-column>
       </vxe-table>
+      <vxe-pager
+        :current-page="page1.offset"
+        :page-size="page1.limit"
+        :total="page1.totalResult"
+        :layouts="[
+          'PrevPage',
+          'JumpNumber',
+          'NextPage',
+          'FullJump',
+          'Sizes',
+          'Total',
+        ]"
+        @page-change="handlePageChangeActivity"
+      >
+      </vxe-pager>
     </div>
     <el-dialog
       title="详情"
@@ -456,6 +471,11 @@ export default {
         id:""
       },
       SetAuthValue: [],
+      page1: {
+        offset: 1,
+        limit: 10,
+        totalResult: 0,
+      },
     };
   },
   created() {
@@ -466,6 +486,7 @@ export default {
       postD(CompanyIndexApi()).then((res) => {
         this.tableData = res.data;
         this.imagesValue = imgUrl();
+        this.page1.totalResult = res.count;
       });
     },
     // 批量删除
@@ -611,6 +632,14 @@ export default {
     },
     async costPlannedAmountChange(param1) {
       this.tableData = param1;
+    },
+    handlePageChangeActivity({ currentPage, pageSize }) {
+      this.page1.offset = currentPage;
+      this.page1.limit = pageSize;
+      postD(CompanyIndexApi(), this.page1).then((res) => {
+        this.tableData = res.data;
+        this.page1.totalResult = res.count;
+      });
     },
   },
 };
