@@ -1,7 +1,7 @@
 <template>
   <el-container class="layout-container-demo" style="height: 100%">
-    <el-aside :width="isCollapse ? '55px' : '170px'">
-      <el-scrollbar>
+    <el-aside :width="isCollapse ? '55px' : '200px'">
+      <el-scrollbar >
         <div>
           <div class="logStyle">
             <img src="../../assets/logo.png" alt="" />
@@ -11,12 +11,11 @@
           :collapse="isCollapse"
           :collapse-transition="false"
           router
-          background-color="#7a40f2"
+          background-color="rgb(39,56,69)"
         >
           <div class="indexhomePageStyle">
             <router-link class="indexhomePage" to="/pageHome">
-              <div>控制台</div></router-link
-            >
+              <div>控制台</div></router-link>
           </div>
           <el-sub-menu
             v-for="item in leftNavigationValue"
@@ -238,15 +237,16 @@ export default {
   }
 }
 .layout-container-demo .el-aside {
-  background: #7a40f2;
-  border-radius: 0px 60px 60px 0px;
+  background: rgb(39,56,69);
+  // border-radius: 0px 60px 60px 0px;
   opacity: 1;
 }
 .layout-container-demo .el-menu {
   border-right: none;
-  background: #7a40f2;
+   background: rgb(39,56,69);
+     font-weight: bold;
   .textLitle {
-    color: #cfb8ff;
+    color: #fff;
     line-height: 0px;
     padding-left: 5px;
   }
@@ -266,14 +266,15 @@ export default {
   right: 20px;
 }
 .el-menu-item-group {
-  background-color: #672fdb;
+  // background-color: #672fdb;
 }
 
 .el-menu-item {
-  color: #cfb8ff;
+  color: #ffffff;
 }
 .el-menu-item.is-active {
-  color: #ffffff;
+  // color: red;
+  background-color: rgb(95,178,251);
 }
 .toggle-button {
   color: #fff;
@@ -285,7 +286,7 @@ export default {
 .indexhomePage {
   cursor: pointer;
   height: 30px;
-  color: #cfb8ff;
+  color: #ffff;
   font-size: 14px;
   line-height: 30px;
   div {
@@ -293,7 +294,7 @@ export default {
   }
 }
 .indexhomePageStyle:active {
-  background-color: #672fdb;
+  // background-color: #672fdb;
 }
 .indexhomePage:focus {
   color: white;

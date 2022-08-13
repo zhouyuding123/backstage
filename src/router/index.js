@@ -242,6 +242,22 @@ const routes = [
         , meta: {
           title: "作品列表"
         }
+      },
+      {
+        path:"/Logistics/getList",
+        name:"Logistics/getList",
+        component:()=>import("../components/logistics/logistics.vue")
+        , meta: {
+          title: "物流列表"
+        }
+      },
+      {
+        path:"/rider/index",
+        name:"rider/index",
+        component:()=> import("../components/rider/rider.vue"),
+        meta: {
+          title: "骑手列表"
+        }
       }
     ]
   },
