@@ -165,9 +165,13 @@
           setDetilValue.tel
         }}</el-descriptions-item>
         <el-descriptions-item label="单位" align="center">{{
-         fullstyle(setDetilValue.style) 
+          fullstyle(setDetilValue.style)
         }}</el-descriptions-item>
-        <el-descriptions-item label="营业执照" align="center" v-if="setDetilValue.style==2">
+        <el-descriptions-item
+          label="营业执照"
+          align="center"
+          v-if="setDetilValue.style == 2"
+        >
           <el-image
             :src="imagesValue + setDetilValue.license"
             :preview-src-list="[imagesValue + setDetilValue.license]"
@@ -176,7 +180,7 @@
           />
         </el-descriptions-item>
         <el-descriptions-item label="性别" align="center">{{
-         full(setDetilValue.sex) 
+          full(setDetilValue.sex)
         }}</el-descriptions-item>
         <el-descriptions-item label="邀请码" align="center">{{
           setDetilValue.in_code
@@ -201,7 +205,6 @@
         <el-descriptions-item label="简介" align="center">{{
           setDetilValue.auth_description
         }}</el-descriptions-item>
-        
       </el-descriptions>
       <div style="padding-top: 15px">请选择</div>
       <el-radio-group v-model="SetStatusRadio.auth" class="SetStatusRadioStyle">
@@ -219,10 +222,15 @@
         </el-input>
       </div>
       <div style="padding-top: 15px">
-        <span>
-          <el-button @click="SetStatus = false">取 消</el-button>
-          <el-button type="primary" @click="SetStatusValue">确 定</el-button>
-        </span>
+
+          <span>
+            <el-button @click="SetStatus = false">取 消</el-button>
+
+            <el-button type="primary" @click="SetStatusValue(setDetilValue)"
+              >确 定</el-button
+            >
+          </span>
+
       </div>
     </el-dialog>
   </div>
@@ -418,8 +426,14 @@ export default {
         return "待认证";
       }
     },
-    SetStatusValue() {
-      postD(riderSetAuthApi(), this.SetStatusRadio).then((res) => {
+    SetStatusValue(val) {
+        console.log(val);
+        let autorider = {
+            id:val.id,
+            description:val.description,
+            auth:this.SetStatusRadio.auth
+        }
+      postD(riderSetAuthApi(), autorider).then((res) => {
         if (res.code == "200") {
           this.$message.success("状态修改成功");
           this.SetStatus = false;
@@ -436,22 +450,29 @@ export default {
       });
     },
     companySetStatus(data) {
+      console.log(data);
       this.SetStatus = true;
       var idser = {
         id: data.id,
       };
       postD(riderAuthRiderApi(), idser).then((res) => {
         console.log(res.data);
-        this.setDetilValue =res.data;
+        this.setDetilValue = res.data;
       });
     },
     fullstyle(val) {
-        if(val==1){
-            return "个人"
-        }else {
- return "企业"
-        }
+      if (val == 1) {
+        return "个人";
+      } else {
+        return "企业";
+      }
     },
   },
 };
 </script>
+
+<style lang="less" scoped>
+.contentRight {
+  margin-left: auto;
+}
+</style>

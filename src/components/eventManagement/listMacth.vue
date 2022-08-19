@@ -379,7 +379,20 @@
         <div v-for="(item, index) in editFrom.prize" :key="index">
           <el-form-item label="奖励" prop="prize" style="width: 100%">
             <p>奖项名称:</p>
-            <el-input v-model="item.name" style="width: 15%"></el-input>
+            <el-select
+              v-model="item.name"
+              value-key="name"
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in rankList"
+                :key="item.id"
+                :label="item.title"
+                :value="item.title"
+                @click="changerankList(item.title)"
+              >
+              </el-option>
+            </el-select>
             <p>数量:</p>
             <el-input v-model="item.amount" style="width: 15%"></el-input>
             <p>奖品:</p>
@@ -613,6 +626,7 @@ import {
   matchAccessListApi,
   matchEditAccessApi,
   matchDelAccessApi,
+  prizeGetListsApi
 } from "@/urls/matchUrl.js";
 export default {
   provide() {
@@ -790,6 +804,7 @@ export default {
       TitleDelsValues: {
         id: "",
       },
+      rankList: [],
     };
   },
   created() {
@@ -1084,10 +1099,24 @@ export default {
       this.page1.totalResult = param1.count;
       this.page1.is_platform = param1.list[0].is_platform;
     },
+    changerankList(e) {
+      this.rankList.map((item, i) => {
+        if (item.title == e) {
+          this.editFrom.prize.forEach((v, is) => {
+            if (v.name == item.title) {
+              v.name_id = item.id;
+              v.prize_sort = item.sort;
+            }
+          });
+        }
+      });
+    },
     showEditAddmodify(data) {
       this.editFromDetil.id = data.id;
       this.dialogEditMatch = true;
-      postD(matchShowMatchApi(), this.editFromDetil).then((res) => {
+      postD(prizeGetListsApi()).then((res) => {
+        this.rankList = res.list;
+        postD(matchShowMatchApi(), this.editFromDetil).then((res) => {
         this.editFrom.title = res.data.title;
         this.editFrom.description = res.data.description;
         this.editFrom.poster = res.data.poster;
@@ -1105,6 +1134,8 @@ export default {
         this.editFrom.entry_info = res.data.entry_info;
         this.editFrom.notice = res.data.notice;
       });
+      });
+      
     },
     dialogEditMatchs() {
       this.$refs.editFromref.validate((valid) => {

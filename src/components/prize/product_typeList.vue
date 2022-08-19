@@ -107,9 +107,9 @@ import { postD } from "../../api/index.js";
 import productTypeSeatch from "./product_typeSeatch/productTypeSeatch.vue";
 import ProductDetil from "./product_typeSeatch/productDetil.vue";
 import {
-  product_typeSelectDelApi,
-  product_typeGetListApi,
-  product_typeEditApi,
+  prizeGetListApi,
+  prizeSelectDelApi,
+  prizeEditApi
 } from "@/urls/product_typeUrl.js";
 export default {
   provide() {
@@ -160,7 +160,7 @@ export default {
       return styleModifytwo();
     },
     productValue() {
-      postD(product_typeGetListApi()).then((res) => {
+      postD(prizeGetListApi()).then((res) => {
         this.tableData = res.list;
         this.page1.totalResult = res.count;
       });
@@ -169,7 +169,7 @@ export default {
     statusChaged(data) {
       this.statusSwitch.id = data.id;
       this.statusSwitch.status = data.status;
-      postD(product_typeEditApi(), this.statusSwitch).then((res) => {
+      postD(prizeEditApi(), this.statusSwitch).then((res) => {
         if (res.code == "200") {
           this.$message.success("状态修改成功");
           this.productValue();
@@ -188,7 +188,7 @@ export default {
     handlePageChange({ currentPage, pageSize }) {
       this.page1.offset = currentPage;
       this.page1.limit = pageSize;
-      postD(product_typeGetListApi(), this.page1).then((res) => {
+      postD(prizeGetListApi(), this.page1).then((res) => {
         this.tableData = res.list;
       });
     },
@@ -222,7 +222,7 @@ export default {
         });
       }
       this.productDelsValues.id = this.ids.toString();
-      postD(product_typeSelectDelApi(), this.productDelsValues).then((res) => {
+      postD(prizeSelectDelApi(), this.productDelsValues).then((res) => {
         if (res.code == "200") {
           this.$message.success("状态修改成功");
           this.productValue();

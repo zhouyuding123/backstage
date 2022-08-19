@@ -16,3 +16,23 @@ export const product_typeEditApi=()=>{
 export const product_typeReleaseApi=()=>{
     return "product_type/release"
 }
+
+export const prizeGetListApi=()=>{
+    return "prize/getList"
+}
+export const prizeSelectDelApi=()=>{
+    return "prize/selectDel"
+}
+export const prizeEditApi=()=>{
+    return "prize/edit"
+}
+export const prizeReleaseApi=()=>{
+    return "prize/release"
+}
+export const prizeShowApi=()=>{
+    return "prize/show"
+}
+export const prizeDelApi=()=>{
+    return "prize/del"
+}
+

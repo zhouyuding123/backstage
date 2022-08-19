@@ -172,7 +172,7 @@ export default {
     logslist() {
       postD(LogisticsGetListApi()).then((res) => {
         console.log(res);
-        this.tableData = res.data.reverse();
+        this.tableData = res.data;
         this.page1.totalResult = res.count;
       });
     },
@@ -192,7 +192,7 @@ export default {
       postD(LogisticsExitLogisApi(), edit).then((res) => {
         if (res.code == "200") {
           this.$message.success("状态修改成功");
-          this.logslist();
+          // this.logslist();
         } else {
           this.$message.error(res.msg);
         }

@@ -125,7 +125,21 @@
         <div v-for="(item, index) in addMacthValue.prize" :key="index">
           <el-form-item label="奖励" prop="prize" style="width: 100%">
             <p>奖项名称:</p>
-            <el-input v-model="item.name" style="width: 15%"></el-input>
+            <!-- <el-input v-model="item.name" style="width: 15%"></el-input> -->
+            <el-select
+              v-model="item.name"
+              value-key="name"
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in rankList"
+                :key="item.id"
+                :label="item.title"
+                :value="item.title"
+                @click="changerankList(item.title)"
+              >
+              </el-option>
+            </el-select>
             <p>数量:</p>
             <el-input v-model="item.amount" style="width: 15%"></el-input>
             <p>奖品:</p>
@@ -164,7 +178,7 @@
 import { beforeAvatar } from "../../../assets/js/modifyStyle.js";
 import { timestampToTime } from "../../../assets/js/time.js";
 import { postD } from "../../../api/index.js";
-import { matchReleaseApi } from "@/urls/matchUrl.js";
+import { matchReleaseApi, prizeGetListsApi } from "@/urls/matchUrl.js";
 export default {
   inject: ["MacthValue"],
   data() {
@@ -187,6 +201,8 @@ export default {
             name: "",
             amount: "",
             item: "",
+            name_id: "",
+            prize_sort: "",
           },
         ],
         standard: [
@@ -200,6 +216,7 @@ export default {
         entry_info: "",
         notice: "",
       },
+      nameid: "",
       addMacthValueRules: {
         title: [
           {
@@ -299,26 +316,66 @@ export default {
             tirgger: "blur",
           },
         ],
-
       },
       imageUrl: "",
       fileType: "images",
       // 封面图
       imageUrlthumb: "",
+      rankList: [],
+      rankid: "",
     };
   },
   methods: {
     addMacth() {
       this.addMacthShow = true;
+      postD(prizeGetListsApi()).then((res) => {
+        this.rankList = res.list;
+      });
+    },
+    changerankList(e) {
+      this.rankList.map((item, i) => {
+        if (item.title == e) {
+          this.addMacthValue.prize.forEach((v, is) => {
+            if (v.name == item.title) {
+              v.name_id = item.id;
+              v.prize_sort = item.sort;
+            }
+          });
+        }
+      });
     },
     addInputHandle() {
-      this.addMacthValue.prize.push({ name: "", amount: "", item: "" });
+      this.addMacthValue.prize.forEach((v, i) => {
+        if (v.amount) {
+          this.rankList = this.rankList.filter((item) => item.title != v.name);
+        }
+      });
+      let b = [];
+      for (var a in this.addMacthValue.prize) {
+        b.push(this.addMacthValue.prize[a]);
+      }
+      if (
+        this.addMacthValue.prize[a].name !== "" &&
+        this.addMacthValue.prize[a].amount !== "" &&
+        this.addMacthValue.prize[a].item !== "" &&
+        this.addMacthValue.prize[a].name_id !== "" &&
+        this.addMacthValue.prize[a].prize_sort !== "" &&
+        a < 4
+      ) {
+        this.addMacthValue.prize.push({
+          name: "",
+          amount: "",
+          item: "",
+          name_id: "",
+          prize_sort: "",
+        });
+      }
     },
     delInputHandle(index) {
       this.addMacthValue.prize.splice(index, 1);
     },
     addStandard() {
-      this.addMacthValue.standard.push({title:"",description:""})
+      this.addMacthValue.standard.push({ title: "", description: "" });
     },
     delStandard(index) {
       this.addMacthValue.standard.splice(index, 1);
@@ -333,34 +390,22 @@ export default {
       this.addMacthValue.poster = res.url;
     },
     getTime(date) {
-      this.addMacthValue.sign_start_time = timestampToTime(
-        date/1000
-      );
+      this.addMacthValue.sign_start_time = timestampToTime(date / 1000);
     },
     gitTime(date) {
-      this.addMacthValue.sign_end_time = timestampToTime(
-        date / 1000
-      );
+      this.addMacthValue.sign_end_time = timestampToTime(date / 1000);
     },
     gatTime(date) {
-      this.addMacthValue.voto_start_time = timestampToTime(
-        date / 1000
-      );
+      this.addMacthValue.voto_start_time = timestampToTime(date / 1000);
     },
     gutTime(date) {
-      this.addMacthValue.voto_end_time = timestampToTime(
-        date / 1000
-      );
+      this.addMacthValue.voto_end_time = timestampToTime(date / 1000);
     },
     gltTime(date) {
-      this.addMacthValue.exh_start_time = timestampToTime(
-        date / 1000
-      );
+      this.addMacthValue.exh_start_time = timestampToTime(date / 1000);
     },
     gctTime(date) {
-      this.addMacthValue.exh_end_time = timestampToTime(
-        date / 1000
-      );
+      this.addMacthValue.exh_end_time = timestampToTime(date / 1000);
     },
     beforeAvatarUpload(file) {
       beforeAvatar(file);
@@ -368,25 +413,31 @@ export default {
     beforeAvatarUploadthumb(file) {
       beforeAvatar(file);
     },
+    fill(val, i) {
+      console.log(val);
+    },
     // 添加提交
     addEventContent() {
+      // this.addMacthValue.prize = JSON.stringify(this.addMacthValue.prize);
+      // this.addMacthValue.standard = JSON.stringify(this.addMacthValue.standard);
+      console.log(this.addMacthValue);
       this.$refs.addMacthValueRef.validate((valid) => {
         if (!valid) return;
-          postD(matchReleaseApi(), this.addMacthValue).then((res) => {
-            if (res.code == "200") {
-              this.$message.success("状态修改成功");
-              this.MacthValue();
-              this.addMacthShow = false;
-            } else if (res.code == "-200") {
-              this.$message.error("参数错误，或暂无数据");
-            } else if (res.code == "-201") {
-              this.$message.error("未登陆");
-            } else if (res.code == "-203") {
-              this.$message.error("对不起，你没有此操作权限");
-            } else {
-              this.$message.error("注册失败，账号已存在");
-            }
-          });
+        postD(matchReleaseApi(), this.addMacthValue).then((res) => {
+          if (res.code == "200") {
+            this.$message.success("状态修改成功");
+            this.MacthValue();
+            this.addMacthShow = false;
+          } else if (res.code == "-200") {
+            this.$message.error("参数错误，或暂无数据");
+          } else if (res.code == "-201") {
+            this.$message.error("未登陆");
+          } else if (res.code == "-203") {
+            this.$message.error("对不起，你没有此操作权限");
+          } else {
+            this.$message.error("注册失败，账号已存在");
+          }
+        });
       });
     },
   },

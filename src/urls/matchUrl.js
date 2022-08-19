@@ -36,3 +36,7 @@ export const matchWorksListApi = () => {
 export const MatchScreenApi = () => {
     return "Match/screen"
 }
+// 排名
+export const prizeGetListsApi = () => {
+    return "prize/getLists"
+}

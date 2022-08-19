@@ -257,7 +257,11 @@ const routes = [
         component:()=> import("../components/rider/rider.vue"),
         meta: {
           title: "骑手列表"
-        }
+        },
+      },{
+        path:"/prize/getList",
+        name:'prize/getList',
+        component:()=>import("../components/prize/product_typeList.vue")
       }
     ]
   },
