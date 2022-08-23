@@ -22,7 +22,7 @@ export default {
         this.times--;
         if (this.times === 0) {
           clearInterval(this.timer);
-          this.$router.push('/login')
+          this.$router.push("/login");
         }
       }, 1000);
     },
