@@ -629,11 +629,11 @@ import {
   prizeGetListsApi
 } from "@/urls/matchUrl.js";
 export default {
-  provide() {
-    return {
-      MacthValue: this.MacthValue,
-    };
-  },
+    provide() {
+      return {
+        MacthValue: this.MacthValue,
+      };
+    },
   components: {
     macthSeatch,
     AddMacth,

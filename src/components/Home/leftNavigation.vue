@@ -98,7 +98,7 @@
             /></el-icon>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item @click="signOut">退出</el-dropdown-item>
+                <!-- <el-dropdown-item @click="signOut">退出</el-dropdown-item> -->
               </el-dropdown-menu>
             </template>
           </el-dropdown>
